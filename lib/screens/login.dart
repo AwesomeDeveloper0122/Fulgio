@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 //Screens
@@ -27,17 +29,17 @@ class LoginState extends State<Login> {
                 "start your experience"),
             Positioned(
               bottom: 50,
-              child: Container(
+              child: SizedBox(
                 width: mq.width,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: ConstrainedBox(
                         constraints: const BoxConstraints.tightFor(width: 340),
-                        child: TextField(
+                        child: const TextField(
                           style: TextStyle(color: Colors.white),
                           autocorrect: true,
                           textAlign: TextAlign.center,
@@ -50,8 +52,8 @@ class LoginState extends State<Login> {
                             ),
                             fillColor: Colors.white,
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 2.0),
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 2.0),
                               // borderRadius: BorderRadius.circular(25.0),
                             ),
                           ),

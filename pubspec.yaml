@@ -61,6 +61,10 @@ flutter:
   assets:
     - assets/images/1.jpeg
     - assets/images/mark.png
+    - assets/images/avatar-1.jpg
+    - assets/images/avatar-2.jpg
+    - assets/images/avatar-3.jpg
+    - assets/images/avatar-4.jpg  
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

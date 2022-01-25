@@ -1,15 +1,20 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 //Screens
-import 'package:Fuligo/screens/first.dart';
+import 'package:Fuligo/screens/tours.dart';
+
 //Widgets
 import 'package:Fuligo/widgets/button.dart';
 import 'package:Fuligo/widgets/logo.dart';
-import 'package:Fuligo/widgets/textheader.dart';
+import 'package:Fuligo/widgets/circleimage.dart';
 
 class StartTour extends StatefulWidget {
+  const StartTour({Key? key}) : super(key: key);
+
   @override
-  StartTourState createState() => new StartTourState();
+  StartTourState createState() => StartTourState();
 }
 
 class StartTourState extends State<StartTour> {
@@ -28,6 +33,17 @@ class StartTourState extends State<StartTour> {
             height: MediaQuery.of(context).size.height,
             child: Logo(context),
           ),
+          // circle image
+          Positioned(
+            top: 200,
+            left: 80,
+            child: CircleImage(context, "assets/images/avatar-1.jpg", 100, 100),
+          ),
+          Positioned(
+            top: 400,
+            left: 30,
+            child: CircleImage(context, "assets/images/avatar-2.jpg", 100, 100),
+          ),
           Positioned(
             top: 60,
             left: 20,
@@ -35,7 +51,7 @@ class StartTourState extends State<StartTour> {
               onTap: () {
                 print("onTap called.");
               },
-              child: Icon(
+              child: const Icon(
                 Icons.menu,
                 size: 40,
                 color: Colors.white,
@@ -53,7 +69,7 @@ class StartTourState extends State<StartTour> {
                   Container(
                     width: 350,
                     height: 50,
-                    child: CustomButton(context, StartTour(), "Start tour"),
+                    child: CustomButton(context, Tours(), "Start tour"),
                   ),
                 ],
               ),

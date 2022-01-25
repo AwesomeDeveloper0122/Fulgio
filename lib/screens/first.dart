@@ -7,7 +7,7 @@ import 'package:Fuligo/widgets/textheader.dart';
 
 class First extends StatefulWidget {
   @override
-  FirstState createState() => new FirstState();
+  FirstState createState() => FirstState();
 }
 
 class FirstState extends State<First> {
@@ -21,11 +21,17 @@ class FirstState extends State<First> {
         // ),
         body: Stack(
           children: <Widget>[
-            TextHeader(
-                context,
-                "Explore",
-                "Exploer the city through digital city",
-                "guids and exciting video content"),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextHeader(
+                    context,
+                    "Explore",
+                    "Exploer the city through digital city",
+                    "guids and exciting video content"),
+              ],
+            ),
             Positioned(
               bottom: 50,
               child: Container(
