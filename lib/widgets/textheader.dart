@@ -47,49 +47,53 @@ Widget TextHeader(context, String txt1, String txt2, String txt3) => Column(
       ],
     );
 
-Widget TextHeader1(context, String txt1, String txt2, String txt3) => Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.2,
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-          child: Container(
+Widget TextHeader1(context, String txt1, String txt2, String txt3) => Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Container(
+              child: Text(
+                txt1,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: whiteColor,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+            child: Container(
+              width: 70,
+              height: 2,
+              decoration: const BoxDecoration(color: Colors.green),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
             child: Text(
-              txt1,
+              txt2,
+              textAlign: TextAlign.center,
               style: const TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold, color: whiteColor),
+                  fontSize: 14, fontWeight: FontWeight.bold, color: whiteColor),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-          child: Container(
-            width: 70,
-            height: 2,
-            decoration: const BoxDecoration(color: Colors.green),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
-          child: Text(
-            txt2,
-            style: const TextStyle(
-                fontSize: 14, fontWeight: FontWeight.bold, color: whiteColor),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-          child: Text(
-            txt3,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: whiteColor,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+            child: Text(
+              txt3,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: whiteColor,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );

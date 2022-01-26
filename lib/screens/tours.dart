@@ -31,6 +31,9 @@ class ToursState extends State<Tours> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                  ),
                   TextHeader1(context, "Tours", "Dicovery the city with one of",
                       "our digital travel tours"),
                   ImageCustom(context, "assets/images/1.jpeg", "Red right",
@@ -44,7 +47,10 @@ class ToursState extends State<Tours> {
             left: 20,
             child: GestureDetector(
               onTap: () {
-                print("onTap called.");
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
               },
               child: const Icon(
                 Icons.cancel,

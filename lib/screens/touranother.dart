@@ -10,14 +10,14 @@ import 'package:Fuligo/widgets/subtxt.dart';
 
 import 'package:Fuligo/screens/tours.dart';
 
-class TourDetail extends StatefulWidget {
-  const TourDetail({Key? key}) : super(key: key);
+class TourAnother extends StatefulWidget {
+  const TourAnother({Key? key}) : super(key: key);
 
   @override
-  TourDetailState createState() => TourDetailState();
+  TourAnotherState createState() => TourAnotherState();
 }
 
-class TourDetailState extends State<TourDetail> {
+class TourAnotherState extends State<TourAnother> {
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
@@ -29,16 +29,28 @@ class TourDetailState extends State<TourDetail> {
       body: Stack(
         children: [
           Container(
-              padding: EdgeInsets.only(right: 20, left: 20),
+              padding: const EdgeInsets.only(right: 20, left: 20),
               width: mq.width,
               height: mq.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 60, 20, 0),
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SubTxt(context, 'Remaining', '42min'),
+                        SubTxt(context, 'Stops', '4/7'),
+                      ],
+                    ),
+                  ),
                   TextHeader1(
                       context,
-                      "Red Light",
+                      "Another",
                       "The Red Light District is the mdieval city ",
                       "and narrow streetes lined with old-school bars,"),
                   Container(
@@ -53,7 +65,7 @@ class TourDetailState extends State<TourDetail> {
                         Container(
                           padding: const EdgeInsets.fromLTRB(60, 20, 30, 20),
                           child: SubTxt(context, 'Stops', '7'),
-                        ),
+                        )
                       ],
                     ),
                   )
@@ -77,9 +89,9 @@ class TourDetailState extends State<TourDetail> {
             ),
           ),
           Positioned(
-            bottom: 110,
+            bottom: 50,
             child: Container(
-              padding: EdgeInsets.only(right: 20, left: 20),
+              padding: const EdgeInsets.only(right: 20, left: 20),
               width: mq.width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -95,23 +107,23 @@ class TourDetailState extends State<TourDetail> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 50,
-            child: Container(
-              width: mq.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 350,
-                    height: 50,
-                    child: CustomButton(context, const Tours(), "Start tour"),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 50,
+          //   child: Container(
+          //     width: mq.width,
+          //     child: Column(
+          //       mainAxisAlignment: MainAxisAlignment.start,
+          //       crossAxisAlignment: CrossAxisAlignment.center,
+          //       children: [
+          //         Container(
+          //           width: 350,
+          //           height: 50,
+          //           child: CustomButton(context, const Tours(), "Start tour"),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

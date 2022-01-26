@@ -1,8 +1,11 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 
 class LandingPage extends StatefulWidget {
+  const LandingPage({Key? key}) : super(key: key);
+
   @override
-  LandingPageState createState() => new LandingPageState();
+  LandingPageState createState() => LandingPageState();
 }
 
 class LandingPageState extends State<LandingPage> {

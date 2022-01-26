@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 //Screens
-import 'package:Fuligo/screens/tours.dart';
+// import 'package:Fuligo/screens/tours.dart';
+import 'package:Fuligo/screens/touranother.dart';
 
 //Widgets
 import 'package:Fuligo/widgets/button.dart';
@@ -69,7 +70,8 @@ class StartTourState extends State<StartTour> {
                   Container(
                     width: 350,
                     height: 50,
-                    child: CustomButton(context, Tours(), "Start tour"),
+                    child: CustomButton(
+                        context, const TourAnother(), "Start tour"),
                   ),
                 ],
               ),
