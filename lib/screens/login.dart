@@ -7,7 +7,7 @@ import 'package:Fuligo/screens/first.dart';
 import 'package:Fuligo/screens/verify.dart';
 //Widgets
 import 'package:Fuligo/widgets/button.dart';
-import 'package:Fuligo/widgets/textheader.dart';
+import 'package:Fuligo/widgets/text_header.dart';
 
 class Login extends StatefulWidget {
   @override

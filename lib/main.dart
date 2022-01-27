@@ -1,5 +1,6 @@
+import 'package:Fuligo/screens/landing_page.dart';
 import 'package:flutter/material.dart';
-import 'package:Fuligo/screens/first.dart';
+// import 'package:Fuligo/screens/first.dart';
 
 // import 'package:testproject/widgets/landing_page.dart';
 
@@ -9,7 +10,7 @@ void main() {
 
 class MyApp extends StatefulWidget {
   @override
-  MyAppState createState() => new MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
 class MyAppState extends State<MyApp> {
@@ -28,7 +29,7 @@ class MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: First(),
+      home: LandingPage(),
       // routes: routes,
     );
   }

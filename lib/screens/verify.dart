@@ -4,12 +4,14 @@ import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/screens/first.dart';
 //Widgets
 import 'package:Fuligo/widgets/button.dart';
-import 'package:Fuligo/widgets/textheader.dart';
-import 'package:Fuligo/screens/starttour.dart';
+import 'package:Fuligo/widgets/text_header.dart';
+import 'package:Fuligo/screens/start_tour.dart';
 
 class Verify extends StatefulWidget {
+  const Verify({Key? key}) : super(key: key);
+
   @override
-  VerifyState createState() => new VerifyState();
+  VerifyState createState() => VerifyState();
 }
 
 class VerifyState extends State<Verify> {

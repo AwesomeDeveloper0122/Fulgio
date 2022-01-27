@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 // ignore: deprecated_member_use
 Widget SubTxt(context, String uptxt, String downtxt) => Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 10, left: 10),

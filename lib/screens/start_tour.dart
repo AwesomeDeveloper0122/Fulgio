@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 //Screens
 // import 'package:Fuligo/screens/tours.dart';
-import 'package:Fuligo/screens/touranother.dart';
+// import 'package:Fuligo/screens/touranother.dart';
+import 'package:Fuligo/screens/achievements.dart';
 
 //Widgets
 import 'package:Fuligo/widgets/button.dart';
@@ -71,7 +72,7 @@ class StartTourState extends State<StartTour> {
                     width: 350,
                     height: 50,
                     child: CustomButton(
-                        context, const TourAnother(), "Start tour"),
+                        context, const Achievements(), "Start tour"),
                   ),
                 ],
               ),

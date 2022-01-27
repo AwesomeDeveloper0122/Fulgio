@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
-import 'package:Fuligo/widgets/textheader.dart';
+import 'package:Fuligo/widgets/text_header.dart';
 import 'package:Fuligo/widgets/button.dart';
-import 'package:Fuligo/widgets/imagedetail.dart';
+import 'package:Fuligo/widgets/image_detail.dart';
 import 'package:Fuligo/widgets/subtxt.dart';
 
 import 'package:Fuligo/screens/tours.dart';
