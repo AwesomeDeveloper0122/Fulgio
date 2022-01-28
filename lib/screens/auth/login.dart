@@ -1,11 +1,15 @@
-// ignore_for_file: sized_box_for_whitespace
+// ignore_for_file: sized_box_for_whitespace, non_constant_identifier_names, avoid_single_cascade_in_expression_statements
 
 // import 'package:Fuligo/widgets/button.dart';
 // import 'package:Fuligo/widgets/login_button.dart';
-import 'package:Fuligo/screens/verify.dart';
+// import 'package:Fuligo/screens/verify.dart';
 import 'package:firebase_core/firebase_core.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 //Screens
 // import 'package:Fuligo/screens/verify.dart';
 //Widgets
@@ -36,6 +40,34 @@ class LoginState extends State<Login> {
     });
   }
 
+  void show_Custom_Flushbar(BuildContext context) {
+    Flushbar(
+      duration: Duration(seconds: 3),
+      margin: EdgeInsets.all(8),
+      padding: EdgeInsets.all(10),
+      backgroundGradient: LinearGradient(
+        colors: [
+          Colors.pink.shade500,
+          Colors.pink.shade300,
+          Colors.pink.shade100
+        ],
+        stops: [0.4, 0.7, 1],
+      ),
+      boxShadows: [
+        BoxShadow(
+          color: Colors.black45,
+          offset: Offset(3, 3),
+          blurRadius: 3,
+        ),
+      ],
+      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+      title: 'This is a floating Flushbar',
+      message: 'Welcome to Flutter community.',
+      // messageSize: 17,
+    )..show(context);
+  }
+
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
     return firebaseApp;
@@ -49,27 +81,75 @@ class LoginState extends State<Login> {
 
     // ========== Show Progress Dialog ===========
     // Dialogs.showLoadingDialog(context, _keyLoader, "Please wait..");
-    // int _result = 0;
+    int _result = 0;
     try {
+      // ignore: avoid_print
+      print(email);
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pwd);
       print('_______ Logined Successfully ______________ \r\n');
       print("success");
       print(userCredential.user);
+      _result = 1;
       // await getUser(userCredential.user!);
       // _result = 1;
     } on FirebaseAuthException catch (e) {
-      // print("faile");
+      print(e.code);
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
+        _result = 2;
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+        _result = 3;
+      } else {
+        print("fail");
+        _result = 4;
       }
     }
+    await toDoResult(_result);
 
     //------------ Dismiss Porgress Dialog  -------------------
     // Navigator.of(_keyLoader.currentContext!, rootNavigator: true).pop();
     // await toDoResult(_result);
+  }
+
+  Future<void> toDoResult(int result) async {
+    switch (result) {
+      case 1:
+        //---- Show Error Msg
+        show_Custom_Flushbar;
+        // Navigator.pushReplacementNamed(context, Routes.profile);
+
+        break;
+
+      case 2:
+        //---- Show Error Msg
+        showTopSnackBar(
+          context,
+          const CustomSnackBar.error(
+            message: "Wrong password",
+          ),
+        );
+        break;
+
+      case 3:
+        //---- Show Error Msg
+        showTopSnackBar(
+          context,
+          const CustomSnackBar.error(
+            message: "Woring password",
+          ),
+        );
+        break;
+      default:
+      //---- Show Error Msg
+      // showTopSnackBar(
+      //   text,
+      //   const CustomSnackBar.error(
+      //     message: "Error",
+      //   ),
+      // );
+    }
   }
 
   @override
@@ -109,11 +189,12 @@ class LoginState extends State<Login> {
                               const BoxConstraints.tightFor(width: 340),
                           child: TextFormField(
                             keyboardType: TextInputType.emailAddress,
-                            onChanged: (value) {
-                              // ignore: avoid_print
-                              print(value);
-                              email = value;
-                            },
+                            // onChanged: (value) {
+                            //   // ignore: avoid_print
+                            //   print(value);
+                            //   email = value;
+                            // },
+                            controller: emailCtl,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Please enter email';
