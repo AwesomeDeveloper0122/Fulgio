@@ -18,33 +18,40 @@ class VerifyState extends State<Verify> {
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
-    return Scaffold(
-        backgroundColor: hintColor,
-        // appBar: AppBar(
-        //   title: Text('TEST'),
-        // ),
-        body: Stack(
-          children: <Widget>[
-            TextHeader(context, "Verify",
-                "Great! Please verify your e-mail start", ""),
-            Positioned(
-              bottom: 50,
-              child: Container(
-                width: mq.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 350,
-                      height: 50,
-                      child: CustomButton(context, StartTour(), "Start tour"),
-                    ),
-                  ],
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/discover.png"),
+          fit: BoxFit.fitHeight,
+        ),
+      ),
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          // appBar: AppBar(
+          //   title: Text('TEST'),
+          // ),
+          body: Stack(
+            children: <Widget>[
+              TextHeader(context, "Verify",
+                  "Great! Please verify your e-mail start", ""),
+              Positioned(
+                bottom: 30,
+                child: SizedBox(
+                  width: mq.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: CustomButton(
+                            context, const StartTour(), "Start tour"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          )),
+    );
   }
 }

@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:Fuligo/utils/common_colors.dart';
-import 'package:Fuligo/screens/login.dart';
+// import 'package:Fuligo/utils/common_colors.dart';
+import 'package:Fuligo/screens/auth/login.dart';
 import 'package:Fuligo/widgets/button.dart';
 import 'package:Fuligo/widgets/text_header.dart';
 
@@ -20,13 +20,14 @@ class FirstState extends State<First> {
     var mq = MediaQuery.of(context).size;
     return Container(
       decoration: const BoxDecoration(
-          color: bgColor,
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [gradientFrom, bgColor])),
+        image: DecorationImage(
+          image: AssetImage("assets/images/explore.png"),
+          fit: BoxFit.fitHeight,
+        ),
+      ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
+
           // appBar: AppBar(
           //   title: Text('TEST'),
           // ),
@@ -44,7 +45,7 @@ class FirstState extends State<First> {
                 ],
               ),
               Positioned(
-                bottom: 50,
+                bottom: 30,
                 child: Container(
                   width: mq.width,
                   child: Column(
@@ -52,8 +53,6 @@ class FirstState extends State<First> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        width: 350,
-                        height: 50,
                         child: CustomButton(context, Login(), "Next"),
                       ),
                     ],

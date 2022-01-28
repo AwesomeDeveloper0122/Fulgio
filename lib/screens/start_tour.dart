@@ -61,7 +61,7 @@ class StartTourState extends State<StartTour> {
             ),
           ),
           Positioned(
-            bottom: 50,
+            bottom: 30,
             child: Container(
               width: mq.width,
               child: Column(
@@ -69,8 +69,6 @@ class StartTourState extends State<StartTour> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: 350,
-                    height: 50,
                     child: CustomButton(
                         context, const Achievements(), "Start tour"),
                   ),

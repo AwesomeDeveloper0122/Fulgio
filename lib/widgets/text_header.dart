@@ -14,15 +14,18 @@ Widget TextHeader(context, String txt1, String txt2, String txt3) => Column(
           child: Text(
             txt1,
             style: const TextStyle(
-                fontSize: 22, fontWeight: FontWeight.bold, color: whiteColor),
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 2,
+                color: whiteColor),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: Container(
-            width: 70,
-            height: 2,
-            decoration: const BoxDecoration(color: Colors.green),
+            width: 62,
+            height: 2.5,
+            decoration: const BoxDecoration(color: Colors.grey),
           ),
         ),
         Padding(
@@ -30,7 +33,11 @@ Widget TextHeader(context, String txt1, String txt2, String txt3) => Column(
           child: Text(
             txt2,
             style: const TextStyle(
-                fontSize: 14, fontWeight: FontWeight.bold, color: whiteColor),
+              fontSize: 13,
+              color: whiteColor,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 1,
+            ),
           ),
         ),
         Padding(
@@ -38,8 +45,9 @@ Widget TextHeader(context, String txt1, String txt2, String txt3) => Column(
           child: Text(
             txt3,
             style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
+              fontSize: 13,
+              letterSpacing: 1,
+              fontWeight: FontWeight.w400, // fontWeight: FontWeight.bold,
               color: whiteColor,
             ),
           ),
