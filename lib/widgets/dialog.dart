@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
@@ -68,7 +70,7 @@ class Dialogs {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return new WillPopScope(
+          return WillPopScope(
               onWillPop: () async {
                 return true;
               },
@@ -78,13 +80,14 @@ class Dialogs {
                   children: <Widget>[
                     Center(
                       child: Column(children: [
-                        CircularProgressIndicator(),
-                        SizedBox(
+                        const CircularProgressIndicator(),
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
                           title,
-                          style: TextStyle(fontSize: 16, color: Colors.white),
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.white),
                         )
                       ]),
                     )
@@ -99,7 +102,7 @@ class Dialogs {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return new WillPopScope(
+          return WillPopScope(
               onWillPop: () async {
                 return true;
               },
@@ -109,13 +112,13 @@ class Dialogs {
                   children: <Widget>[
                     Center(
                       child: Column(children: [
-                        CircularProgressIndicator(),
-                        SizedBox(
+                        const CircularProgressIndicator(),
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
                           title,
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                         )
                       ]),
                     )

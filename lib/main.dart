@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:Fuligo/screens/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/routes/route.dart' as router;
@@ -7,7 +8,7 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({key}) : super(key: key);
 
   @override
   MyAppState createState() => MyAppState();
@@ -21,7 +22,6 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-   
     return MaterialApp(
         title: 'Fulgio',
         debugShowCheckedModeBanner: false,

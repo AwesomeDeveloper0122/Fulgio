@@ -9,9 +9,13 @@ abstract class LocalText {
   static const confirmPassError = 'confirmPassError';
   static const success = 'success';
   //---------login ------------//
+  // ignore: constant_identifier_names
   static const LoginSuccess = 'Login Successfully';
+  // ignore: constant_identifier_names
   static const WrongPwd = 'Wrong Password';
+  // ignore: constant_identifier_names
   static const NotFoundUser = 'Not found user';
+  // ignore: constant_identifier_names
   static const NetError = 'Network Error';
 
   ///

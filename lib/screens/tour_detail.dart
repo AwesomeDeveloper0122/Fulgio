@@ -29,7 +29,7 @@ class TourDetailState extends State<TourDetail> {
       body: Stack(
         children: [
           Container(
-              padding: EdgeInsets.only(right: 20, left: 20),
+              padding: const EdgeInsets.only(right: 20, left: 20),
               width: mq.width,
               height: mq.height,
               child: Column(
@@ -79,7 +79,7 @@ class TourDetailState extends State<TourDetail> {
           Positioned(
             bottom: 110,
             child: Container(
-              padding: EdgeInsets.only(right: 20, left: 20),
+              padding: const EdgeInsets.only(right: 20, left: 20),
               width: mq.width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

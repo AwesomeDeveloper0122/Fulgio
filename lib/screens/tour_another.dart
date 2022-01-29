@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-import 'package:Fuligo/widgets/button.dart';
 import 'package:Fuligo/widgets/image_detail.dart';
 import 'package:Fuligo/widgets/subtxt.dart';
-
-import 'package:Fuligo/screens/tours.dart';
 
 class TourAnother extends StatefulWidget {
   const TourAnother({Key? key}) : super(key: key);
@@ -37,7 +34,7 @@ class TourAnotherState extends State<TourAnother> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.fromLTRB(0, 60, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 60, 20, 0),
                     height: MediaQuery.of(context).size.height * 0.2,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,

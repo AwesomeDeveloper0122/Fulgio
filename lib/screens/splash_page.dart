@@ -1,9 +1,7 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/screens/home.dart';
-
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -12,16 +10,15 @@ class SplashPage extends StatefulWidget {
 }
 
 class SplashPageState extends State<SplashPage> {
-  void initState() {  
-    super.initState();  
-    Timer(Duration(seconds: 5),  
-            ()=>Navigator.pushReplacement(context,  
-            MaterialPageRoute(builder:  
-                (context) => Home()  
-            )  
-         )  
-    );  
-  }  
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+        const Duration(seconds: 5),
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const Home())));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

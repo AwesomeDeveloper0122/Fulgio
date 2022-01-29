@@ -1,11 +1,17 @@
+// ignore_for_file: unused_element
+
+import 'package:Fuligo/widgets/map_button.dart';
 import 'package:flutter/material.dart';
-import 'package:Fuligo/utils/common_colors.dart';
+// import 'package:Fuligo/utils/common_colors.dart';
 //Screens
 
 //Widgets
 import 'package:Fuligo/widgets/button.dart';
 import 'package:Fuligo/widgets/text_header.dart';
 import 'package:Fuligo/screens/start_tour.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Verify extends StatefulWidget {
   const Verify({Key? key}) : super(key: key);
@@ -15,6 +21,24 @@ class Verify extends StatefulWidget {
 }
 
 class VerifyState extends State<Verify> {
+  late GoogleMapController myController;
+
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  MapType _currentMapType = MapType.normal;
+
+  void _onMapTypeButtonPressed() {
+    setState(() {
+      _currentMapType = _currentMapType == MapType.normal
+          ? MapType.satellite
+          : MapType.normal;
+    });
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    myController = controller;
+  }
+
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
@@ -47,31 +71,67 @@ class VerifyState extends State<Verify> {
                   ),
                   child: Center(
                     child: Container(
-                      padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                      padding: const EdgeInsets.only(top: 15),
                       child: Column(
-                        children: const [
-                          Text(
+                        children: <Widget>[
+                          const Text(
                             "Allow to use your ",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18),
                           ),
-                          Text(
+                          const Text(
                             "location?",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18),
                           ),
-                          Text(
-                            "Turning on location services allows us",
-                            style: TextStyle(
-                              fontSize: 11,
+                          Container(
+                            margin: const EdgeInsets.only(top: 6),
+                            child: const Text(
+                              "Turning on location services allows us",
+                              style: TextStyle(
+                                fontSize: 11,
+                              ),
                             ),
                           ),
-                          Text(
-                            "to show you whe pals are nearby..",
-                            style: TextStyle(
-                              fontSize: 11,
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 6),
+                            child: const Text(
+                              "to show you whe pals are nearby..",
+                              style: TextStyle(
+                                fontSize: 11,
+                              ),
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            height: 200,
+                            child: GoogleMap(
+                                onMapCreated: _onMapCreated,
+                                initialCameraPosition: CameraPosition(
+                                  target: _center,
+                                  zoom: 10.0,
+                                ),
+                                mapType: _currentMapType),
+                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.all(14.0),
+                          //   child: Align(
+                          //     alignment: Alignment.topRight,
+                          //     child: FloatingActionButton(
+                          //       onPressed: _onMapTypeButtonPressed,
+                          //       materialTapTargetSize:
+                          //           MaterialTapTargetSize.padded,
+                          //       backgroundColor: Colors.green,
+                          //       child: const Icon(Icons.map, size: 30.0),
+                          //     ),
+                          //   ),
+                          // ),
+                          Column(
+                            children: [
+                              MapButton(context, "Allow once"),
+                              MapButton(context, "Allow while using app"),
+                              MapButton(context, "Don't allow"),
+                            ],
+                          ),
                         ],
                       ),
                     ),

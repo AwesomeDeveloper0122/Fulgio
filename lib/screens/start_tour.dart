@@ -51,6 +51,7 @@ class StartTourState extends State<StartTour> {
             left: 20,
             child: GestureDetector(
               onTap: () {
+                // ignore: avoid_print
                 print("onTap called.");
               },
               child: const Icon(

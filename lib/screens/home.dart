@@ -39,7 +39,7 @@ class HomeState extends State<Home> {
               ),
               Positioned(
                 bottom: 30,
-                child: Container(
+                child: SizedBox(
                   width: mq.width,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
