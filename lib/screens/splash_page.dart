@@ -1,15 +1,27 @@
-// ignore: file_names
+
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
+import 'package:Fuligo/screens/home.dart';
 
-class LandingPage extends StatefulWidget {
-  const LandingPage({Key? key}) : super(key: key);
 
+class SplashPage extends StatefulWidget {
+  const SplashPage({Key? key}) : super(key: key);
   @override
-  LandingPageState createState() => LandingPageState();
+  SplashPageState createState() => SplashPageState();
 }
 
-class LandingPageState extends State<LandingPage> {
+class SplashPageState extends State<SplashPage> {
+  void initState() {  
+    super.initState();  
+    Timer(Duration(seconds: 5),  
+            ()=>Navigator.pushReplacement(context,  
+            MaterialPageRoute(builder:  
+                (context) => Home()  
+            )  
+         )  
+    );  
+  }  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +33,6 @@ class LandingPageState extends State<LandingPage> {
               colors: [gradientFrom, bgColor])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        // appBar: AppBar(title: const Text('Set Full Screen Background Image')),
         body: Center(
           child: Container(
             constraints: const BoxConstraints.expand(),

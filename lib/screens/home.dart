@@ -1,20 +1,17 @@
-// ignore_for_file: sized_box_for_whitespace
-
 import 'package:flutter/material.dart';
 
-// import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/screens/auth/login.dart';
 import 'package:Fuligo/widgets/button.dart';
 import 'package:Fuligo/widgets/text_header.dart';
 
-class First extends StatefulWidget {
-  const First({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  FirstState createState() => FirstState();
+  HomeState createState() => HomeState();
 }
 
-class FirstState extends State<First> {
+class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
@@ -27,10 +24,6 @@ class FirstState extends State<First> {
       ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
-
-          // appBar: AppBar(
-          //   title: Text('TEST'),
-          // ),
           body: Stack(
             children: <Widget>[
               Column(
@@ -53,7 +46,7 @@ class FirstState extends State<First> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        child: CustomButton(context, Login(), "Next"),
+                        child: CustomButton(context, const Login(), "Next"),
                       ),
                     ],
                   ),

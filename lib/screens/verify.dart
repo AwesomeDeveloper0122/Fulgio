@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 //Screens
-import 'package:Fuligo/screens/first.dart';
+
 //Widgets
 import 'package:Fuligo/widgets/button.dart';
 import 'package:Fuligo/widgets/text_header.dart';

@@ -1,8 +1,6 @@
-import 'package:Fuligo/screens/first.dart';
-// import 'package:Fuligo/screens/landing_page.dart';
+import 'package:Fuligo/screens/splash_page.dart';
 import 'package:flutter/material.dart';
-
-// import 'package:testproject/widgets/landing_page.dart';
+import 'package:Fuligo/routes/route.dart' as router;
 
 void main() {
   runApp(const MyApp());
@@ -23,17 +21,16 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // final Future _initialization = Firebase.initializeApp();
+   
     return MaterialApp(
-      title: 'Fulgio',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Noto_Sans_JP',
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const First(),
-      // routes: routes,
-    );
+        title: 'Fulgio',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: 'Noto_Sans_JP',
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: const SplashPage(),
+        onGenerateRoute: router.generateRoute);
   }
 }
