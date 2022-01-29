@@ -34,6 +34,50 @@ class VerifyState extends State<Verify> {
             children: <Widget>[
               TextHeader(context, "Verify",
                   "Great! Please verify your e-mail start", ""),
+              Center(
+                child: Container(
+                  height: 400.0,
+                  width: 230.0,
+                  margin: const EdgeInsets.only(top: 120),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25.0),
+                    ),
+                  ),
+                  child: Center(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                      child: Column(
+                        children: const [
+                          Text(
+                            "Allow to use your ",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          Text(
+                            "location?",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          Text(
+                            "Turning on location services allows us",
+                            style: TextStyle(
+                              fontSize: 11,
+                            ),
+                          ),
+                          Text(
+                            "to show you whe pals are nearby..",
+                            style: TextStyle(
+                              fontSize: 11,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Positioned(
                 bottom: 30,
                 child: SizedBox(

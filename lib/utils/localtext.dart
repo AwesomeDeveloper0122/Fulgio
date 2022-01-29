@@ -7,7 +7,12 @@ abstract class LocalText {
   static const formatError = 'formatError';
   static const error = 'error';
   static const confirmPassError = 'confirmPassError';
-  static const success = 'Login successfully';
+  static const success = 'success';
+  //---------login ------------//
+  static const LoginSuccess = 'Login Successfully';
+  static const WrongPwd = 'Wrong Password';
+  static const NotFoundUser = 'Not found user';
+  static const NetError = 'Network Error';
 
   ///
   static const gender = 'gender';
