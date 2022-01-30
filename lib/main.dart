@@ -2,6 +2,7 @@
 import 'package:Fuligo/screens/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/routes/route.dart' as router;
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,6 +32,7 @@ class MyAppState extends State<MyApp> {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: const SplashPage(),
+        builder: FlutterSmartDialog.init(),
         onGenerateRoute: router.generateRoute);
   }
 }

@@ -138,22 +138,23 @@ class VerifyState extends State<Verify> {
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 30,
-                child: SizedBox(
-                  width: mq.width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: CustomButton(
-                            context, const StartTour(), "Start tour"),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+// "Start tour" button
+              // Positioned(
+              //   bottom: 30,
+              //   child: SizedBox(
+              //     width: mq.width,
+              //     child: Column(
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       crossAxisAlignment: CrossAxisAlignment.center,
+              //       children: [
+              //         Container(
+              //           child: CustomButton(
+              //               context, const StartTour(), "Start tour"),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ],
           )),
     );

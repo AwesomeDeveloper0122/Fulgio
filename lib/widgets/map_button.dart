@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:Fuligo/routes/route_costant.dart';
 
 // ignore: non_constant_identifier_names
 Widget MapButton(context, String txt) => InkWell(
@@ -28,6 +29,6 @@ Widget MapButton(context, String txt) => InkWell(
         ),
       ),
       onTap: () {
-        print("Tapped on container");
+        Navigator.pushNamed(context, RouteName.Startour);
       },
     );

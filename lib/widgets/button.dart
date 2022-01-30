@@ -32,3 +32,34 @@ Widget CustomButton(context, StatefulWidget page, String txt) => SizedBox(
         ),
       ),
     );
+
+Widget CanelButton(context, StatefulWidget page, String txt) => SizedBox(
+      height: 50,
+      width: 340,
+      // ignore: deprecated_member_use
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40.0),
+            side: BorderSide(color: whiteColor, width: 2)),
+        color: Colors.transparent,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => page,
+            ),
+          );
+          //  Navigator.of(context).pushReplacementNamed(page);
+        },
+        textColor: whiteColor,
+        child: Text(
+          txt,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            letterSpacing: 1.2,
+          ),
+        ),
+      ),
+    );

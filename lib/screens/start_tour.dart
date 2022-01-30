@@ -1,6 +1,8 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'package:Fuligo/screens/cancel_tour.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 //Screens
 // import 'package:Fuligo/screens/tours.dart';
@@ -11,6 +13,7 @@ import 'package:Fuligo/screens/achievements.dart';
 import 'package:Fuligo/widgets/button.dart';
 import 'package:Fuligo/widgets/logo.dart';
 import 'package:Fuligo/widgets/circleimage.dart';
+import 'package:Fuligo/screens/menu_screen.dart';
 
 class StartTour extends StatefulWidget {
   const StartTour({Key? key}) : super(key: key);
@@ -47,16 +50,13 @@ class StartTourState extends State<StartTour> {
             child: CircleImage(context, "assets/images/avatar-2.jpg", 100, 100),
           ),
           Positioned(
-            top: 60,
+            top: 70,
             left: 20,
             child: GestureDetector(
-              onTap: () {
-                // ignore: avoid_print
-                print("onTap called.");
-              },
+              onTap: () => {_show()},
               child: const Icon(
                 Icons.menu,
-                size: 40,
+                size: 50,
                 color: Colors.white,
               ),
             ),
@@ -70,8 +70,8 @@ class StartTourState extends State<StartTour> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    child: CustomButton(
-                        context, const Achievements(), "Start tour"),
+                    child:
+                        CustomButton(context, const CancelTour(), "Start tour"),
                   ),
                 ],
               ),
@@ -79,41 +79,14 @@ class StartTourState extends State<StartTour> {
           ),
         ],
       ),
-      drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Drawer Header'),
-            ),
-            ListTile(
-              title: const Text('Item 1'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Item 2'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
     );
+  }
+
+  void _show() {
+    SmartDialog.show(
+      widget: MenuScreen(context),
+    );
+
+    //target widget
   }
 }
