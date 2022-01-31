@@ -1,13 +1,13 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'package:Fuligo/screens/cancel_tour.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 //Screens
-// import 'package:Fuligo/screens/tours.dart';
+import 'package:Fuligo/screens/tours.dart';
 // import 'package:Fuligo/screens/touranother.dart';
-import 'package:Fuligo/screens/achievements.dart';
+// import 'package:Fuligo/screens/cancel_tour.dart';
+// import 'package:Fuligo/screens/achievements.dart';
 
 //Widgets
 import 'package:Fuligo/widgets/button.dart';
@@ -70,8 +70,7 @@ class StartTourState extends State<StartTour> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    child:
-                        CustomButton(context, const CancelTour(), "Start tour"),
+                    child: CustomButton(context, const Tours(), "Start tour"),
                   ),
                 ],
               ),

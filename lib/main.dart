@@ -1,8 +1,13 @@
 // @dart=2.9
-import 'package:Fuligo/screens/splash_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:Fuligo/routes/route.dart' as router;
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+
+// import 'package:Fuligo/screens/splash_page.dart';
+// import 'package:Fuligo/screens/keizersgracht.dart';
+// import 'package:Fuligo/screens/route_screen.dart';
+import 'package:Fuligo/screens/achievements.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +36,7 @@ class MyAppState extends State<MyApp> {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: const SplashPage(),
+        home: const Achievements(),
         builder: FlutterSmartDialog.init(),
         onGenerateRoute: router.generateRoute);
   }

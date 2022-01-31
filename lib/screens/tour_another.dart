@@ -46,10 +46,10 @@ class TourAnotherState extends State<TourAnother> {
                     ),
                   ),
                   TextHeader1(
-                      context,
-                      "Another",
-                      "The Red Light District is the mdieval city ",
-                      "and narrow streetes lined with old-school bars,"),
+                    context,
+                    "Another",
+                    "The Red Light District is the mdieval city \n and narrow streetes lined with old-school bars, ",
+                  ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(40, 30, 40, 30),
                     child: Row(

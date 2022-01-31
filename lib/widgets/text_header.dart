@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/logo.dart';
 
-Widget TextHeader(context, String txt1, String txt2, String txt3) => Column(
+Widget TextHeader(context, String title, String content) => Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -12,12 +12,13 @@ Widget TextHeader(context, String txt1, String txt2, String txt3) => Column(
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
           child: Text(
-            txt1,
+            title,
             style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w400,
                 letterSpacing: 2,
                 color: whiteColor),
+            textAlign: TextAlign.center,
           ),
         ),
         Padding(
@@ -31,77 +32,79 @@ Widget TextHeader(context, String txt1, String txt2, String txt3) => Column(
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
           child: Text(
-            txt2,
+            content,
             style: const TextStyle(
               fontSize: 13,
               color: whiteColor,
               fontWeight: FontWeight.w400,
               letterSpacing: 1,
             ),
+            textAlign: TextAlign.center,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-          child: Text(
-            txt3,
-            style: const TextStyle(
-              fontSize: 13,
-              letterSpacing: 1,
-              fontWeight: FontWeight.w400, // fontWeight: FontWeight.bold,
-              color: whiteColor,
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        //   child: Text(
+        //     txt3,
+        //     style: const TextStyle(
+        //       fontSize: 13,
+        //       letterSpacing: 1,
+        //       fontWeight: FontWeight.w400, // fontWeight: FontWeight.bold,
+        //       color: whiteColor,
+        //     ),
+        //   ),
+        // ),
       ],
     );
 
-Widget TextHeader1(context, String txt1, String txt2, String txt3) => Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: Container(
-              child: Text(
-                txt1,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: whiteColor,
-                ),
-              ),
-            ),
+Widget TextHeader1(context, String title, String content) => Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+          child: Text(
+            title,
+            style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 2,
+                color: whiteColor),
+            textAlign: TextAlign.center,
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-            child: Container(
-              width: 70,
-              height: 2,
-              decoration: const BoxDecoration(color: Colors.green),
-            ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: Container(
+            width: 62,
+            height: 2.5,
+            decoration: const BoxDecoration(color: Colors.grey),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
-            child: Text(
-              txt2,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.bold, color: whiteColor),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
+          child: Text(
+            content,
+            style: const TextStyle(
+              fontSize: 13,
+              color: whiteColor,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 1,
             ),
+            textAlign: TextAlign.center,
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Text(
-              txt3,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: whiteColor,
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        //   child: Text(
+        //     txt3,
+        //     style: const TextStyle(
+        //       fontSize: 13,
+        //       letterSpacing: 1,
+        //       fontWeight: FontWeight.w400, // fontWeight: FontWeight.bold,
+        //       color: whiteColor,
+        //     ),
+        //   ),
+        // ),
+      ],
     );

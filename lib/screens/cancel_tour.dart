@@ -1,5 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'package:Fuligo/screens/start_tour.dart';
+import 'package:Fuligo/screens/tours.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:Fuligo/utils/common_colors.dart';
@@ -41,12 +43,12 @@ class CancelTourState extends State<CancelTour> {
           Positioned(
             top: 200,
             left: 80,
-            child: CircleImage(context, "assets/images/avatar-1.jpg", 100, 100),
+            child: CircleImage(context, "assets/images/avatar-1.jpg", 80, 80),
           ),
           Positioned(
             top: 400,
             left: 30,
-            child: CircleImage(context, "assets/images/avatar-2.jpg", 100, 100),
+            child: CircleImage(context, "assets/images/avatar-2.jpg", 80, 80),
           ),
           Positioned(
             top: 70,
@@ -60,6 +62,7 @@ class CancelTourState extends State<CancelTour> {
               ),
             ),
           ),
+//Cancel tour
           Positioned(
             bottom: 30,
             child: Container(
@@ -69,13 +72,14 @@ class CancelTourState extends State<CancelTour> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    child: CanelButton(
-                        context, const Achievements(), "Cancel Tour"),
+                    child:
+                        CanelButton(context, const StartTour(), "Cancel Tour"),
                   ),
                 ],
               ),
             ),
           ),
+//video list
           Positioned(
             bottom: 90,
             child: Container(

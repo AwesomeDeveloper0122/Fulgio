@@ -56,8 +56,11 @@ class VerifyState extends State<Verify> {
           // ),
           body: Stack(
             children: <Widget>[
-              TextHeader(context, "Verify",
-                  "Great! Please verify your e-mail start", ""),
+              TextHeader(
+                context,
+                "Verify",
+                "Great! Please verify your e-mail start",
+              ),
               Center(
                 child: Container(
                   height: 400.0,

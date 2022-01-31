@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'route_costant.dart';
+
+import 'package:Fuligo/screens/auth/login.dart';
 import 'package:Fuligo/screens/verify.dart';
 import 'package:Fuligo/screens/start_tour.dart';
-import 'package:Fuligo/screens/auth/login.dart';
-import 'route_costant.dart';
+import 'package:Fuligo/screens/tour_list.dart';
+import 'package:Fuligo/screens/tour_detail.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    case RouteName.Verify:
-      return MaterialPageRoute(builder: (context) => const Verify());
     case RouteName.Login:
       return MaterialPageRoute(builder: (context) => const Login());
+    case RouteName.Verify:
+      return MaterialPageRoute(builder: (context) => const Verify());
     case RouteName.Startour:
       return MaterialPageRoute(builder: (context) => const StartTour());
-    // case 'login':
-    //   return MaterialPageRoute(builder: (context) => LoginView());
+    case RouteName.tourlist:
+      return MaterialPageRoute(builder: (context) => const TourList());
+    case RouteName.tourdetail:
+      return MaterialPageRoute(builder: (context) => const TourDetail());
+
     default:
       return MaterialPageRoute(builder: (context) => const Verify());
   }

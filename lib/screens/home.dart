@@ -31,10 +31,10 @@ class HomeState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TextHeader(
-                      context,
-                      "Explore",
-                      "Exploer the city through digital city",
-                      "guids and exciting video content"),
+                    context,
+                    "Explore",
+                    "Exploer the city through digital city \nguids and exciting video content",
+                  ),
                 ],
               ),
               Positioned(

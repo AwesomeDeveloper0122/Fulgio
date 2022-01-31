@@ -1,5 +1,7 @@
-// ignore_for_file: non_constant_identifier_names, sized_box_for_whitespace
+// ignore_for_file: non_constant_identifier_names, sized_box_for_whitespace, avoid_print
 
+// import 'package:Fuligo/routes/route_costant.dart';
+import 'package:Fuligo/screens/start_tour.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -10,7 +12,7 @@ import 'package:Fuligo/widgets/circleimage.dart';
 Widget MenuScreen(context) => Stack(
       children: [
         Container(
-          padding: EdgeInsets.only(top: 100, left: 20),
+          padding: EdgeInsets.only(top: 150, left: 20),
           decoration: const BoxDecoration(
             color: bgColor,
             gradient: LinearGradient(
@@ -22,7 +24,7 @@ Widget MenuScreen(context) => Stack(
           width: MediaQuery.of(context).size.width,
           alignment: Alignment.center,
           child: ListView(
-            children: const <Widget>[
+            children: <Widget>[
               // SizedBox(
               //   height: 80,
               //   child: ListTile(
@@ -45,6 +47,16 @@ Widget MenuScreen(context) => Stack(
                   'Map',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
+                onTap: () => {
+                  // Navigator.pushNamed(context, RouteName.Startour),
+                  print("object"),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const StartTour(),
+                    ),
+                  ),
+                },
               ),
               ListTile(
                 contentPadding: EdgeInsets.only(bottom: 20, left: 20),

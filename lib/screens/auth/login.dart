@@ -134,8 +134,8 @@ class LoginState extends State<Login> {
           key: _formKey,
           child: Stack(
             children: <Widget>[
-              TextHeader(context, "Discover", "Enter your email to",
-                  "start your experience"),
+              TextHeader(context, "Discover",
+                  "Enter your email to \n start your experience"),
               Positioned(
                 bottom: 30,
                 child: SizedBox(
