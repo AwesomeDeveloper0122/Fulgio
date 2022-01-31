@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-import 'package:Fuligo/widgets/image.dart';
+import 'package:Fuligo/widgets/custom_image.dart';
 
 class Tours extends StatefulWidget {
   const Tours({Key? key}) : super(key: key);

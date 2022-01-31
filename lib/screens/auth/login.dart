@@ -1,5 +1,7 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:Fuligo/widgets/custom_button.dart';
+import 'package:Fuligo/widgets/logo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/routes/route_costant.dart';
@@ -7,15 +9,16 @@ import 'package:Fuligo/widgets/text_header.dart';
 import 'package:Fuligo/widgets/dialog.dart';
 
 //common
-import 'package:Fuligo/utils/common_colors.dart';
+// import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/utils/localtext.dart';
 
 //import firebase
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
+// import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+// import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -27,7 +30,7 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   TextEditingController emailCtl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final GlobalKey<State> _keyLoader = GlobalKey<State>();
+  // final GlobalKey<State> _keyLoader = GlobalKey<State>();
   String email = "";
 
   @override
@@ -51,7 +54,10 @@ class LoginState extends State<Login> {
 
     // ========== Show Progress Dialog ===========
 
-    Dialogs.showLoadingDialog(context, _keyLoader, "Please wait..");
+    // Dialogs.showLoadingDialog(context, _keyLoader, "Please wait..");
+    SmartDialog.showLoading(backDismiss: false, background: Colors.transparent);
+    // await Future.delayed(const Duration(seconds: 2));
+    // SmartDialog.dismiss();
     int _result = 0;
 
     try {
@@ -70,50 +76,33 @@ class LoginState extends State<Login> {
         _result = 4;
       }
     }
-
+    SmartDialog.dismiss();
     // ------------ Dismiss Porgress Dialog  -------------------
-    Navigator.of(_keyLoader.currentContext!, rootNavigator: false).pop();
+    // Navigator.of(_keyLoader.currentContext!, rootNavigator: false).pop();
     await toDoResult(_result);
   }
 
   Future<void> toDoResult(int result) async {
     switch (result) {
       case 1:
-        showTopSnackBar(
-          context,
-          const CustomSnackBar.success(
-            message: LocalText.LoginSuccess,
-          ),
+        SmartDialog.showToast(
+          LocalText.LoginSuccess,
         );
         Navigator.of(context).pushReplacementNamed(RouteName.Verify);
 
         break;
 
       case 2:
-        //---- Show Error Msg
-        showTopSnackBar(
-          context,
-          const CustomSnackBar.error(
-            message: LocalText.NotFoundUser,
-          ),
-        );
+        SmartDialog.showToast(LocalText.NotFoundUser);
         break;
 
       case 3:
-        //---- Show Error Msg
-        showTopSnackBar(
-          context,
-          const CustomSnackBar.error(
-            message: LocalText.WrongPwd,
-          ),
-        );
+        SmartDialog.showToast(LocalText.WrongPwd);
         break;
       default:
-        showTopSnackBar(
-          context,
-          const CustomSnackBar.error(
-            message: LocalText.NetError,
-          ),
+        SmartDialog.showToast(
+          LocalText.NetError,
+          alignment: Alignment.topCenter,
         );
     }
   }
@@ -133,86 +122,66 @@ class LoginState extends State<Login> {
         body: Form(
           key: _formKey,
           child: Stack(
-            children: <Widget>[
-              TextHeader(context, "Discover",
-                  "Enter your email to \n start your experience"),
+            alignment: Alignment.center,
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    Logo_test,
+                    TextHeaderTest(context, "Explore",
+                        "Explore the city through digital city \n guides and exciting video content"),
+                  ],
+                ),
+              ),
               Positioned(
-                bottom: 30,
-                child: SizedBox(
-                  width: mq.width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(20.0),
-                        child: ConstrainedBox(
-                          constraints:
-                              const BoxConstraints.tightFor(width: 340),
-                          child: TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            controller: emailCtl,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter email';
-                              }
-                              return null;
-                            },
-                            style: const TextStyle(color: Colors.grey),
-                            autocorrect: true,
-                            textAlign: TextAlign.center,
-                            decoration: const InputDecoration(
-                              border: UnderlineInputBorder(),
-                              hintText: 'Enter a email',
-                              hintStyle: TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.grey,
-                              ),
-                              fillColor: Colors.grey,
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 2.0),
-                                // borderRadius: BorderRadius.circular(25.0),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 2.0),
-                                // borderRadius: BorderRadius.circular(25.0),
-                              ),
-                            ),
-                          ),
+                bottom: 80,
+                child: Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints.tightFor(width: 340),
+                    child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      controller: emailCtl,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter email';
+                        }
+                        return null;
+                      },
+                      style: const TextStyle(
+                        color: Colors.white70,
+                      ),
+                      autocorrect: true,
+                      textAlign: TextAlign.center,
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        hintText: 'Enter a email',
+                        hintStyle: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.white60,
+                        ),
+                        fillColor: Colors.grey,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 2.0),
+                          // borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 2.0),
+                          // borderRadius: BorderRadius.circular(25.0),
                         ),
                       ),
-                      SizedBox(
-                        height: 50,
-                        width: 340,
-                        // ignore: deprecated_member_use
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40.0),
-                          ),
-                          color: bgColor,
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              login();
-                            }
-                          },
-                          textColor: bgColor,
-                          child: const Text(
-                            "Next",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
+              LoginButton(
+                  context,
+                  () => {
+                        if (_formKey.currentState!.validate()) {login()}
+                      },
+                  "Next")
             ],
           ),
         ),

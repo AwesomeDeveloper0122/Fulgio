@@ -20,3 +20,11 @@ Widget Logo(context) => Row(
         ),
       ],
     );
+Widget Logo_test = Container(
+  margin: const EdgeInsets.symmetric(vertical: 40),
+  child: const Image(
+    image: AssetImage('assets/images/logo.png'),
+    width: 100,
+    height: 60,
+  ),
+);

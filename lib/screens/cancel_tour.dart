@@ -11,7 +11,7 @@ import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/screens/achievements.dart';
 
 //Widgets
-import 'package:Fuligo/widgets/button.dart';
+import 'package:Fuligo/widgets/custom_button.dart';
 import 'package:Fuligo/widgets/logo.dart';
 import 'package:Fuligo/widgets/circleimage.dart';
 import 'package:Fuligo/screens/menu_screen.dart';

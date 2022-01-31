@@ -7,7 +7,7 @@ import 'package:Fuligo/widgets/text_header.dart';
 // import 'package:Fuligo/widgets/button.dart';
 // import 'package:Fuligo/widgets/imagedetail.dart';
 import 'package:Fuligo/widgets/subtxt.dart';
-import 'package:Fuligo/widgets/button.dart';
+import 'package:Fuligo/widgets/custom_button.dart';
 // import 'package:Fuligo/widgets/fuligo_card.dart';
 import 'package:Fuligo/screens/credits.dart';
 

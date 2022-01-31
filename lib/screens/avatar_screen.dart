@@ -1,5 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'package:Fuligo/widgets/circleimage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
@@ -11,14 +12,14 @@ import 'package:Fuligo/widgets/fuligo_card.dart';
 
 // import 'package:Fuligo/screens/tours.dart';
 
-class Achievements extends StatefulWidget {
-  const Achievements({Key? key}) : super(key: key);
+class AvatarScreen extends StatefulWidget {
+  const AvatarScreen({Key? key}) : super(key: key);
 
   @override
-  ArchivmentsState createState() => ArchivmentsState();
+  AvatarScreenState createState() => AvatarScreenState();
 }
 
-class ArchivmentsState extends State<Achievements> {
+class AvatarScreenState extends State<AvatarScreen> {
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
@@ -50,8 +51,8 @@ class ArchivmentsState extends State<Achievements> {
                     ),
                     TextHeader1(
                       context,
-                      "Archivements",
-                      "Each completed achievement \n brings you credit on Flugio, ",
+                      "Avatar",
+                      "Choose your avatar",
                     ),
                     Container(
                       width: mq.width,
@@ -62,7 +63,7 @@ class ArchivmentsState extends State<Achievements> {
                           Container(
                             width: mq.width / 2,
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: SubTxt(context, 'Achievements', '5 of 75'),
+                            child: SubTxt(context, 'AvatarScreen', '5 of 75'),
                           ),
                           Container(
                             width: mq.width / 2,
@@ -74,76 +75,24 @@ class ArchivmentsState extends State<Achievements> {
                     ),
                     Container(
                       width: mq.width,
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      margin: const EdgeInsets.only(bottom: 10, top: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Row(
-                            children: [
-                              Stack(
-                                children: [
-                                  Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5),
-                                    child: Row(
-                                      children: [
-                                        FuligoCard(
-                                          context,
-                                          "test",
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 25,
-                                    right: 20,
-                                    child: Icon(
-                                      Icons.cancel,
-                                      color: Colors.grey,
-                                      size: 16.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Stack(
-                                children: [
-                                  Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5),
-                                    child: Row(
-                                      children: [
-                                        FuligoCard(
-                                          context,
-                                          "test",
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 25,
-                                    right: 20,
-                                    child: Icon(
-                                      Icons.check_circle,
-                                      color: Colors.white,
-                                      size: 16.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100.0)),
+                            width: mq.width / 2,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: CircleImage(context,
+                                "assets/images/avatar-1.jpg", 100, 100),
                           ),
-                          Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: FuligoCard(context, "test"),
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: FuligoCard(context, "test"),
-                              ),
-                            ],
-                          ),
+                          Container(
+                            width: mq.width / 2,
+                            padding: const EdgeInsets.symmetric(vertical: 30),
+                            child: CircleImage(context,
+                                "assets/images/avatar-1.jpg", 100, 100),
+                          )
                         ],
                       ),
                     ),
