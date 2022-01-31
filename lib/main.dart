@@ -7,6 +7,10 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 // import 'package:Fuligo/screens/splash_page.dart';
 // import 'package:Fuligo/screens/keizersgracht.dart';
 // import 'package:Fuligo/screens/route_screen.dart';
+// import 'package:Fuligo/screens/achievements.dart';
+// import 'package:Fuligo/screens/credits.dart';
+// import 'package:Fuligo/screens/success.dart';
+// import 'package:Fuligo/screens/ranking.dart';
 import 'package:Fuligo/screens/achievements.dart';
 
 void main() {
