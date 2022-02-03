@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
 import 'package:Fuligo/widgets/custom_image.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class ChatAgain extends StatefulWidget {
   ChatAgain({Key? key, required String documentId}) : super(key: key);
@@ -25,6 +26,7 @@ class ChatAgain extends StatefulWidget {
 
 class ChatAgainState extends State<ChatAgain> {
   void initState() {
+    SmartDialog.showLoading(backDismiss: false, background: Colors.black);
     super.initState();
     getChatData();
     setState(() {
@@ -58,6 +60,7 @@ class ChatAgainState extends State<ChatAgain> {
         .doc('qEnncoZSqLs8QE4jS3bF')
         .get();
     chat_list = chatData['chatMessages'];
+    SmartDialog.dismiss();
     setState(() {});
     return chat_list;
   }
@@ -70,13 +73,21 @@ class ChatAgainState extends State<ChatAgain> {
       message: content,
     );
     List chatdata = [];
+    SmartDialog.showLoading(backDismiss: false, background: Colors.transparent);
     chatdata = await getChatData();
+    SmartDialog.dismiss();
     setState(() {});
 
     print("============== Chat Data ==============");
     // print(chatdata);
     chatdata.add(_chat.toJson());
     chatInput.text = "";
+
+    final position = _scrollController.position.maxScrollExtent;
+
+    _scrollController.jumpTo(position);
+    print("+++++++++++++++position++++++++++++++");
+    print(position);
 
     return order
         .doc('qEnncoZSqLs8QE4jS3bF')
@@ -153,25 +164,33 @@ class ChatAgainState extends State<ChatAgain> {
                 ),
               ),
               Positioned(
-                top: mq.height / 6,
-                child: Container(
-                  height: 600,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    width: mq.width * 0.9,
-                    // padding: EdgeInsets.all(20),
-                    child: Scrollbar(
-                      isAlwaysShown: true,
-                      controller: _scrollController,
-                      child: ListView(
-                        scrollDirection: Axis.vertical,
-                        children: widgets,
-                        padding: EdgeInsets.all(10),
+                  top: mq.height / 6,
+                  // top: 0,
+                  // bottom: 70,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        height: 600,
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          width: mq.width * 0.9,
+                          // padding: EdgeInsets.all(20),
+                          child: Scrollbar(
+                            isAlwaysShown: true,
+                            controller: _scrollController,
+                            child: ListView(
+                              scrollDirection: Axis.vertical,
+                              children: widgets,
+                              padding: EdgeInsets.all(10),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
+                    ],
+                  )),
               Positioned(
                 bottom: 0,
                 width: mq.width,
