@@ -39,17 +39,16 @@ class RankingState extends State<Ranking> {
         body: Stack(
           children: [
             Container(
-              padding: const EdgeInsets.only(right: 0, left: 0),
-              // width: 400,
-              // height: mq.height,
+              width: mq.width,
+              height: mq.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
+                    height: MediaQuery.of(context).size.height * 0.17,
                   ),
-                  TextHeader1(
+                  TextHeaderTest(
                     context,
                     "Ranking",
                     "So where do you stand? Let's see...",

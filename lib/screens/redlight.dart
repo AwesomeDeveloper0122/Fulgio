@@ -1,26 +1,24 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'package:Fuligo/screens/cancel_tour.dart';
-import 'package:Fuligo/screens/tour_another.dart';
-import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-import 'package:Fuligo/widgets/custom_button.dart';
-import 'package:Fuligo/widgets/image_detail.dart';
+// import 'package:Fuligo/widgets/button.dart';
+// import 'package:Fuligo/widgets/imagedetail.dart';
 import 'package:Fuligo/widgets/subtxt.dart';
+import 'package:Fuligo/widgets/fuligo_card.dart';
 
 // import 'package:Fuligo/screens/tours.dart';
 
-class RouteScreen extends StatefulWidget {
-  const RouteScreen({Key? key}) : super(key: key);
+class RedLight extends StatefulWidget {
+  const RedLight({Key? key}) : super(key: key);
 
   @override
-  RouteScreenState createState() => RouteScreenState();
+  RedLightState createState() => RedLightState();
 }
 
-class RouteScreenState extends State<RouteScreen> {
+class RedLightState extends State<RedLight> {
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
@@ -36,7 +34,6 @@ class RouteScreenState extends State<RouteScreen> {
             Container(
                 width: mq.width,
                 height: mq.height,
-                padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,17 +43,27 @@ class RouteScreenState extends State<RouteScreen> {
                     ),
                     TextHeaderTest(
                       context,
-                      "RouteScreen",
-                      "Would you like to be taken there?",
+                      "Red Light",
+                      "Complete the digital city tour \n 'Red Light' in Amsterdam",
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 30),
-                      child: CancelButtonTest(
-                          context, const TourAnother(), "Show directions"),
-                    )
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 60),
+                            child: SubTxt(context, 'Achieved on', '24-10-2020'),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 60),
+                            child: SubTxt(context, 'Reward', '1 CHF'),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 )),
-            ClearRoundButton(context, mq.width / 2 - 40),
           ],
         ),
       ),

@@ -1,23 +1,22 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:Fuligo/utils/common_colors.dart';
+import 'package:Fuligo/utils/font_style.dart';
 import 'package:flutter/material.dart';
 
 // ignore: deprecated_member_use
 Widget SubTxt(context, String uptxt, String downtxt) => Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10, left: 10),
-          child: Text(
-            uptxt,
-            style: const TextStyle(color: Colors.white),
-          ),
+        Text(
+          uptxt,
+          style: font_14_grey,
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 10, left: 10),
+          padding: const EdgeInsets.symmetric(vertical: 6),
           child: Text(
             downtxt,
-            style: const TextStyle(color: Colors.white),
+            style: font_14_white,
           ),
         ),
       ],

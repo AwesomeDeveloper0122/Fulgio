@@ -25,7 +25,6 @@ class StartTour extends StatefulWidget {
 class StartTourState extends State<StartTour> {
   @override
   Widget build(BuildContext context) {
-    var mq = MediaQuery.of(context).size;
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -36,13 +35,15 @@ class StartTourState extends State<StartTour> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
+          alignment: Alignment.center,
           children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: Logo(context),
+            Center(
+              child: Column(
+                children: [
+                  Logo_test,
+                ],
+              ),
             ),
-            // circle image
             Positioned(
               top: 200,
               left: 80,
@@ -55,8 +56,9 @@ class StartTourState extends State<StartTour> {
               child:
                   CircleImage(context, "assets/images/avatar-2.jpg", 100, 100),
             ),
+// Menu Icon
             Positioned(
-              top: 70,
+              top: 50,
               left: 20,
               child: GestureDetector(
                 onTap: () => {_show()},
@@ -67,21 +69,8 @@ class StartTourState extends State<StartTour> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 30,
-              child: Container(
-                width: mq.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: CustomButton(context, const Tours(), "Start tour"),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+
+            CustomButtonTest(context, const Tours(), "Start tour")
           ],
         ),
       ),
@@ -93,7 +82,7 @@ class StartTourState extends State<StartTour> {
 
   void _show() {
     SmartDialog.show(
-      widget: MenuScreen(context),
+      widget: MenuScreen(),
     );
 
     //target widget

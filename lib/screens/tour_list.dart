@@ -1,6 +1,8 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:Fuligo/screens/cancel_tour.dart';
+import 'package:Fuligo/widgets/clear_button.dart';
+import 'package:Fuligo/widgets/custom_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
@@ -23,109 +25,93 @@ class TourListState extends State<TourList> {
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
     return Container(
-      decoration: const BoxDecoration(
-        color: bgColor,
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [gradientFrom, bgColor]),
-      ),
+      decoration: bgDecoration,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         // appBar: AppBar(
         //   title: Text('TEST'),
         // ),
-        body: Stack(
-          children: [
-            Container(
-                padding: const EdgeInsets.only(right: 20, left: 20),
-                width: mq.width,
-                height: mq.height,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2,
-                    ),
-                    TextHeader1(
-                      context,
-                      "Red Light",
-                      "The Red Light District is the mdieval city center of Amsterdam, known for its canals and narrow streets lined with old-scholl bars,",
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(40, 30, 40, 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(30, 20, 60, 20),
-                            child: SubTxt(context, 'Stops', '7'),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(60, 20, 30, 20),
-                            child: SubTxt(context, 'Stops', '7'),
-                          ),
-                        ],
+        body: Container(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                  width: mq.width,
+                  height: mq.height,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: mq.height * 0.17,
                       ),
-                    )
-                  ],
-                )),
-            Positioned(
-              top: 60,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.clear_rounded,
-                  size: 50,
-                  color: Colors.white,
+                      TextHeaderTest(
+                        context,
+                        "Red Light",
+                        "The Red Light District is the mdieval city \n center of Amsterdam, known for its canals\n and narrow streets lined with old-scholl bars, \n exotic nightclubs and brothels surrouned by \n neo-lit red lights",
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 40),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 60),
+                              child: SubTxt(context, 'Stops', '7'),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 60),
+                              child: SubTxt(context, 'Stops', '7'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+              ClearButton(context),
+              Positioned(
+                bottom: 100,
+                left: 20,
+                child: SizedBox(
+                  height: 140,
+                  // padding: const EdgeInsets.only(right: 20, left: 20),
+                  width: mq.width,
+                  child: ListView(
+                    shrinkWrap: true,
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      TourSmallImage(context, "assets/images/1.jpeg",
+                          "Red right", "Amsterdam"),
+                      TourSmallImage(context, "assets/images/1.jpeg",
+                          "Old town", "Amsterdam"),
+                      TourSmallImage(context, "assets/images/1.jpeg",
+                          "Old town", "Amsterdam")
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 90,
-              child: Container(
-                padding: const EdgeInsets.only(right: 20, left: 20),
-                width: mq.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ImageDetail(context, "assets/images/1.jpeg", "Red right",
-                        "Amsterdam"),
-                    ImageDetail(context, "assets/images/1.jpeg", "Old town",
-                        "Amsterdam"),
-                    ImageDetail(context, "assets/images/1.jpeg", "Old town",
-                        "Amsterdam")
-                  ],
+              Positioned(
+                bottom: 30,
+                child: Container(
+                  width: mq.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 350,
+                        height: 50,
+                        child: CustomButton(
+                            context, const CancelTour(), "Start tour"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 30,
-              child: Container(
-                width: mq.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 350,
-                      height: 50,
-                      child: CustomButton(
-                          context, const CancelTour(), "Start tour"),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

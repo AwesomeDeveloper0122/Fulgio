@@ -1,6 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:Fuligo/screens/cancel_tour.dart';
+import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
@@ -23,13 +24,7 @@ class KeizersgrachtState extends State<Keizersgracht> {
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
     return Container(
-      decoration: const BoxDecoration(
-        color: bgColor,
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [gradientFrom, bgColor]),
-      ),
+      decoration: bgDecoration,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         // appBar: AppBar(
@@ -38,37 +33,24 @@ class KeizersgrachtState extends State<Keizersgracht> {
         body: Stack(
           children: [
             Container(
-                padding: const EdgeInsets.only(right: 20, left: 20),
                 width: mq.width,
                 height: mq.height,
+                padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: mq.height * 0.17,
                     ),
-                    TextHeader1(
+                    TextHeaderTest(
                       context,
                       "Keizersgracht",
                       "The Red Light District is the mdieval city center of Amsterdam, known for its canals and narrow streets lined with old-scholl bars,",
                     ),
                   ],
                 )),
-            Positioned(
-              bottom: 30,
-              left: mq.width / 2 - 30,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.cancel,
-                  size: 60,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            ClearRoundButton(context, mq.width / 2 - 40),
           ],
         ),
       ),

@@ -1,12 +1,14 @@
 // ignore_for_file: unused_local_variable
-
+import 'package:Fuligo/model/user_modal.dart';
+import 'package:Fuligo/provider/auth_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:Fuligo/repositories/user_repository.dart';
 import 'package:Fuligo/widgets/custom_button.dart';
 import 'package:Fuligo/widgets/logo.dart';
-import 'package:flutter/material.dart';
 
 import 'package:Fuligo/routes/route_costant.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-import 'package:Fuligo/widgets/dialog.dart';
+// import 'package:Fuligo/widgets/dialog.dart';
 
 //common
 // import 'package:Fuligo/utils/common_colors.dart';
@@ -15,6 +17,7 @@ import 'package:Fuligo/utils/localtext.dart';
 //import firebase
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 // import 'package:top_snackbar_flutter/custom_snack_bar.dart';
@@ -30,6 +33,7 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   TextEditingController emailCtl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
   // final GlobalKey<State> _keyLoader = GlobalKey<State>();
   String email = "";
 
@@ -43,8 +47,24 @@ class LoginState extends State<Login> {
     });
   }
 
+  Future<void> getUser(User user) async {
+    print("===========get user================");
+    // await UserRepository.addUser(userModel)
+    final result = await UserRepository.getUserByID(user.uid);
+    print(user.uid);
+    print("ppppppppppppppppppppppppppppp");
+    print(result);
+    if (result != null) {
+      UserModel _userModel = UserModel.fromJson(result);
+      print("aaaaaaaaaaaaaaaaaaaaa");
+      print(_userModel);
+      AuthProvider.of(context).setUserModel(_userModel);
+    }
+  }
+
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
+
     return firebaseApp;
   }
 
@@ -63,10 +83,11 @@ class LoginState extends State<Login> {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pwd);
-      _result = 1;
+      print("---------------------------------------------");
+      print(userCredential.user!);
 
-      // await getUser(userCredential.user!);
-      // _result = 1;
+      await getUser(userCredential.user!);
+      _result = 1;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         _result = 2;

@@ -1,3 +1,4 @@
+import 'package:Fuligo/screens/chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'route_costant.dart';
 
@@ -19,6 +20,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const TourList());
     case RouteName.tourdetail:
       return MaterialPageRoute(builder: (context) => const TourDetail());
+    case RouteName.chat:
+      return MaterialPageRoute(builder: (context) => const Chat());
 
     default:
       return MaterialPageRoute(builder: (context) => const Verify());

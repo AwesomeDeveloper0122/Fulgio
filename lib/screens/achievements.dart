@@ -1,5 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
@@ -23,13 +24,7 @@ class ArchivmentsState extends State<Achievements> {
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
     return Container(
-      decoration: const BoxDecoration(
-        color: bgColor,
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [gradientFrom, bgColor]),
-      ),
+      decoration: bgDecoration,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         // appBar: AppBar(
@@ -38,134 +33,80 @@ class ArchivmentsState extends State<Achievements> {
         body: Stack(
           children: [
             Container(
-                padding: const EdgeInsets.only(right: 0, left: 0),
-                // width: 400,
-                // height: mq.height,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.15,
+              width: mq.width,
+              height: mq.height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: mq.height * 0.17,
+                  ),
+                  TextHeaderTest(
+                    context,
+                    "Archivements",
+                    "Each completed achievement \n brings you credit on Flugio, ",
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 40),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 55),
+                          child: SubTxt(context, 'Achievementss', '5 of 75'),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 55),
+                          child: SubTxt(context, 'Credit', '8 CHF'),
+                        ),
+                      ],
                     ),
-                    TextHeader1(
-                      context,
-                      "Archivements",
-                      "Each completed achievement \n brings you credit on Flugio, ",
+                  ),
+                  Container(
+                    width: mq.width,
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(5),
+                              child:
+                                  FuligoCard(context, "Early bird", greyColor),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(5),
+                              child:
+                                  FuligoCard(context, "Early bird", whiteColor),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    Container(
-                      width: mq.width,
-                      margin: const EdgeInsets.only(bottom: 10, top: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: mq.width / 2,
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: SubTxt(context, 'Achievements', '5 of 75'),
-                          ),
-                          Container(
-                            width: mq.width / 2,
-                            padding: const EdgeInsets.symmetric(vertical: 30),
-                            child: SubTxt(context, 'Credit', '8 CHF'),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: mq.width,
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Stack(
-                                children: [
-                                  Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5),
-                                    child: Row(
-                                      children: [
-                                        FuligoCard(
-                                          context,
-                                          "test",
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 25,
-                                    right: 20,
-                                    child: Icon(
-                                      Icons.cancel,
-                                      color: Colors.grey,
-                                      size: 16.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Stack(
-                                children: [
-                                  Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5),
-                                    child: Row(
-                                      children: [
-                                        FuligoCard(
-                                          context,
-                                          "test",
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 25,
-                                    right: 20,
-                                    child: Icon(
-                                      Icons.check_circle,
-                                      color: Colors.white,
-                                      size: 16.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: FuligoCard(context, "test"),
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                child: FuligoCard(context, "test"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )),
-            Positioned(
-              top: 60,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.clear,
-                  size: 50,
-                  color: Colors.white,
-                ),
+                  ),
+                ],
               ),
             ),
+            ClearButton(context),
+            // Positioned(
+            //   top: 60,
+            //   left: 20,
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       // Update the state of the app
+            //       // ...
+            //       // Then close the drawer
+            //       Navigator.pop(context);
+            //     },
+            //     child: const Icon(
+            //       Icons.clear,
+            //       size: 50,
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            // ),
             // Positioned(
             //   bottom: 50,
             //   child: Container(

@@ -9,8 +9,8 @@ Widget CircleImage(context, String url, double height, double width) => InkWell(
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100.0),
-        child: Image(
-          image: AssetImage(url),
+        child: Image.network(
+          url,
           height: height,
           width: width,
         ),

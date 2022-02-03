@@ -5,32 +5,35 @@ import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/utils/font_style.dart';
 import 'package:Fuligo/widgets/logo.dart';
 
-Widget TextHeaderTest(context, String title, String content) => Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          title,
-          style: font_20_white,
-          textAlign: TextAlign.center,
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: Container(
-            width: 62,
-            height: 2.5,
-            decoration: const BoxDecoration(color: Colors.grey),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
-          child: Text(
-            content,
-            style: font_13_white,
+Widget TextHeaderTest(context, String title, String content) => Container(
+      // padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: font_20_white,
             textAlign: TextAlign.center,
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Container(
+              width: 62,
+              height: 2.5,
+              decoration: const BoxDecoration(color: Colors.grey),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
+            child: Text(
+              content,
+              style: font_13_white,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
 
 Widget TextHeader(context, String title, String content) => Column(

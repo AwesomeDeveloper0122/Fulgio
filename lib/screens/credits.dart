@@ -1,5 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'package:Fuligo/utils/font_style.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
@@ -23,13 +24,7 @@ class CreditsState extends State<Credits> {
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
     return Container(
-      decoration: const BoxDecoration(
-        color: bgColor,
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [gradientFrom, bgColor]),
-      ),
+      decoration: bgDecoration,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         // appBar: AppBar(
@@ -38,37 +33,33 @@ class CreditsState extends State<Credits> {
         body: Stack(
           children: [
             Container(
-              padding: const EdgeInsets.only(right: 0, left: 0),
-              // width: 400,
-              // height: mq.height,
+              width: mq.width,
+              height: mq.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
+                    height: MediaQuery.of(context).size.height * 0.17,
                   ),
-                  TextHeader1(
+                  TextHeaderTest(
                     context,
                     "Credits",
                     "Your credit will be automatically applied \n to your next booking with Flugio. \n No actions are required",
                   ),
                   Container(
-                    width: mq.width,
-                    margin: const EdgeInsets.only(bottom: 10, top: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 40),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: mq.width / 2,
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: SubTxt(context, 'Available', 'CHF 8'),
+                          margin: EdgeInsets.symmetric(horizontal: 60),
+                          child: SubTxt(context, 'Achieved on', '24-10-2020'),
                         ),
                         Container(
-                          width: mq.width / 2,
-                          padding: const EdgeInsets.symmetric(vertical: 30),
-                          child: SubTxt(context, 'Used', 'CHF 4'),
-                        )
+                          margin: EdgeInsets.symmetric(horizontal: 60),
+                          child: SubTxt(context, 'Reward', '1 CHF'),
+                        ),
                       ],
                     ),
                   ),
@@ -84,53 +75,20 @@ class CreditsState extends State<Credits> {
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [gradientFrom, bgColor]),
-                            borderRadius: BorderRadius.circular(25.0),
+                            borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: ListTile(
                             contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
+                                horizontal: 20, vertical: 3),
                             leading: Icon(Icons.location_on_outlined,
                                 color: Colors.white, size: 32),
                             title: Text(
                               'Zurich-Amsterdam',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                              style: font_14_white,
                             ),
                             subtitle: Text(
                               '11-02-2021 | -2 CHF',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 14),
-                            ),
-                            onTap: () => {
-                              // Navigator.pushNamed(context, RouteName.Startour),
-                              print("object"),
-                            },
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          decoration: BoxDecoration(
-                            color: bgColor,
-                            gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [gradientFrom, bgColor]),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
-                            leading: Icon(Icons.location_on_outlined,
-                                color: Colors.white, size: 32),
-                            title: Text(
-                              'Zurich-Amsterdam',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                            subtitle: Text(
-                              '11-02-2021 | -2 CHF',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 14),
+                              style: font_14_grey,
                             ),
                             onTap: () => {
                               // Navigator.pushNamed(context, RouteName.Startour),
