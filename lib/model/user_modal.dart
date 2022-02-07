@@ -1,17 +1,21 @@
 import 'dart:convert';
 
+import 'package:firebase_storage/firebase_storage.dart';
+
 class UserModel {
   String uid;
   String username;
 
   String avatar;
   String email;
+  // List<Reference>? archievement;
 
   UserModel({
     this.uid = "",
     this.username = "",
     this.avatar = "",
     this.email = "",
+    // this.archievement,
   });
 
   UserModel.fromJson(Map json)
@@ -26,6 +30,15 @@ class UserModel {
       "username": (username == null) ? "" : username,
       "avatar": (avatar == null) ? "" : avatar,
       "email": (email == null) ? "" : email,
+      // "archievement": (archievement == null) ? [] : convertList(archievement!),
     };
+  }
+
+  List convertList(List<Reference> list) {
+    return list.map((item) {
+      return {
+        item,
+      };
+    }).toList();
   }
 }

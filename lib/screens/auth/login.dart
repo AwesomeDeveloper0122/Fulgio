@@ -1,4 +1,6 @@
 // ignore_for_file: unused_local_variable
+import 'dart:convert';
+
 import 'package:Fuligo/model/user_modal.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/utils/common_functions.dart';
@@ -22,6 +24,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 // import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -67,11 +70,12 @@ class LoginState extends State<Login> {
     // await UserRepository.addUser(userModel)
     final result = await UserRepository.getUserByID(user.uid);
     print(user.uid);
-
+    print("========= result ===============");
     print(result);
     if (result != null) {
       UserModel _userModel = UserModel.fromJson(result);
       print(_userModel);
+      print("========= usermodel ===============");
       AuthProvider.of(context).setUserModel(_userModel);
     }
   }
@@ -93,31 +97,26 @@ class LoginState extends State<Login> {
     } else {
       SmartDialog.showLoading(
           backDismiss: false, background: Colors.transparent);
-      // await Future.delayed(const Duration(seconds: 2));
-      // SmartDialog.dismiss();
+
       int _result = 0;
 
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: pwd);
-        print("---------------------------------------------");
+        print("--------------signInWithEmailAndPassword-----------------");
         print(userCredential.user!);
         await getUser(userCredential.user!);
         _result = 1;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-          print("123123123");
-
-          UserCredential userCredential = await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(email: email, password: pwd);
-          print("================  create new user============== ");
-          print(userCredential.user!);
-          _result = 2;
+          // UserCredential userCredential = await FirebaseAuth.instance
+          //     .createUserWithEmailAndPassword(email: email, password: pwd);
+          // print("================  create new user============== ");
+          // print(userCredential.user!);
+          // _result = 2;
         } else if (e.code == 'wrong-password') {
-          print("234234324");
           _result = 3;
         } else {
-          print("45654654");
           _result = 4;
         }
       }
