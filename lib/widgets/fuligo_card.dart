@@ -39,7 +39,7 @@ Widget FuligoCard(context, String content, Color color) => Stack(
           top: 25,
           right: 20,
           child: Icon(
-            Icons.cancel,
+            color == whiteColor ? Icons.check_circle : Icons.cancel,
             color: color,
             size: 16.0,
           ),

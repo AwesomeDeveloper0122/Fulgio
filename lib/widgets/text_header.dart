@@ -25,7 +25,7 @@ Widget TextHeaderTest(context, String title, String content) => Container(
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
+            padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Text(
               content,
               style: font_13_white,

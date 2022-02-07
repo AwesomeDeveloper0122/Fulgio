@@ -1,11 +1,10 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'dart:ffi';
-
 import 'package:Fuligo/model/chat_model.dart';
 import 'package:Fuligo/model/user_modal.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/utils/font_style.dart';
+import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/widgets/circleimage.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:Fuligo/widgets/logo.dart';
@@ -25,8 +24,9 @@ class ChatAgain extends StatefulWidget {
 }
 
 class ChatAgainState extends State<ChatAgain> {
+  bool is_load = false;
+  @override
   void initState() {
-    SmartDialog.showLoading(backDismiss: false, background: Colors.black);
     super.initState();
     getChatData();
     setState(() {
@@ -43,24 +43,17 @@ class ChatAgainState extends State<ChatAgain> {
   final ScrollController _scrollController = ScrollController();
   String content = "";
   TextEditingController chatInput = TextEditingController();
-  // ignore: non_constant_identifier_names
   List chat_list = [];
 
   @override
-
-// Get data in firebase
-  CollectionReference _collectionRef =
-      FirebaseFirestore.instance.collection('order');
-  // Stream documentStream =
-  //     FirebaseFirestore.instance.collection('order').doc('ABC123').snapshots();
-
   Future<List> getChatData() async {
-    var chatData = await FirebaseFirestore.instance
+    DocumentSnapshot chatData = await FirebaseFirestore.instance
         .collection('order')
         .doc('qEnncoZSqLs8QE4jS3bF')
         .get();
+
     chat_list = chatData['chatMessages'];
-    SmartDialog.dismiss();
+    is_load = true;
     setState(() {});
     return chat_list;
   }
@@ -102,8 +95,9 @@ class ChatAgainState extends State<ChatAgain> {
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
     UserModel _userInfo = AuthProvider.of(context).userModel;
-    CollectionReference users = FirebaseFirestore.instance.collection('order');
+    // CollectionReference users = FirebaseFirestore.instance.collection('order');
     List<Widget> widgets = [];
+    // ignore: avoid_function_literals_in_foreach_calls
     chat_list.forEach((element) {
       print(element['message']);
 
@@ -163,34 +157,36 @@ class ChatAgainState extends State<ChatAgain> {
                   ),
                 ),
               ),
-              Positioned(
-                  top: mq.height / 6,
-                  // top: 0,
-                  // bottom: 70,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        height: 600,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          width: mq.width * 0.9,
-                          // padding: EdgeInsets.all(20),
-                          child: Scrollbar(
-                            isAlwaysShown: true,
-                            controller: _scrollController,
-                            child: ListView(
-                              scrollDirection: Axis.vertical,
-                              children: widgets,
-                              padding: EdgeInsets.all(10),
+              is_load
+                  ? Positioned(
+                      top: mq.height / 6,
+                      // top: 0,
+                      // bottom: 70,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            height: 600,
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Container(
+                              width: mq.width * 0.9,
+                              // padding: EdgeInsets.all(20),
+                              child: Scrollbar(
+                                isAlwaysShown: true,
+                                controller: _scrollController,
+                                child: ListView(
+                                  scrollDirection: Axis.vertical,
+                                  children: widgets,
+                                  padding: EdgeInsets.all(10),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  )),
+                        ],
+                      ))
+                  : kLoadingFadingWidget(context),
               Positioned(
                 bottom: 0,
                 width: mq.width,

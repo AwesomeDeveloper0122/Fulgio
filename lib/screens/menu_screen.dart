@@ -10,6 +10,7 @@ import 'package:Fuligo/screens/chat/chat.dart';
 import 'package:Fuligo/screens/chat/chat_again.dart';
 import 'package:Fuligo/screens/chat/chat_content.dart';
 import 'package:Fuligo/screens/start_tour.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -38,6 +39,8 @@ class Test extends StatelessWidget {
 
   Widget build(BuildContext context) {
     UserModel _userInfo = AuthProvider.of(context).userModel;
+    print("ssssssssssssss");
+    print(_userInfo.username);
     return Stack(
       children: [
         Container(

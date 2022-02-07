@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:Fuligo/widgets/custom_button.dart';
 import 'package:Fuligo/widgets/text_header.dart';
 import 'package:Fuligo/screens/start_tour.dart';
+// import 'package:geocoding/geocoding.dart';
+// import 'package:geolocator/geolocator.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,11 +24,19 @@ class Verify extends StatefulWidget {
 }
 
 class VerifyState extends State<Verify> {
+  // late Position _currentPosition;
+  String? _currentAddress;
   late GoogleMapController myController;
 
   final LatLng _center = const LatLng(45.521563, -122.677433);
+  // LatLng? _mylocation;
 
   MapType _currentMapType = MapType.normal;
+
+  void initState() {
+    super.initState();
+    // _getCurrentLocation();
+  }
 
   void _onMapTypeButtonPressed() {
     setState(() {
@@ -36,6 +46,46 @@ class VerifyState extends State<Verify> {
     });
   }
 
+  // _getAddressFromLatLng() async {
+  //   try {
+  //     List<Placemark> placemarks = await placemarkFromCoordinates(
+  //         _currentPosition.latitude, _currentPosition.longitude);
+  //     _mylocation =
+  //         LatLng(_currentPosition.latitude, _currentPosition.longitude);
+  //     setState(() {});
+
+  //     Placemark place = placemarks[0];
+
+  //     setState(() {
+  //       _currentAddress =
+  //           "${place.locality}, ${place.postalCode}, ${place.country}";
+  //       print("12312312312312312123");
+  //       print(_currentAddress);
+  //     });
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  // _getCurrentLocation() async {
+  //   LocationPermission permission;
+  //   // permission = await Geolocator.checkPermission();
+  //   permission = await Geolocator.requestPermission();
+  //   print("aaaaaaaaaaaaaaaaaaaaa");
+  //   print(permission);
+  //   Geolocator.getCurrentPosition(
+  //           desiredAccuracy: LocationAccuracy.best,
+  //           forceAndroidLocationManager: true)
+  //       .then((Position position) {
+  //     setState(() {
+  //       _currentPosition = position;
+  //       _getAddressFromLatLng();
+  //     });
+  //   }).catchError((e) {
+  //     print(e);
+  //   });
+  // }
+
   void _onMapCreated(GoogleMapController controller) {
     myController = controller;
   }
@@ -43,6 +93,7 @@ class VerifyState extends State<Verify> {
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
+    var map_height = mq * 0.5;
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -58,11 +109,6 @@ class VerifyState extends State<Verify> {
           body: Stack(
             alignment: Alignment.center,
             children: <Widget>[
-              // TextHeader(
-              //   context,
-              //   "Verify",
-              //   "Great! Please verify your e-mail start",
-              // ),
               Center(
                 child: Column(
                   children: [
@@ -70,7 +116,7 @@ class VerifyState extends State<Verify> {
                     TextHeaderTest(context, "Verify",
                         "Great! Please verify your e-mail start"),
                     Container(
-                      height: mq.height * 0.5,
+                      height: map_height.height,
                       width: 280.0,
                       margin: const EdgeInsets.only(top: 15),
                       decoration: const BoxDecoration(
@@ -86,7 +132,7 @@ class VerifyState extends State<Verify> {
                           child: Column(
                             children: <Widget>[
                               Container(
-                                height: mq.height * 0.1,
+                                height: map_height.height * 0.22,
                                 child: Column(
                                   children: [
                                     Text(
@@ -111,14 +157,17 @@ class VerifyState extends State<Verify> {
                                 ),
                               ),
                               SizedBox(
-                                height: mq.height * 0.26,
+                                height: map_height.height * 0.48,
                                 child: GoogleMap(
-                                    onMapCreated: _onMapCreated,
-                                    initialCameraPosition: CameraPosition(
-                                      target: _center,
-                                      zoom: 10.0,
-                                    ),
-                                    mapType: _currentMapType),
+                                  onMapCreated: _onMapCreated,
+                                  initialCameraPosition: CameraPosition(
+                                    target: _center,
+                                    zoom: 10.0,
+                                  ),
+                                  mapType: _currentMapType,
+                                  myLocationEnabled: true,
+                                  myLocationButtonEnabled: true,
+                                ),
                               ),
                               Container(
                                 child: Column(

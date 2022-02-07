@@ -12,6 +12,8 @@ abstract class LocalText {
   // ignore: constant_identifier_names
   static const LoginSuccess = 'Login Successfully';
   // ignore: constant_identifier_names
+  static const SignupandLogin = 'Sign up and Login Successfully';
+  // ignore: constant_identifier_names
   static const WrongPwd = 'Wrong Password';
   // ignore: constant_identifier_names
   static const NotFoundUser = 'Not found user';

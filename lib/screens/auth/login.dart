@@ -1,6 +1,9 @@
 // ignore_for_file: unused_local_variable
 import 'package:Fuligo/model/user_modal.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
+import 'package:Fuligo/utils/common_functions.dart';
+import 'package:Fuligo/utils/common_header_list.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/repositories/user_repository.dart';
 import 'package:Fuligo/widgets/custom_button.dart';
@@ -31,20 +34,32 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
+  String page = HeaderList.discover;
+  String title = '';
+  String subtitle = '';
+  List<String> headerList = [];
   TextEditingController emailCtl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  // final GlobalKey<State> _keyLoader = GlobalKey<State>();
   String email = "";
-
   @override
   void initState() {
     super.initState();
+    getData(page);
     _initializeFirebase();
-
     setState(() {
       emailCtl.text = "";
     });
+
+    // setState(() {});
+  }
+
+  void getData(pageName) async {
+    headerList = await getTitle(pageName);
+    print("-------------headerList-----------------");
+    print(headerList);
+    title = headerList[0];
+    subtitle = headerList[1];
+    setState(() {});
   }
 
   Future<void> getUser(User user) async {
@@ -52,11 +67,10 @@ class LoginState extends State<Login> {
     // await UserRepository.addUser(userModel)
     final result = await UserRepository.getUserByID(user.uid);
     print(user.uid);
-    print("ppppppppppppppppppppppppppppp");
+
     print(result);
     if (result != null) {
       UserModel _userModel = UserModel.fromJson(result);
-      print("aaaaaaaaaaaaaaaaaaaaa");
       print(_userModel);
       AuthProvider.of(context).setUserModel(_userModel);
     }
@@ -72,35 +86,45 @@ class LoginState extends State<Login> {
     String email = emailCtl.text;
     String pwd = "123123123";
 
-    // ========== Show Progress Dialog ===========
+    bool isValid = EmailValidator.validate(email);
+    if (!isValid) {
+      SmartDialog.showToast("email invalid");
+      return;
+    } else {
+      SmartDialog.showLoading(
+          backDismiss: false, background: Colors.transparent);
+      // await Future.delayed(const Duration(seconds: 2));
+      // SmartDialog.dismiss();
+      int _result = 0;
 
-    // Dialogs.showLoadingDialog(context, _keyLoader, "Please wait..");
-    SmartDialog.showLoading(backDismiss: false, background: Colors.transparent);
-    // await Future.delayed(const Duration(seconds: 2));
-    // SmartDialog.dismiss();
-    int _result = 0;
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: pwd);
+        print("---------------------------------------------");
+        print(userCredential.user!);
+        await getUser(userCredential.user!);
+        _result = 1;
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print("123123123");
 
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: pwd);
-      print("---------------------------------------------");
-      print(userCredential.user!);
-
-      await getUser(userCredential.user!);
-      _result = 1;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        _result = 2;
-      } else if (e.code == 'wrong-password') {
-        _result = 3;
-      } else {
-        _result = 4;
+          UserCredential userCredential = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(email: email, password: pwd);
+          print("================  create new user============== ");
+          print(userCredential.user!);
+          _result = 2;
+        } else if (e.code == 'wrong-password') {
+          print("234234324");
+          _result = 3;
+        } else {
+          print("45654654");
+          _result = 4;
+        }
       }
+      SmartDialog.dismiss();
+
+      await toDoResult(_result);
     }
-    SmartDialog.dismiss();
-    // ------------ Dismiss Porgress Dialog  -------------------
-    // Navigator.of(_keyLoader.currentContext!, rootNavigator: false).pop();
-    await toDoResult(_result);
   }
 
   Future<void> toDoResult(int result) async {
@@ -114,7 +138,10 @@ class LoginState extends State<Login> {
         break;
 
       case 2:
-        SmartDialog.showToast(LocalText.NotFoundUser);
+        SmartDialog.showToast(
+          LocalText.SignupandLogin,
+        );
+        Navigator.of(context).pushReplacementNamed(RouteName.Verify);
         break;
 
       case 3:
@@ -149,8 +176,7 @@ class LoginState extends State<Login> {
                 child: Column(
                   children: [
                     Logo_test,
-                    TextHeaderTest(context, "Explore",
-                        "Explore the city through digital city \n guides and exciting video content"),
+                    TextHeaderTest(context, title, subtitle),
                   ],
                 ),
               ),

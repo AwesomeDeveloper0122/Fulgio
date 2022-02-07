@@ -5,10 +5,17 @@
 // import 'package:Fuligo/screens/chat/chat.dart';
 // import 'package:Fuligo/screens/chat/chat_content.dart';
 // import 'package:Fuligo/screens/credits.dart';
+import 'dart:convert';
+
 import 'package:Fuligo/provider/auth_provider.dart';
+import 'package:Fuligo/screens/achievements.dart';
+import 'package:Fuligo/screens/home.dart';
 import 'package:Fuligo/screens/splash_page.dart';
 // import 'package:Fuligo/screens/chat/chat_content.dart';
 import 'package:Fuligo/test.dart';
+import 'package:Fuligo/utils/common_header_list.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/routes/route.dart' as router;
 import 'package:flutter/services.dart';
@@ -16,6 +23,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 // import 'package:Fuligo/screens/splash_page.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:Fuligo/screens/keizersgracht.dart';
 // import 'package:Fuligo/screens/route_screen.dart';
@@ -27,8 +35,19 @@ import 'package:provider/provider.dart';
 // import 'package:Fuligo/screens/home.dart';
 // import 'package:Fuligo/test.dart';
 
-void main() {
-  runApp(const MyApp());
+// void main() {
+//   runApp(const MyApp());
+// }
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+  //initilization of Firebase app
+
+  // other Firebase service initialization
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -39,9 +58,31 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
+  String isLoad = "false";
+  String title = '';
+  String subtitle = '';
   @override
   void initState() {
     super.initState();
+    getHeaderData(
+      CollectionNameList.display,
+      DocIdList.display,
+    );
+  }
+
+  @override
+  Future<String> getHeaderData(String collectionName, String docId) async {
+    DocumentSnapshot headerData = await FirebaseFirestore.instance
+        .collection(collectionName)
+        .doc(docId)
+        .get();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('headerlist', jsonEncode(headerData.data()));
+    isLoad = "true";
+    setState(() {});
+    return isLoad;
   }
 
   @override
@@ -68,7 +109,7 @@ class MyAppState extends State<MyApp> {
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: SplashPage(),
+          home: (isLoad == "true") ? Home() : const SplashPage(),
           builder: FlutterSmartDialog.init(),
           onGenerateRoute: router.generateRoute),
     );
