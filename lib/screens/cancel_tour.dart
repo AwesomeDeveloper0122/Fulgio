@@ -8,7 +8,7 @@ import 'package:Fuligo/utils/common_colors.dart';
 //Screens
 // import 'package:Fuligo/screens/tours.dart';
 // import 'package:Fuligo/screens/touranother.dart';
-import 'package:Fuligo/screens/achievements.dart';
+import 'package:Fuligo/screens/achievement/achievements.dart';
 
 //Widgets
 import 'package:Fuligo/widgets/custom_button.dart';

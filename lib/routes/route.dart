@@ -1,3 +1,4 @@
+import 'package:Fuligo/screens/achievement/achievement_detail.dart';
 import 'package:Fuligo/screens/chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'route_costant.dart';
@@ -22,6 +23,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const TourDetail());
     case RouteName.chat:
       return MaterialPageRoute(builder: (context) => const Chat());
+    // case RouteName.achievementDetail:
+    //   return MaterialPageRoute(
+    //       builder: (context) => const ArchivementsDetail());
 
     default:
       return MaterialPageRoute(builder: (context) => const Verify());

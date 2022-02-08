@@ -8,7 +8,7 @@
 import 'dart:convert';
 
 import 'package:Fuligo/provider/auth_provider.dart';
-import 'package:Fuligo/screens/achievements.dart';
+import 'package:Fuligo/screens/achievement/achievements.dart';
 import 'package:Fuligo/screens/home.dart';
 import 'package:Fuligo/screens/splash_page.dart';
 // import 'package:Fuligo/screens/chat/chat_content.dart';

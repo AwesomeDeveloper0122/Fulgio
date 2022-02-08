@@ -7,7 +7,7 @@ import 'package:Fuligo/model/user_modal.dart';
 
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/routes/route_costant.dart';
-import 'package:Fuligo/screens/achievements.dart';
+import 'package:Fuligo/screens/achievement/achievements.dart';
 import 'package:Fuligo/screens/chat/chat.dart';
 import 'package:Fuligo/screens/chat/chat_again.dart';
 import 'package:Fuligo/screens/chat/chat_content.dart';

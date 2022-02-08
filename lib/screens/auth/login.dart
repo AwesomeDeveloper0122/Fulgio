@@ -5,6 +5,7 @@ import 'package:Fuligo/model/user_modal.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/utils/common_functions.dart';
 import 'package:Fuligo/utils/common_header_list.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/repositories/user_repository.dart';
@@ -71,10 +72,21 @@ class LoginState extends State<Login> {
     final result = await UserRepository.getUserByID(user.uid);
     print(user.uid);
     print("========= result ===============");
-    print(result);
+    print(result["achievement"].runtimeType);
+    print(result["achievement"]);
+    // List<dynamic> test = result["achievement"];
+    // List<Map<String, dynamic>> json;
+    // test.forEach((element) {
+    //   // Map<String, dynamic> ele = element;
+    //   print("=== element ===");
+    //   print(element.runtimeType);
+    //   print(element);
+    // });
+
     if (result != null) {
       UserModel _userModel = UserModel.fromJson(result);
-      print(_userModel);
+      // _userModel.getAchievement(result);
+      // print(_userModel.);
       print("========= usermodel ===============");
       AuthProvider.of(context).setUserModel(_userModel);
     }

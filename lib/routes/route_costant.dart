@@ -8,4 +8,5 @@ class RouteName {
   static const String tourlist = '/tourlist';
   static const String tourdetail = '/tourdetail';
   static const String chat = '/chat';
+  static const String achievementDetail = '/achievementdetail';
 }
