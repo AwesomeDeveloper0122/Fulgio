@@ -64,7 +64,9 @@ class ArchivmentsState extends State<Achievements> {
             "isDone": true,
             "active": element['active'],
             "name": element['name'],
-            "description": element['description']
+            "description": element['description'],
+            // "credits": element['credits'],
+            // "updatedat": element['updatedat']
           };
           new_list.add(temp);
         } else {
@@ -72,7 +74,9 @@ class ArchivmentsState extends State<Achievements> {
             "isDone": false,
             "active": element['active'],
             "name": element['name'],
-            "description": element['description']
+            "description": element['description'],
+            // "credits": element['credits'],
+            // "updatedat": element['updatedat']
           };
           new_list.add(temp);
         }
@@ -92,16 +96,17 @@ class ArchivmentsState extends State<Achievements> {
   }
 
   List<Widget> getArchivementsItem(List<Map> newList) {
-    List<Widget> list = [];
+    List<Widget> cardlist = [];
     for (var i = 0; i < newList.length; i++) {
       if (newList[i]['isDone']) {
-        list.add(
+        cardlist.add(
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ArchivementsDetail(),
+                  // builder: (context) => ArchivementsDetail(data: newList[i]),
+                  builder: (context) => ArchivementsDetail(data: newList[i]),
                 ),
               );
             },
@@ -113,10 +118,16 @@ class ArchivmentsState extends State<Achievements> {
           ),
         );
       } else {
-        list.add(
+        cardlist.add(
           GestureDetector(
             onTap: () {
-              print("Tapped a Container");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  // builder: (context) => ArchivementsDetail(data: newList[i]),
+                  builder: (context) => ArchivementsDetail(data: newList[i]),
+                ),
+              );
             },
             child: Container(
               padding: const EdgeInsets.all(5),
@@ -127,7 +138,7 @@ class ArchivmentsState extends State<Achievements> {
         );
       }
     }
-    return list;
+    return cardlist;
   }
 
   @override
@@ -138,71 +149,82 @@ class ArchivmentsState extends State<Achievements> {
       return Container(
         decoration: bgDecoration,
         child: Scaffold(
-            backgroundColor: Colors.transparent,
-            // appBar: AppBar(
-            //   title: Text('TEST'),
-            // ),
-            body: is_load
-                ? Stack(
-                    children: [
-                      Container(
-                        width: mq.width,
-                        height: mq.height,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              height: mq.height * 0.17,
-                            ),
-                            TextHeaderTest(
-                              context,
-                              "Archivements",
-                              "Each completed achievement \n brings you credit on Flugio, ",
-                            ),
-                            Container(
-                              height: mq.height * 0.16,
-                              padding: const EdgeInsets.symmetric(vertical: 40),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 55),
-                                    child: SubTxt(context, 'Achievements',
-                                        '$user_achieve of ${doc_list.length}'),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 55),
-                                    child: SubTxt(
-                                        context, 'Credit', '$user_credit CHF'),
-                                  ),
-                                ],
+          backgroundColor: Colors.transparent,
+          // appBar: AppBar(
+          //   title: Text('TEST'),
+          // ),
+          body: Stack(
+            children: [
+              Container(
+                width: mq.width,
+                height: mq.height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: mq.height * 0.17,
+                    ),
+                    TextHeaderTest(
+                      context,
+                      "Archivements",
+                      "Each completed achievement \n brings you credit on Flugio, ",
+                    ),
+                    is_load
+                        ? Column(
+                            children: [
+                              Container(
+                                height: mq.height * 0.16,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 40),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 55),
+                                      child: SubTxt(context, 'Achievements',
+                                          '$user_achieve of ${doc_list.length}'),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 55),
+                                      child: SubTxt(context, 'Credit',
+                                          '$user_credit CHF'),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: mq.width,
-                              height: mq.height * 0.57,
-                              // decoration: BoxDecoration(
-                              //     color: Colors.white,
-                              //     borderRadius: BorderRadius.circular(10)),
+                              Container(
+                                width: mq.width,
+                                height: mq.height * 0.57,
+                                // decoration: BoxDecoration(
+                                //     color: Colors.white,
+                                //     borderRadius: BorderRadius.circular(10)),
 
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: GridView.count(
-                                padding: const EdgeInsets.all(0),
-                                crossAxisCount: 2,
-                                children: getArchivementsItem(new_list),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 30),
+                                child: GridView.count(
+                                  padding: const EdgeInsets.all(0),
+                                  crossAxisCount: 2,
+                                  children: getArchivementsItem(new_list),
+                                ),
                               ),
+                            ],
+                          )
+                        : Container(
+                            child: SizedBox(
+                              height: mq.height * 0.3,
+                              child: kLoadingFadingWidget(context),
                             ),
-                          ],
-                        ),
-                      ),
-                      ClearButton(context),
-                    ],
-                  )
-                : kLoadingFadeWidget(context)),
+                          )
+                  ],
+                ),
+              ),
+              ClearButton(context),
+            ],
+          ),
+        ),
       );
     });
   }

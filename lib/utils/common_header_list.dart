@@ -19,4 +19,5 @@ abstract class HeaderList {
   static const explorer = 'Explore';
   static const verify = 'Verify';
   static const discover = 'Discover';
+  static const location = 'Location';
 }

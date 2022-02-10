@@ -20,3 +20,5 @@ const bgDecoration = BoxDecoration(
       end: Alignment.bottomRight,
       colors: [gradientFrom, bgColor]),
 );
+const Color chatTitleColor = Color.fromRGBO(24, 83, 98, 1);
+const Color chatContentColor = Color.fromRGBO(66, 120, 125, 1);

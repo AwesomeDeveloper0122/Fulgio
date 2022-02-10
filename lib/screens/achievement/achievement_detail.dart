@@ -13,7 +13,11 @@ import 'package:Fuligo/widgets/fuligo_card.dart';
 // import 'package:Fuligo/screens/tours.dart';
 
 class ArchivementsDetail extends StatefulWidget {
-  ArchivementsDetail({Key? key}) : super(key: key);
+  final Map data;
+  ArchivementsDetail({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
 // SecondScreenWithData({Key key, @required this.person}) : super(key: key);
   @override
   ArchivementsDetailState createState() => ArchivementsDetailState();
@@ -23,6 +27,7 @@ class ArchivementsDetailState extends State<ArchivementsDetail> {
   @override
   Widget build(BuildContext context) {
     print("123123");
+    print(widget.data);
 
     var mq = MediaQuery.of(context).size;
     return Container(

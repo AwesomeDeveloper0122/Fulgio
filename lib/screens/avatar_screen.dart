@@ -22,6 +22,12 @@ class AvatarScreen extends StatefulWidget {
 class AvatarScreenState extends State<AvatarScreen> {
   @override
   Widget build(BuildContext context) {
+    List<Widget> avatarList = [];
+    for (var i = 0; i < 6; i++) {
+      avatarList.add(
+        CircleLocalImage(context, "assets/images/avatar-1.jpg"),
+      );
+    }
     var mq = MediaQuery.of(context).size;
     return Container(
       decoration: const BoxDecoration(
@@ -56,45 +62,12 @@ class AvatarScreenState extends State<AvatarScreen> {
                     ),
                     Container(
                       width: mq.width,
+                      height: mq.height * 0.7,
                       margin: const EdgeInsets.only(bottom: 10, top: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: mq.width / 2,
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: SubTxt(context, 'AvatarScreen', '5 of 75'),
-                          ),
-                          Container(
-                            width: mq.width / 2,
-                            padding: const EdgeInsets.symmetric(vertical: 30),
-                            child: SubTxt(context, 'Credit', '8 CHF'),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: mq.width,
-                      margin: const EdgeInsets.only(bottom: 10, top: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.0)),
-                            width: mq.width / 2,
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: CircleImage(context,
-                                "assets/images/avatar-1.jpg", 100, 100),
-                          ),
-                          Container(
-                            width: mq.width / 2,
-                            padding: const EdgeInsets.symmetric(vertical: 30),
-                            child: CircleImage(context,
-                                "assets/images/avatar-1.jpg", 100, 100),
-                          )
-                        ],
-                      ),
+                      child: GridView.count(
+                          padding: const EdgeInsets.all(60),
+                          crossAxisCount: 2,
+                          children: avatarList),
                     ),
                   ],
                 )),

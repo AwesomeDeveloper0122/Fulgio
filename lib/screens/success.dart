@@ -41,8 +41,8 @@ class SucessState extends State<Sucess> {
           children: [
             Container(
               padding: const EdgeInsets.only(right: 0, left: 0),
-              // width: 400,
-              // height: mq.height,
+              width: mq.width,
+              height: mq.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,31 +55,34 @@ class SucessState extends State<Sucess> {
                     "Sucess",
                     "You finished an achievement",
                   ),
-                  Container(
-                    width: mq.width,
-                    margin: const EdgeInsets.only(bottom: 10, top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: mq.width / 2,
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: SubTxt(context, 'Available', 'CHF 8'),
-                        ),
-                        Container(
-                          width: mq.width / 2,
-                          padding: const EdgeInsets.symmetric(vertical: 30),
-                          child: SubTxt(context, 'Used', 'CHF 4'),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Icon(
-                      Icons.cancel,
-                      color: bgColor,
-                      size: 250.0,
+                  Center(
+                    child: Container(
+                      width: 200,
+                      height: 200,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 60),
+                      decoration: BoxDecoration(
+                        color: bgColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            child: Image.asset(
+                              'assets/images/png/icon-umbrella.png',
+                              height: 100,
+                              width: 100,
+                            ),
+                          ),
+                          Text(
+                            "123",
+                            style: TextStyle(color: whiteColor, fontSize: 16),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ],

@@ -12,6 +12,7 @@ import 'package:Fuligo/screens/chat/chat.dart';
 import 'package:Fuligo/screens/chat/chat_again.dart';
 import 'package:Fuligo/screens/chat/chat_content.dart';
 import 'package:Fuligo/screens/start_tour.dart';
+import 'package:Fuligo/utils/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
@@ -19,6 +20,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 // import 'package:Fuligo/widgets/button.dart';
 import 'package:Fuligo/widgets/circleimage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'avatar_screen.dart';
 // import 'package:Fuligo/screens/achievements.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -47,9 +50,15 @@ class Test extends StatelessWidget {
   Test({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
+    bool isLoad = false;
     UserModel _userInfo = AuthProvider.of(context).userModel;
+    if (_userInfo.avatar != "") {
+      isLoad = true;
+    }
+
     print("========= userInfo ============");
-    print(_userInfo.username);
+    print(isLoad);
+    print(_userInfo.avatar);
     return Stack(
       children: [
         Container(
@@ -67,7 +76,7 @@ class Test extends StatelessWidget {
           child: ListView(
             children: <Widget>[
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.17,
+                height: MediaQuery.of(context).size.height * 0.1,
               ),
               ListTile(
                 contentPadding: EdgeInsets.only(bottom: 20, left: 20),
@@ -152,30 +161,59 @@ class Test extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          bottom: 30,
-          child: Container(
-            padding: EdgeInsets.only(left: 30),
-            // width: mq.width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleImage(context, _userInfo.avatar, 80, 80),
-                Container(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    _userInfo.username,
-                    style: TextStyle(
-                        color: whiteColor,
-                        decoration: TextDecoration.none,
-                        fontSize: 16),
+        isLoad
+            ? Positioned(
+                bottom: 30,
+                child: Container(
+                  padding: EdgeInsets.only(left: 30),
+                  // width: mq.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // CircleImage(context, _userInfo.avatar, 80, 80),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AvatarScreen(),
+                            ),
+                          );
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
+                          child: Image.network(
+                            _userInfo.avatar,
+                            height: 80,
+                            width: 80,
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return Center(
+                                child: kLoadingFadingWidget(context),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text(
+                          _userInfo.username,
+                          style: TextStyle(
+                              color: whiteColor,
+                              decoration: TextDecoration.none,
+                              fontSize: 16),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
-        ),
+                ),
+              )
+            : kLoadingFadingWidget(context),
       ],
     );
   }

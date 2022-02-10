@@ -59,6 +59,7 @@ dependencies:
   path_provider: ^2.0.8
   flutter_firebase_chat_core: ^1.5.2
   email_validator: ^2.0.1
+  flutter_dialogs: ^2.1.1
   # geocoding: ^2.0.2
   # location: ^4.3.0
   
@@ -101,6 +102,7 @@ flutter:
     - assets/images/avatar-2.jpg
     - assets/images/avatar-3.jpg
     - assets/images/avatar-4.jpg  
+    - assets/images/png/icon-umbrella.png  
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
