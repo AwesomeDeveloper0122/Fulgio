@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.testproject">
+    package="com.flugio.app">
     <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
    <application
         android:label="testproject"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyDnTr7ut0QsoE-0My0dPfgq0lu6QZDMe14"
+        android:value="AIzaSyAdZUK7PREsaN7RFVEyW2J-q1V0rasiIM0"
          />
         
         <activity

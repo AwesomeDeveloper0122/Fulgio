@@ -1,7 +1,8 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'package:Fuligo/screens/start_tour.dart';
-import 'package:Fuligo/screens/tours.dart';
+import 'package:Fuligo/screens/tours/start_tour.dart';
+import 'package:Fuligo/screens/tours/tours.dart';
+import 'package:Fuligo/screens/video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:Fuligo/utils/common_colors.dart';
@@ -49,12 +50,22 @@ class CancelTourState extends State<CancelTour> {
             Positioned(
               top: 200,
               left: 80,
-              child: CircleImage(context, "assets/images/avatar-1.jpg", 80, 80),
+              child: CircleImage(
+                  context,
+                  "https://firebasestorage.googleapis.com/v0/b/project-flugio.appspot.com/o/assets%2Fstatic%2Favatar-marieke-harmsen%402x.png?alt=media&token=8043d7f3-347b-457c-abf8-126a79449354",
+                  80,
+                  80,
+                  "tour"),
             ),
             Positioned(
               top: 400,
               left: 30,
-              child: CircleImage(context, "assets/images/avatar-2.jpg", 80, 80),
+              child: CircleImage(
+                  context,
+                  "https://firebasestorage.googleapis.com/v0/b/project-flugio.appspot.com/o/assets%2Fstatic%2Favatar-marieke-harmsen%402x.png?alt=media&token=8043d7f3-347b-457c-abf8-126a79449354",
+                  80,
+                  80,
+                  "tour"),
             ),
             Positioned(
               top: 50,
@@ -95,56 +106,60 @@ class CancelTourState extends State<CancelTour> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      height: 80,
-                      width: 340,
+                      height: mq.height * 0.1,
+                      width: mq.width * 0.85,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(15),
                         image: DecorationImage(
-                          image: AssetImage("assets/images/explore.png"),
-                          fit: BoxFit.fitWidth,
-                        ),
+                            image: NetworkImage(
+                                "https://firebasestorage.googleapis.com/v0/b/project-flugio.appspot.com/o/assets%2F1623336600707_9955.jpg?alt=media&token=75cc95c4-c371-4528-9c0f-b8ef2b73f855"),
+                            fit: BoxFit.fill),
                       ),
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.play_arrow,
-                          size: 30,
-                          color: Colors.white,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [gradientFrom, bgColor]),
+                            color: bgColor.withOpacity(0.6)),
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.play_arrow,
+                            size: 30,
+                            color: Colors.white,
+                          ),
+                          title: Text(
+                            'In 250 Meter',
+                            // textScaleFactor: 1.5,
+                          ),
+                          trailing: Image(
+                            image:
+                                AssetImage('assets/images/png/icon-route.png'),
+                            width: 60,
+                            height: 60,
+                          ),
+                          subtitle: Text(
+                            'Rijksmuseum',
+                            textScaleFactor: 1.1,
+                            style: TextStyle(color: whiteColor),
+                          ),
+                          selected: false,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const VideoScreen(),
+                              ),
+                            );
+                          },
                         ),
-                        title: Text(
-                          'In 250 Meter',
-                          // textScaleFactor: 1.5,
-                        ),
-                        trailing: Icon(
-                          Icons.alt_route_rounded,
-                          size: 30,
-                          color: Colors.white,
-                        ),
-                        subtitle: Text(
-                          'Rijksmuseum',
-                          textScaleFactor: 1.1,
-                          style: TextStyle(color: whiteColor),
-                        ),
-                        selected: false,
-                        onTap: () {},
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            // Positioned(
-            //   top: 100,
-            //   child: ListView(
-            //     padding: const EdgeInsets.all(8),
-            //     children: const <Widget>[
-            //       ListTile(
-            //           title: Text("Battery Full"),
-            //           subtitle: Text("The battery is full."),
-            //           leading: Icon(Icons.battery_full),
-            //           trailing: Icon(Icons.star)),
-            //     ],
-            //   ),
-            // )
           ],
         ),
       ),

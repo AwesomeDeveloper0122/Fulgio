@@ -1,7 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:Fuligo/screens/cancel_tour.dart';
-import 'package:Fuligo/screens/tour_another.dart';
+import 'package:Fuligo/screens/tours/tour_another.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +25,13 @@ class RouteScreenState extends State<RouteScreen> {
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
     return Container(
-      decoration: bgDecoration,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        image: DecorationImage(
+            image: NetworkImage(
+                "https://firebasestorage.googleapis.com/v0/b/project-flugio.appspot.com/o/assets%2F1623336600707_9955.jpg?alt=media&token=75cc95c4-c371-4528-9c0f-b8ef2b73f855"),
+            fit: BoxFit.fill),
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         // appBar: AppBar(
@@ -34,6 +40,13 @@ class RouteScreenState extends State<RouteScreen> {
         body: Stack(
           children: [
             Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [gradientFrom, bgColor]),
+                    color: bgColor.withOpacity(0.8)),
                 width: mq.width,
                 height: mq.height,
                 padding: EdgeInsets.symmetric(horizontal: 40),

@@ -89,7 +89,7 @@ class ChatContent extends StatelessWidget {
                             Container(
                               margin: EdgeInsets.only(right: 20, top: 20),
                               child: CircleImage(
-                                  context, _userInfo.avatar, 40, 40),
+                                  context, _userInfo.avatar, 40, 40, "caht"),
                             ),
                           ],
                         ),

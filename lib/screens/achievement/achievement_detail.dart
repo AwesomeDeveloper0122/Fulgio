@@ -1,4 +1,5 @@
 // ignore_for_file: sized_box_for_whitespace
+import 'dart:convert';
 
 import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,9 @@ class ArchivementsDetailState extends State<ArchivementsDetail> {
   Widget build(BuildContext context) {
     print("123123");
     print(widget.data);
+    Map detaildata = widget.data;
+    // String achieve_date =
+    //     DateFormat('MM-dd-yyyy').format(detaildata["updatedAt"]);
 
     var mq = MediaQuery.of(context).size;
     return Container(
@@ -51,8 +55,8 @@ class ArchivementsDetailState extends State<ArchivementsDetail> {
                   ),
                   TextHeaderTest(
                     context,
-                    "Red Light",
-                    "Complete the digital city tour \n 'Red Light' in Amsterdam",
+                    detaildata["name"]["en_GB"],
+                    detaildata["description"]["en_GB"],
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 40),
@@ -61,11 +65,13 @@ class ArchivementsDetailState extends State<ArchivementsDetail> {
                       children: [
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 60),
-                          child: SubTxt(context, 'Achieved on', '24-10-2020'),
+                          child: SubTxt(
+                              context, 'Achieved on', detaildata["updatedAt"]),
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 60),
-                          child: SubTxt(context, 'Reward', "aaaa"),
+                          child: SubTxt(context, 'Reward',
+                              detaildata["credits"].toString()),
                         ),
                       ],
                     ),

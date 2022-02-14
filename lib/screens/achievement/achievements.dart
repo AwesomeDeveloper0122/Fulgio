@@ -1,4 +1,5 @@
 // ignore_for_file: sized_box_for_whitespace, prefer_final_fields
+import 'package:intl/intl.dart';
 
 import 'package:Fuligo/model/user_modal.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
@@ -45,28 +46,37 @@ class ArchivmentsState extends State<Achievements> {
 
   Future<bool> getData() async {
     UserModel _userInfo = AuthProvider.of(context).userModel;
-    final result = await UserRepository.getUserByID(_userInfo.uid);
-    user_achievement =
-        result['achievement']; // get achievement in User collection
-    print('=======user achievement===========');
-    print(result["achievement"]);
-
     CollectionReference achievements =
         FirebaseFirestore.instance.collection('achievement');
 
+    try {
+      final result = await UserRepository.getUserByID(_userInfo.uid);
+      user_achievement =
+          result['achievement']; // get achievement in User collection
+
+    } catch (e) {
+      user_achievement = [];
+    }
+    print('=======element1===========');
     achievements.get().then((QuerySnapshot querySnapshot) {
+      print('=======element2===========');
       doc_list = querySnapshot.docs; //get achievement in Achievement collection
       for (var element in doc_list) {
+        String updatedAt =
+            DateFormat('MM-dd-yyyy').format((element['updatedAt'].toDate()));
+        print("element['updatedAt']");
+        print(updatedAt);
         if (user_achievement.toString().contains(element.reference.id)) {
           user_credit += element["credits"];
           user_achieve++;
+
           Map temp = {
             "isDone": true,
             "active": element['active'],
             "name": element['name'],
             "description": element['description'],
-            // "credits": element['credits'],
-            // "updatedat": element['updatedat']
+            "credits": element['credits'],
+            "updatedAt": updatedAt
           };
           new_list.add(temp);
         } else {
@@ -75,8 +85,8 @@ class ArchivmentsState extends State<Achievements> {
             "active": element['active'],
             "name": element['name'],
             "description": element['description'],
-            // "credits": element['credits'],
-            // "updatedat": element['updatedat']
+            "credits": element['credits'],
+            "updatedAt": updatedAt
           };
           new_list.add(temp);
         }

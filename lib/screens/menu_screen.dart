@@ -11,9 +11,11 @@ import 'package:Fuligo/screens/achievement/achievements.dart';
 import 'package:Fuligo/screens/chat/chat.dart';
 import 'package:Fuligo/screens/chat/chat_again.dart';
 import 'package:Fuligo/screens/chat/chat_content.dart';
-import 'package:Fuligo/screens/start_tour.dart';
+import 'package:Fuligo/screens/documents/documents.dart';
+import 'package:Fuligo/screens/tours/start_tour.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -79,44 +81,59 @@ class Test extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.1,
               ),
               ListTile(
+                horizontalTitleGap: 30.0,
                 contentPadding: EdgeInsets.only(bottom: 20, left: 20),
-                leading: Icon(Icons.location_on_outlined,
-                    color: Colors.white, size: 32),
+                leading: Image(
+                  image: AssetImage('assets/images/png/icon-map.png'),
+                  width: 40,
+                  height: 40,
+                ),
                 title: Text(
                   'Map',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 onTap: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ChatAgain(documentId: 'qEnncoZSqLs8QE4jS3bF'),
-                    ),
-                  ),
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) =>
+                  //         ChatAgain(documentId: 'qEnncoZSqLs8QE4jS3bF'),
+                  //   ),
+                  // ),
                 },
               ),
               ListTile(
+                horizontalTitleGap: 30.0,
                 contentPadding: EdgeInsets.only(bottom: 20, left: 20),
-                leading: Icon(Icons.document_scanner_outlined,
-                    color: Colors.white, size: 32),
+                leading: Image(
+                  image: AssetImage('assets/images/png/icon-document.png'),
+                  width: 40,
+                  height: 40,
+                  color: whiteColor,
+                ),
                 title: Text(
-                  'Documentations',
+                  'Documents',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 onTap: () => {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Chat(),
+                      builder: (context) => Chat(
+                        ischat: false,
+                      ),
                     ),
                   ),
                 },
               ),
               ListTile(
+                horizontalTitleGap: 30.0,
                 contentPadding: EdgeInsets.only(bottom: 20, left: 20),
-                leading:
-                    Icon(Icons.chat_outlined, color: Colors.white, size: 32),
+                leading: Image(
+                  image: AssetImage('assets/images/png/icon-achievement.png'),
+                  width: 40,
+                  height: 40,
+                ),
                 title: Text(
                   'Chat',
                   style: TextStyle(color: Colors.white, fontSize: 20),
@@ -125,16 +142,21 @@ class Test extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Chat(),
+                      builder: (context) => Chat(ischat: true),
                     ),
                   ),
                 },
               ),
               ListTile(
+                horizontalTitleGap: 30.0,
                 contentPadding: EdgeInsets.only(bottom: 20, left: 20),
-                leading: Icon(Icons.archive, color: Colors.white, size: 32),
+                leading: Image(
+                  image: AssetImage('assets/images/png/icon-achievement.png'),
+                  width: 40,
+                  height: 40,
+                ),
                 title: Text(
-                  'Archivement',
+                  'Achivement',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 onTap: () => {
@@ -171,36 +193,17 @@ class Test extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // CircleImage(context, _userInfo.avatar, 80, 80),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AvatarScreen(),
-                            ),
-                          );
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100.0),
-                          child: Image.network(
-                            _userInfo.avatar,
-                            height: 80,
-                            width: 80,
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return Center(
-                                child: kLoadingFadingWidget(context),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
+                      _userInfo.avatar != ""
+                          ? CircleImage(
+                              context, _userInfo.avatar, 80, 80, "menu")
+                          : CircleImage(
+                              context,
+                              "https://picsum.photos/id/237/200/300",
+                              80,
+                              80,
+                              "menu"),
                       Container(
-                        padding: EdgeInsets.only(left: 20),
+                        padding: EdgeInsets.only(left: 0),
                         child: Text(
                           _userInfo.username,
                           style: TextStyle(

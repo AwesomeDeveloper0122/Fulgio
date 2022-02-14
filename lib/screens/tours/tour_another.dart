@@ -1,5 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:Fuligo/widgets/custom_image.dart';
 import 'package:flutter/material.dart';
 
@@ -56,32 +57,20 @@ class TourAnotherState extends State<TourAnother> {
                     ),
                   ],
                 )),
-            Positioned(
-              top: 60,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.clear_rounded,
-                  size: 50,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            ClearButton(context),
             Positioned(
               bottom: 30,
-              child: Container(
-                padding: const EdgeInsets.only(right: 20, left: 20),
+              left: 20,
+              child: SizedBox(
+                height: 140,
+                // padding: const EdgeInsets.only(right: 20, left: 20),
                 width: mq.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+                child: ListView(
+                  shrinkWrap: true,
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
                     TourSmallImage(context, "assets/images/1.jpeg", "Red right",
                         "Amsterdam"),
                     TourSmallImage(context, "assets/images/1.jpeg", "Old town",
@@ -92,23 +81,6 @@ class TourAnotherState extends State<TourAnother> {
                 ),
               ),
             ),
-            // Positioned(
-            //   bottom: 50,
-            //   child: Container(
-            //     width: mq.width,
-            //     child: Column(
-            //       mainAxisAlignment: MainAxisAlignment.start,
-            //       crossAxisAlignment: CrossAxisAlignment.center,
-            //       children: [
-            //         Container(
-            //           width: 350,
-            //           height: 50,
-            //           child: CustomButton(context, const Tours(), "Start tour"),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

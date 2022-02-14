@@ -70,10 +70,10 @@ class RankingState extends State<Ranking> {
                           child: ListTile(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 5),
-                            leading: CircleImage(
-                                context, "assets/images/1.jpeg", 50, 50),
-                            trailing: CircleImage(
-                                context, "assets/images/1.jpeg", 50, 50),
+                            leading: CircleImage(context,
+                                "assets/images/1.jpeg", 50, 50, "ranking"),
+                            trailing: CircleImage(context,
+                                "assets/images/1.jpeg", 50, 50, "ranking"),
                             title: Text(
                               'Zurich-Amsterdam',
                               style:

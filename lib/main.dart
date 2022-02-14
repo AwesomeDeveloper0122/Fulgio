@@ -1,10 +1,5 @@
 // @dart=2.9
 
-// import 'package:Fuligo/screens/tour_another.dart';
-// import 'package:Fuligo/screens/route_screen.dart';
-// import 'package:Fuligo/screens/chat/chat.dart';
-// import 'package:Fuligo/screens/chat/chat_content.dart';
-// import 'package:Fuligo/screens/credits.dart';
 import 'dart:convert';
 
 import 'package:Fuligo/provider/auth_provider.dart';
@@ -12,7 +7,7 @@ import 'package:Fuligo/screens/achievement/achievements.dart';
 import 'package:Fuligo/screens/configuration/location.dart';
 import 'package:Fuligo/screens/home.dart';
 import 'package:Fuligo/screens/splash_page.dart';
-import 'package:Fuligo/screens/success.dart';
+import 'package:Fuligo/screens/achievement/success.dart';
 // import 'package:Fuligo/screens/chat/chat_content.dart';
 import 'package:Fuligo/test.dart';
 import 'package:Fuligo/utils/common_header_list.dart';

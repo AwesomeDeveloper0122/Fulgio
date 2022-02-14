@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 //Widgets
 import 'package:Fuligo/widgets/custom_button.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-import 'package:Fuligo/screens/start_tour.dart';
+import 'package:Fuligo/screens/tours/start_tour.dart';
 // import 'package:geocoding/geocoding.dart';
 // import 'package:geolocator/geolocator.dart';
 

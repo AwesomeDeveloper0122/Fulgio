@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 //Screens
-import 'package:Fuligo/screens/tours.dart';
+import 'package:Fuligo/screens/tours/tours.dart';
 // import 'package:Fuligo/screens/touranother.dart';
 // import 'package:Fuligo/screens/cancel_tour.dart';
 // import 'package:Fuligo/screens/achievements.dart';
@@ -47,14 +47,22 @@ class StartTourState extends State<StartTour> {
             Positioned(
               top: 200,
               left: 80,
-              child:
-                  CircleImage(context, "assets/images/avatar-1.jpg", 100, 100),
+              child: CircleImage(
+                  context,
+                  "https://firebasestorage.googleapis.com/v0/b/project-flugio.appspot.com/o/assets%2Fstatic%2Favatar-marieke-harmsen%402x.png?alt=media&token=8043d7f3-347b-457c-abf8-126a79449354",
+                  100,
+                  100,
+                  "starttour"),
             ),
             Positioned(
               top: 400,
               left: 30,
-              child:
-                  CircleImage(context, "assets/images/avatar-2.jpg", 100, 100),
+              child: CircleImage(
+                  context,
+                  "https://firebasestorage.googleapis.com/v0/b/project-flugio.appspot.com/o/assets%2Fstatic%2Favatar-marieke-harmsen%402x.png?alt=media&token=8043d7f3-347b-457c-abf8-126a79449354",
+                  100,
+                  100,
+                  "starttour"),
             ),
 // Menu Icon
             Positioned(

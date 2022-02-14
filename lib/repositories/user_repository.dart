@@ -20,7 +20,7 @@ class UserRepository {
     DocumentSnapshot currentUser =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     print("==== current User ===========");
-    print(currentUser.data().runtimeType);
+    print(currentUser.data());
 
     // return (currentUser.data() != null)
     //     ? jsonDecode(jsonEncode(currentUser.data()))

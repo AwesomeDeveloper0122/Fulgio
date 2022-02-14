@@ -17,7 +17,8 @@ import 'package:Fuligo/widgets/custom_image.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class ChatAgain extends StatefulWidget {
-  ChatAgain({Key? key, required String documentId}) : super(key: key);
+  String docId;
+  ChatAgain({Key? key, required this.docId}) : super(key: key);
 
   @override
   ChatAgainState createState() => ChatAgainState();
@@ -25,10 +26,16 @@ class ChatAgain extends StatefulWidget {
 
 class ChatAgainState extends State<ChatAgain> {
   bool is_load = false;
+  final _formKey = GlobalKey<FormState>();
+  final ScrollController _scrollController = ScrollController();
+  String content = "";
+  TextEditingController chatInput = TextEditingController();
+  List chat_list = [];
+
   @override
   void initState() {
     super.initState();
-    getChatData();
+    getChatData(widget.docId);
     setState(() {
       chatInput.text = "";
     });
@@ -39,22 +46,31 @@ class ChatAgainState extends State<ChatAgain> {
     addChat(name, chatContent);
   }
 
-  final _formKey = GlobalKey<FormState>();
-  final ScrollController _scrollController = ScrollController();
-  String content = "";
-  TextEditingController chatInput = TextEditingController();
-  List chat_list = [];
-
   @override
-  Future<List> getChatData() async {
-    DocumentSnapshot chatData = await FirebaseFirestore.instance
-        .collection('order')
-        .doc('qEnncoZSqLs8QE4jS3bF')
-        .get();
+  Future<List> getChatData(id) async {
+    print("important");
+    print(id);
+    try {
+      DocumentSnapshot snapshot =
+          await FirebaseFirestore.instance.collection('order').doc(id).get();
 
-    chat_list = chatData['chatMessages'];
-    is_load = true;
-    setState(() {});
+      chat_list = snapshot['chatMessages'];
+      is_load = true;
+      setState(() {});
+    } catch (e) {
+      print("exception");
+      print(e);
+      CollectionReference order =
+          FirebaseFirestore.instance.collection('order');
+      order
+          .doc(widget.docId)
+          .set({'chatMessages': []}, SetOptions(merge: true))
+          .then((value) => print("ChatMessages Field Added"))
+          .catchError((error) => print("Failed to add user: $error"));
+      is_load = true;
+
+      setState(() {});
+    }
     return chat_list;
   }
 
@@ -65,18 +81,10 @@ class ChatAgainState extends State<ChatAgain> {
       author: username,
       message: content,
     );
-    // SmartDialog.showLoading(backDismiss: false, background: Colors.transparent);
-    // await FirebaseFirestore.instance
-    //     .collection('order')
-    //     .doc('qEnncoZSqLs8QE4jS3bF')
-    //     .set(_chat.toJson());
-
-    // SmartDialog.dismiss();
-    // await getChatData();
 
     List chatdata = [];
     SmartDialog.showLoading(backDismiss: false, background: Colors.transparent);
-    chatdata = await getChatData();
+    chatdata = await getChatData(widget.docId);
     SmartDialog.dismiss();
 
     setState(() {});
@@ -87,17 +95,10 @@ class ChatAgainState extends State<ChatAgain> {
     chatInput.text = "";
     print("======== chatdata ========");
     print(chatdata);
-    // final position = _scrollController.position.maxScrollExtent;
-
-    // _scrollController.jumpTo(position);
-    // print("+++++++++++++++position++++++++++++++");
-    // print(position);
 
     return order
-        .doc('qEnncoZSqLs8QE4jS3bF')
-        .set(
-          {'chatMessages': chatdata},
-        )
+        .doc(widget.docId)
+        .set({'chatMessages': chatdata}, SetOptions(merge: true))
         .then((value) => print("Chat Added"))
         .catchError((error) => print("Failed to add user: $error"));
   }
@@ -107,23 +108,39 @@ class ChatAgainState extends State<ChatAgain> {
     var mq = MediaQuery.of(context).size;
     UserModel _userInfo = AuthProvider.of(context).userModel;
     List<Widget> widgets = [];
-    for (var element in chat_list) {
+    if (chat_list.length > 0) {
+      for (var element in chat_list) {
+        widgets.add(Column(
+          crossAxisAlignment: element["author"] == _userInfo.username
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.end,
+          children: [
+            Container(
+              width: 250,
+              padding: EdgeInsets.all(15),
+              margin: EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                  color: bgColor, borderRadius: BorderRadius.circular(15)),
+              child: Text(element['message'], style: font_14_white),
+            ),
+          ],
+        ));
+      }
+    } else {
       widgets.add(Column(
-        crossAxisAlignment: element["author"] == _userInfo.username
-            ? CrossAxisAlignment.start
-            : CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: 250,
-            padding: EdgeInsets.all(15),
-            margin: EdgeInsets.symmetric(vertical: 10),
-            decoration: BoxDecoration(
-                color: element["author"] == _userInfo.username
-                    ? bgColor
-                    : hintColor,
-                borderRadius: BorderRadius.circular(15)),
-            child: Text(element['message'], style: font_14_white),
+          SizedBox(
+            height: mq.height * 0.3,
           ),
+          Text(
+            "No display Chat",
+            style: TextStyle(
+              color: greyColor,
+              fontSize: 20,
+            ),
+          )
         ],
       ));
     }
@@ -156,7 +173,8 @@ class ChatAgainState extends State<ChatAgain> {
                       ),
                       Container(
                         margin: EdgeInsets.only(right: 20, top: 20),
-                        child: CircleImage(context, _userInfo.avatar, 40, 40),
+                        child: CircleImage(
+                            context, _userInfo.avatar, 40, 40, "chat"),
                       ),
                     ],
                   ),

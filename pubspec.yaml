@@ -102,7 +102,12 @@ flutter:
     - assets/images/avatar-2.jpg
     - assets/images/avatar-3.jpg
     - assets/images/avatar-4.jpg  
-    - assets/images/png/icon-umbrella.png  
+    - assets/images/png/icon-umbrella.png
+    - assets/images/png/icon-map.png
+    - assets/images/png/icon-document.png
+    - assets/images/png/icon-achievement.png
+    - assets/images/png/icon-route.png
+    - assets/images/png/icon-heart.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
