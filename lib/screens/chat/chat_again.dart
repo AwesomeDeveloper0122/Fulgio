@@ -127,22 +127,24 @@ class ChatAgainState extends State<ChatAgain> {
         ));
       }
     } else {
-      widgets.add(Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: mq.height * 0.3,
-          ),
-          Text(
-            "No display Chat",
-            style: TextStyle(
-              color: greyColor,
-              fontSize: 20,
+      widgets.add(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: mq.height * 0.3,
             ),
-          )
-        ],
-      ));
+            Text(
+              "No display Chat",
+              style: TextStyle(
+                color: greyColor,
+                fontSize: 20,
+              ),
+            )
+          ],
+        ),
+      );
     }
 
     return Container(

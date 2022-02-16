@@ -6,6 +6,7 @@ import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:Fuligo/widgets/logo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
@@ -33,13 +34,32 @@ class ToursState extends State<Tours> {
     QuerySnapshot querySnapshot = await _tourCollection.get();
 
     // Get data from docs and convert map to List
-    List tourdata = querySnapshot.docs.map((doc) => doc.data()).toList();
+    List tourdata = querySnapshot.docs
+        .map(
+          (doc) => doc.data(),
+        )
+        .toList();
+    for (var item in tourdata) {
+      item["image"] = await getUrlFromFirebase((item["image"][0]));
+      print("itemimage");
+      print(item["image"]);
+    }
+
     print("==== List tourdata ====");
     print(tourdata);
+
     setState(() {
       tourData = tourdata;
     });
     return tourData;
+  }
+
+  Future<String> getUrlFromFirebase(String firebaseURL) async {
+    Reference ref = FirebaseStorage.instance.ref().child(firebaseURL);
+    String url = await ref.getDownloadURL();
+    print("123");
+
+    return url;
   }
 
   @override
@@ -49,11 +69,9 @@ class ToursState extends State<Tours> {
 
     List<Widget> tourlist = [];
     for (var item in tourData) {
-      print(" ======== item ============");
-      print(item);
       if (item["active"] == true) {
         tourlist.add(
-          InkWell(
+          GestureDetector(
             onTap: () {
               // Navigator.pushNamed(context, RouteName.tourlist);
               Navigator.push(
@@ -64,36 +82,64 @@ class ToursState extends State<Tours> {
               );
             },
             child: Container(
-              width: 350,
-              height: 140,
               margin: const EdgeInsets.only(top: 40),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/1.jpeg"),
-                  fit: BoxFit.fill,
-                ),
-                borderRadius: BorderRadius.circular(25.0),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  Text(
-                    item["name"]["en_GB"],
-                    style: font_20_white,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Container(
-                      width: 62,
-                      height: 2.5,
-                      decoration: const BoxDecoration(color: Colors.grey),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      item["image"],
+                      width: mq.width * 0.77,
+                      height: mq.height * 0.17,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return Center(
+                          child: kLoadingFadingWidget(context),
+                        );
+                      },
                     ),
                   ),
-                  Text(
-                    item["description"]["en_GB"],
-                    style: font_13_white,
-                  ),
+                  Positioned(
+                    child: Container(
+                      width: mq.width * 0.77,
+                      height: mq.height * 0.17,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [gradientFrom, bgColor]),
+                          color: bgColor.withOpacity(0.4)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            item["name"]["en_GB"],
+                            style: font_20_white,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Container(
+                              width: 62,
+                              height: 2.5,
+                              decoration:
+                                  const BoxDecoration(color: Colors.grey),
+                            ),
+                          ),
+                          Text(
+                            item["description"]["en_GB"],
+                            style: font_13_white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -101,13 +147,6 @@ class ToursState extends State<Tours> {
         );
       }
     }
-    // for (var i = 0; i < 6; i++) {
-    //   tourlist.add(TourBigImage(
-    //       context, "assets/images/1.jpeg", "Red right", "Amsterdam"));
-    // }
-
-    print("==== tourlist====");
-    print(tourlist);
 
     return Container(
       decoration: bgDecoration,
@@ -148,6 +187,9 @@ class ToursState extends State<Tours> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                SizedBox(
+                                  height: mq.height * 0.2,
+                                ),
                                 kLoadingFadingWidget(context),
                               ],
                             ),

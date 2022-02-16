@@ -2,7 +2,7 @@
 
 import 'package:Fuligo/screens/tours/start_tour.dart';
 import 'package:Fuligo/screens/tours/tours.dart';
-import 'package:Fuligo/screens/video.dart';
+import 'package:Fuligo/video/video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:Fuligo/utils/common_colors.dart';
@@ -146,12 +146,12 @@ class CancelTourState extends State<CancelTour> {
                           ),
                           selected: false,
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const VideoScreen(),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => const VideoScreen(),
+                            //   ),
+                            // );
                           },
                         ),
                       ),

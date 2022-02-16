@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 // ignore: non_constant_identifier_names
 Widget TourBigImage(context, String url, String title, String content,
         bool ischat, List list) =>
-    InkWell(
+    GestureDetector(
       onTap: () {
         Navigator.push(
           context,
@@ -68,7 +68,7 @@ Widget TourBigImage(context, String url, String title, String content,
 // ignore: non_constant_identifier_names
 Widget ChatCard(context, String url, String title, String content, bool ischat,
         String docId) =>
-    InkWell(
+    GestureDetector(
       onTap: () {
         // Navigator.pushNamed(context, RouteName.tourlist);
         Navigator.push(

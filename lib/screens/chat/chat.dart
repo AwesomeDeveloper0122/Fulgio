@@ -104,37 +104,7 @@ class ChatState extends State<Chat> {
         }
       });
     }
-    // for (var referId in _myordertempdata) {
-    //   // Get data from DocumentReference in firebase flutter
-    //   referId.get().then((DocumentSnapshot documentSnapshot) async {
-    //     if (documentSnapshot.exists) {
-    //       print('Document exists on the database');
-    //       //get image url from firebase storage
-    //       Reference ref = FirebaseStorage.instance
-    //           .ref()
-    //           .child(documentSnapshot.get('image')[0]);
-    //       String url = await ref.getDownloadURL();
 
-    //       String name = documentSnapshot.get('name')["en_GB"];
-    //       // String image = documentSnapshot.get('image')[0];
-    //       DateTime datetime = documentSnapshot.get('updatedAt').toDate();
-
-    //       Map test = {
-    //         "name": name,
-    //         "image": url,
-    //         "datetime": datetime,
-    //       };
-    //       OrderModel _orderModel = OrderModel.fromJson(test);
-
-    //       myOrderCity.add(_orderModel);
-    //       setState(() {
-    //         myOrderCity = myOrderCity;
-    //       });
-    //     } else {
-    //       SmartDialog.showToast("No data");
-    //     }
-    //   });
-    // }
     return myOrderCity;
   }
 

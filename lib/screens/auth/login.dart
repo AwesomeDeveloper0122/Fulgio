@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:Fuligo/model/user_modal.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
+import 'package:Fuligo/screens/verify.dart';
 import 'package:Fuligo/screens/verify_test.dart';
 import 'package:Fuligo/utils/common_functions.dart';
 import 'package:Fuligo/utils/common_header_list.dart';
@@ -149,7 +150,7 @@ class LoginState extends State<Login> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const VerifyTest(),
+            builder: (context) => const Verify(),
           ),
         );
 

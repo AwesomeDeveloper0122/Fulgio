@@ -95,7 +95,7 @@ class LocationState extends State<Location> {
                     color: bgColor,
                     onPressed: () {
                       //  Navigator.of(context).pushReplacementNamed(page);
-                      showConfirm(context, "tracking");
+                      showConfirm(context, "tracking", "");
                     },
                     textColor: bgColor,
                     child: Text(

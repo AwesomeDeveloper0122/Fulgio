@@ -60,6 +60,8 @@ dependencies:
   flutter_firebase_chat_core: ^1.5.2
   email_validator: ^2.0.1
   flutter_dialogs: ^2.1.1
+  video_player: ^2.2.18
+  # audioplayers: ^0.20.1
   # geocoding: ^2.0.2
   # location: ^4.3.0
   
