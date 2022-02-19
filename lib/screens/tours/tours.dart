@@ -4,14 +4,12 @@ import 'package:Fuligo/screens/tours/tour_list.dart';
 import 'package:Fuligo/utils/font_style.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
-import 'package:Fuligo/widgets/logo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-import 'package:Fuligo/widgets/custom_image.dart';
 
 class Tours extends StatefulWidget {
   const Tours({Key? key}) : super(key: key);
@@ -27,7 +25,7 @@ class ToursState extends State<Tours> {
 
   List tourData = [];
 
-  final CollectionReference _tourCollection =
+  CollectionReference _tourCollection =
       FirebaseFirestore.instance.collection('city');
 
   Future<List> getTourData() async {
@@ -39,14 +37,10 @@ class ToursState extends State<Tours> {
           (doc) => doc.data(),
         )
         .toList();
+
     for (var item in tourdata) {
       item["image"] = await getUrlFromFirebase((item["image"][0]));
-      print("itemimage");
-      print(item["image"]);
     }
-
-    print("==== List tourdata ====");
-    print(tourdata);
 
     setState(() {
       tourData = tourdata;
@@ -65,11 +59,10 @@ class ToursState extends State<Tours> {
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
-    print("==== tourdata  ====");
 
     List<Widget> tourlist = [];
-    for (var item in tourData) {
-      if (item["active"] == true) {
+    for (var each in tourData) {
+      if (each["active"] == true) {
         tourlist.add(
           GestureDetector(
             onTap: () {
@@ -77,7 +70,7 @@ class ToursState extends State<Tours> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TourList(detailData: item),
+                  builder: (context) => TourList(detailData: each),
                 ),
               );
             },
@@ -89,7 +82,7 @@ class ToursState extends State<Tours> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.network(
-                      item["image"],
+                      each["image"],
                       width: mq.width * 0.77,
                       height: mq.height * 0.17,
                       fit: BoxFit.cover,
@@ -120,7 +113,7 @@ class ToursState extends State<Tours> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            item["name"]["en_GB"],
+                            each["name"]["en_GB"],
                             style: font_20_white,
                           ),
                           Padding(
@@ -133,7 +126,7 @@ class ToursState extends State<Tours> {
                             ),
                           ),
                           Text(
-                            item["description"]["en_GB"],
+                            each["description"]["en_GB"],
                             style: font_13_white,
                           ),
                         ],

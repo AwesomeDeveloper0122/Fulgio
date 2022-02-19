@@ -18,90 +18,94 @@ import 'package:Fuligo/widgets/logo.dart';
 import 'package:Fuligo/widgets/circleimage.dart';
 import 'package:Fuligo/screens/menu_screen.dart';
 
-class StartTour extends StatefulWidget {
-  const StartTour({Key? key}) : super(key: key);
+class StartTourTest extends StatefulWidget {
+  const StartTourTest({Key? key}) : super(key: key);
 
   @override
-  StartTourState createState() => StartTourState();
+  StartTourTestState createState() => StartTourTestState();
 }
 
-class StartTourState extends State<StartTour> {
+class StartTourTestState extends State<StartTourTest> {
   List pointdata = [];
   void initState() {
     getPointData();
   }
 
-  late Map test;
+  // late Map test;
+  // List videoUrl = [];
+  // List audioUrl = [];
+
+  // List netImageUrl = [];
+  // String netVideoUrl = "";
+  // String netAudioUrl = "";
+  // List imageUrl = [];
 
   final CollectionReference _pointCollection =
       FirebaseFirestore.instance.collection('pointOfInterest');
 
   Future<List> getPointData() async {
     QuerySnapshot querySnapshot = await _pointCollection.get();
-    try {
-      for (var ele in querySnapshot.docs) {
-        try {
-          List videoUrl = [];
-          List audioUrl = [];
-
-          List netImageUrl = [];
-          String netVideoUrl = "";
-          String netAudioUrl = "";
-          List imageUrl = ele.get("image");
-          if (imageUrl.length > 0) {
-            for (var item in imageUrl) {
-              netImageUrl.add(await getUrlFromFirebase(item));
-            }
-          }
-          Map _data = ele.data() as Map<String, dynamic>;
-          if (_data.containsKey("video")) {
-            videoUrl = ele.get("video");
-            if (videoUrl.length > 0) {
-              netVideoUrl = await getUrlFromFirebase(videoUrl[0]);
-              pointdata.add({
-                "flag": "video",
-                "video": netVideoUrl,
-                "location": ele.get("location"),
-                "image": netImageUrl,
-                "audio": netAudioUrl,
-                "name": ele.get("name"),
-                "description": ele.get("description"),
-                "rating": ele.get("rating"),
-              });
-            }
-          }
-          if (_data.containsKey("audio") && _data.containsKey("image")) {
-            // SmartDialog.showToast("imagefiled not exist");
-            audioUrl = ele.get("audio");
-            if (audioUrl.length > 0) {
-              netAudioUrl = await getUrlFromFirebase(audioUrl[0]);
-            }
-
-            pointdata.add(
-              {
-                "flag": "audio",
-                "image": netImageUrl,
-                "location": ele.get("location"),
-                "audio": netAudioUrl,
-                "name": ele.get("name"),
-                "description": ele.get("description"),
-                "rating": ele.get("rating"),
-              },
-            );
-          }
-        } catch (err) {
-          // SmartDialog.showToast("Error");
-        }
-      }
-    } catch (e) {
-      SmartDialog.showToast("No data");
+    List<Map> pointdata = [];
+    for (var ele in querySnapshot.docs) {
+      String netVideoUrl = await getVideoData(ele);
+      String netAudioUrl = await getAudioData(ele);
+      List imageUrl = await getImageData(ele);
+      Map location = await getLocationData(ele);
+      pointdata.add({
+        "video": netVideoUrl,
+        "image": imageUrl,
+        "location": location,
+        "audio": netAudioUrl,
+      });
+      setState(() {});
     }
 
-    setState(() {
-      pointdata = pointdata;
-    });
-
     return pointdata;
+  }
+
+  Future<String> getVideoData(QueryDocumentSnapshot item) async {
+    List urlList = [];
+    String url = "";
+    if ((item.data() as Map<String, dynamic>).containsKey("video")) {
+      urlList = item.get("video");
+      if (urlList.isNotEmpty) {
+        url = await getUrlFromFirebase(urlList[0]);
+        //
+      }
+    }
+    return url;
+  }
+
+  Future<String> getAudioData(QueryDocumentSnapshot item) async {
+    List urlList = [];
+    String url = "";
+    if ((item.data() as Map<String, dynamic>).containsKey("audio")) {
+      urlList = item.get("video");
+      if (urlList.isNotEmpty) {
+        url = await getUrlFromFirebase(urlList[0]);
+        //
+      }
+    }
+    return url;
+  }
+
+  Future<List> getImageData(QueryDocumentSnapshot item) async {
+    List urlList = [];
+    List<String> url = [];
+    if ((item.data() as Map<String, dynamic>).containsKey("audio")) {
+      url = item.get("video");
+      if (url.isNotEmpty) {
+        for (var item in url) {
+          urlList.add(await getUrlFromFirebase(item));
+        }
+      }
+    }
+    return url;
+  }
+
+  Future<Map> getLocationData(QueryDocumentSnapshot item) async {
+    Map location = item.get("location");
+    return location;
   }
 
   Future<String> getUrlFromFirebase(String firebaseURL) async {
@@ -113,28 +117,19 @@ class StartTourState extends State<StartTour> {
 
   @override
   Widget build(BuildContext context) {
+    print("pointdata builder");
     print(pointdata);
     var mq = MediaQuery.of(context).size;
     List<Widget> widgets = [];
     if (pointdata.length > 0) {
       for (var item in pointdata) {
-        if (item["flag"] == "video") {
-          widgets.add(
-            Positioned(
-              top: 0,
-              left: 0,
-              child: CircleNetworkImage(context, item),
-            ),
-          );
-        } else {
-          widgets.add(
-            Positioned(
-              top: 0,
-              left: 0,
-              child: CircleAudioImage(context, item),
-            ),
-          );
-        }
+        widgets.add(
+          Positioned(
+            top: 0,
+            left: 0,
+            child: CircleNetworkImage(context, item),
+          ),
+        );
       }
     } else {
       widgets.add(

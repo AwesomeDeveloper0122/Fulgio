@@ -1,4 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace, prefer_final_fields
+import 'package:Fuligo/screens/achievement/credits.dart';
+import 'package:Fuligo/screens/achievement/ranking.dart';
 import 'package:intl/intl.dart';
 
 import 'package:Fuligo/model/user_modal.dart';
@@ -34,7 +36,7 @@ class ArchivmentsState extends State<Achievements> {
   List<QueryDocumentSnapshot> doc_list = [];
   List user_achievement = [];
   List<Widget> widgets = [];
-  List<Map> new_list = [];
+  List<Map> arch_list = [];
 
   @override
   void initState() {
@@ -51,6 +53,8 @@ class ArchivmentsState extends State<Achievements> {
 
     try {
       final result = await UserRepository.getUserByID(_userInfo.uid);
+      print("result");
+      print(result["credits"]);
       user_achievement =
           result['achievement']; // get achievement in User collection
 
@@ -64,8 +68,7 @@ class ArchivmentsState extends State<Achievements> {
       for (var element in doc_list) {
         String updatedAt =
             DateFormat('MM-dd-yyyy').format((element['updatedAt'].toDate()));
-        print("element['updatedAt']");
-        print(updatedAt);
+
         if (user_achievement.toString().contains(element.reference.id)) {
           user_credit += element["credits"];
           user_achieve++;
@@ -78,7 +81,7 @@ class ArchivmentsState extends State<Achievements> {
             "credits": element['credits'],
             "updatedAt": updatedAt
           };
-          new_list.add(temp);
+          arch_list.add(temp);
         } else {
           Map temp = {
             "isDone": false,
@@ -88,7 +91,7 @@ class ArchivmentsState extends State<Achievements> {
             "credits": element['credits'],
             "updatedAt": updatedAt
           };
-          new_list.add(temp);
+          arch_list.add(temp);
         }
       }
 
@@ -115,7 +118,6 @@ class ArchivmentsState extends State<Achievements> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  // builder: (context) => ArchivementsDetail(data: newList[i]),
                   builder: (context) => ArchivementsDetail(data: newList[i]),
                 ),
               );
@@ -190,18 +192,40 @@ class ArchivmentsState extends State<Achievements> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 55),
-                                      child: SubTxt(context, 'Achievements',
-                                          '$user_achieve of ${doc_list.length}'),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Ranking(),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 55),
+                                        child: SubTxt(context, 'Achievements',
+                                            '$user_achieve of ${doc_list.length}'),
+                                      ),
                                     ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 55),
-                                      child: SubTxt(context, 'Credit',
-                                          '$user_credit CHF'),
-                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                Credits(arch_list: arch_list),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 55),
+                                        child: SubTxt(context, 'Credit',
+                                            '$user_credit CHF'),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
@@ -217,7 +241,7 @@ class ArchivmentsState extends State<Achievements> {
                                 child: GridView.count(
                                   padding: const EdgeInsets.all(0),
                                   crossAxisCount: 2,
-                                  children: getArchivementsItem(new_list),
+                                  children: getArchivementsItem(arch_list),
                                 ),
                               ),
                             ],

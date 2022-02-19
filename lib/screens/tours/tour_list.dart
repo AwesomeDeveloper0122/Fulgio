@@ -1,10 +1,13 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'package:Fuligo/model/interest_model.dart';
+import 'package:Fuligo/model/my_order_modal.dart';
 import 'package:Fuligo/screens/cancel_tour.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:Fuligo/widgets/custom_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
@@ -14,6 +17,7 @@ import 'package:Fuligo/widgets/image_detail.dart';
 import 'package:Fuligo/widgets/subtxt.dart';
 
 import 'package:Fuligo/screens/tours/tours.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class TourList extends StatefulWidget {
   final Map detailData;
@@ -27,6 +31,8 @@ class TourListState extends State<TourList> {
   void initState() {
     super.initState();
     Map detailData = widget.detailData;
+    print("detailData");
+    print(detailData["interests"]);
     getData(detailData["interests"], detailData["activities"]);
   }
 
@@ -39,28 +45,69 @@ class TourListState extends State<TourList> {
     // Get docs from collection reference
     List _tourdetail = [];
     List _activitydetail = [];
+    for (var referId in _detail) {
+      // Get data from DocumentReference in firebase flutter
+      referId.get().then((DocumentSnapshot documentSnapshot) async {
+        if (documentSnapshot.exists) {
+          print('Document exists on the database');
+          //get image url from firebase storage
+          Reference ref = FirebaseStorage.instance
+              .ref()
+              .child(documentSnapshot.get('image')["main"]);
+
+          String url = await ref.getDownloadURL();
+          print("ref123");
+          print(url);
+          String description = documentSnapshot.get('description')["en_GB"];
+          print("url description");
+          print(description);
+
+          String name = documentSnapshot.get('name')["en_GB"];
+          // String image = documentSnapshot.get('image')[0];
+          DateTime datetime = documentSnapshot.get('updatedAt').toDate();
+
+          Map test = {
+            "description": description,
+            "name": name,
+            // "image": url,
+            "datetime": datetime,
+          };
+          InterestModel _InterestModel = InterestModel.fromJson(test);
+
+          _tourdetail.add(_InterestModel);
+          print("_tourdetail");
+          print(_tourdetail);
+          setState(() {
+            _tourdetail = _tourdetail;
+          });
+        } else {
+          SmartDialog.showToast("No data");
+        }
+      });
+    }
 
     QuerySnapshot interestquerySnapshot = await _interestRef.get();
     QuerySnapshot activityquerySnapshot = await _activityRef.get();
     print("------------------");
     print(_detail.runtimeType);
     // Get data from docs and convert map to List
-    interestquerySnapshot.docs
-        .map((doc) => {
-              if (_detail.contains(doc.reference))
-                {
-                  print("===== doc.data() =========="),
-                  print(doc.data()),
-                  _tourdetail.add(doc.data())
-                }
-            })
-        .toList();
+
+    // interestquerySnapshot.docs
+    //     .map((doc) => {
+    //           if (_detail.contains(doc.reference))
+    //             {
+    //               print("===== doc.data() =========="),
+    //               print(doc.data()),
+    //               _tourdetail.add(doc.data())
+    //             }
+    //         })
+    //     .toList();
     activityquerySnapshot.docs
         .map((doc) => {
               if (_activity.contains(doc.reference))
                 {
-                  print("===== doc.data() =========="),
-                  print(doc.data()),
+                  // print("===== doc.data() =========="),
+                  // print(doc.data()),
                   _activitydetail.add(doc.data())
                 }
             })
@@ -70,8 +117,8 @@ class TourListState extends State<TourList> {
     // print(allData);
     print(" ===== _tourdetail =====");
     print(_tourdetail);
-    print(" ===== _activitydetail =====");
-    print(_activitydetail.length);
+    // print(" ===== _activitydetail =====");
+    // print(_activitydetail.length);
   }
 
   @override

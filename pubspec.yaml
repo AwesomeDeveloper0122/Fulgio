@@ -61,6 +61,16 @@ dependencies:
   email_validator: ^2.0.1
   flutter_dialogs: ^2.1.1
   video_player: ^2.2.18
+  flutter_map: ^0.14.0
+  latlong: ^0.6.1
+  audioplayers: ^0.20.1
+  audio_video_progress_bar: ^0.10.0
+  just_audio: ^0.9.20
+  rxdart: ^0.27.3
+  carousel_slider: ^4.0.0
+  flutter_rating_bar: ^4.0.0
+  # mapbox_gl: ^0.15.0
+  # user_location: ^0.06
   # audioplayers: ^0.20.1
   # geocoding: ^2.0.2
   # location: ^4.3.0
@@ -110,6 +120,7 @@ flutter:
     - assets/images/png/icon-achievement.png
     - assets/images/png/icon-route.png
     - assets/images/png/icon-heart.png
+    - assets/3.mp3
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

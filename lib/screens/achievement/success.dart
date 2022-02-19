@@ -116,7 +116,12 @@ class SucessState extends State<Sucess> {
                     Container(
                       width: 350,
                       height: 50,
-                      child: CustomButton(context, const Credits(), "Close"),
+                      child: CustomButton(
+                          context,
+                          Credits(
+                            arch_list: [],
+                          ),
+                          "Close"),
                     ),
                   ],
                 ),

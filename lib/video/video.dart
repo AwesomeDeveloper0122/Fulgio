@@ -13,6 +13,7 @@ import 'package:Fuligo/widgets/text_header.dart';
 import 'package:Fuligo/widgets/custom_button.dart';
 import 'package:Fuligo/widgets/image_detail.dart';
 import 'package:Fuligo/widgets/subtxt.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:video_player/video_player.dart';
 // import 'package:audioplayers/audioplayers.dart';
@@ -72,290 +73,70 @@ class VideoScreenState extends State<VideoScreen> {
         future: _initializeVideoPlayerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return (mediadata["video"].length > 0)
-                ? Column(
-                    children: <Widget>[
-                      Expanded(
-                        child: AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
-                          child: Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: <Widget>[
-                              VideoPlayer(_controller),
-                              Container(
-                                  child: _ControlsOverlay(
-                                      controller: _controller)),
-                              // VideoProgressIndicator(_controller, allowScrubbing: true),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 30),
-                                child: VideoProgressIndicator(
-                                  _controller,
-                                  allowScrubbing: true,
-                                  colors: VideoProgressColors(
-                                      backgroundColor: Colors.grey,
-                                      // bufferedColor: Colors.yellow,
-                                      playedColor: Colors.white),
-                                ),
+            return Column(
+              children: <Widget>[
+                Expanded(
+                  child: AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: <Widget>[
+                        VideoPlayer(_controller),
+                        Container(
+                            child: _ControlsOverlay(
+                                controller: _controller, infodata: mediadata)),
+                        // VideoProgressIndicator(_controller, allowScrubbing: true),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 30),
+                          child: VideoProgressIndicator(
+                            _controller,
+                            allowScrubbing: true,
+                            colors: VideoProgressColors(
+                                backgroundColor: Colors.grey,
+                                // bufferedColor: Colors.yellow,
+                                playedColor: Colors.white),
+                          ),
+                        ),
+                        ClearButton(context),
+                        Positioned(
+                          top: 65,
+                          right: 20,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Keizersgrachi",
+                                style: font_13_white,
+                                textAlign: TextAlign.center,
                               ),
-                              ClearButton(context),
-                              Positioned(
-                                top: 65,
-                                right: 20,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Keizersgrachi",
-                                      style: font_13_white,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.favorite,
-                                          color: whiteColor,
-                                          size: 20,
-                                        ),
-                                        Icon(
-                                          Icons.favorite,
-                                          color: whiteColor,
-                                          size: 20,
-                                        ),
-                                        Icon(
-                                          Icons.favorite,
-                                          color: whiteColor,
-                                          size: 20,
-                                        ),
-                                        Icon(
-                                          Icons.favorite,
-                                          color: whiteColor,
-                                          size: 20,
-                                        ),
-                                        Icon(
-                                          Icons.favorite_border,
-                                          color: whiteColor,
-                                          size: 20,
-                                        )
-                                      ],
-                                    )
-                                  ],
+                              RatingBar.builder(
+                                initialRating: mediadata["rating"]!,
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemCount: 5,
+                                itemSize: 20.0,
+                                itemPadding:
+                                    EdgeInsets.symmetric(horizontal: 2.0),
+                                itemBuilder: (context, _) => Icon(
+                                  Icons.favorite,
+                                  color: whiteColor,
                                 ),
+                                onRatingUpdate: (rating) {
+                                  print(rating);
+                                },
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                : Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      image: DecorationImage(
-                          image: NetworkImage(mediadata["image"][0]),
-                          fit: BoxFit.fill),
+                      ],
                     ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [gradientFrom, bgColor]),
-                          color: bgColor.withOpacity(0.5)),
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: <Widget>[
-                          Container(
-                              child: _ControlsOverlay(controller: _controller)),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 30),
-                            child: VideoProgressIndicator(
-                              _controller,
-                              allowScrubbing: true,
-                              colors: VideoProgressColors(
-                                  backgroundColor: Colors.grey,
-                                  // bufferedColor: Colors.yellow,
-                                  playedColor: Colors.white),
-                            ),
-                          ),
-                          ClearButton(context),
-                          Positioned(
-                            top: 65,
-                            right: 20,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Keizersgrachi",
-                                  style: font_13_white,
-                                  textAlign: TextAlign.center,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.favorite,
-                                      color: whiteColor,
-                                      size: 20,
-                                    ),
-                                    Icon(
-                                      Icons.favorite,
-                                      color: whiteColor,
-                                      size: 20,
-                                    ),
-                                    Icon(
-                                      Icons.favorite,
-                                      color: whiteColor,
-                                      size: 20,
-                                    ),
-                                    Icon(
-                                      Icons.favorite,
-                                      color: whiteColor,
-                                      size: 20,
-                                    ),
-                                    Icon(
-                                      Icons.favorite_border,
-                                      color: whiteColor,
-                                      size: 20,
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 60,
-                            child: Row(
-                              children: [
-                                Container(
-                                  child: GestureDetector(
-                                    onTap: () => {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Keizersgracht(),
-                                        ),
-                                      ),
-                                    },
-                                    child: const Icon(
-                                      Icons.info_outline,
-                                      size: 50,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  child: GestureDetector(
-                                    onTap: () => {},
-                                    child: const Icon(
-                                      Icons.play_circle,
-                                      size: 100,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  child: GestureDetector(
-                                      onTap: () => {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    RouteScreen(),
-                                              ),
-                                            ),
-                                          },
-                                      child: const Icon(
-                                        Icons.compass_calibration_outlined,
-                                        size: 50,
-                                        color: Colors.white,
-                                      )),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 20,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                width: mq.width * 0.9,
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topRight,
-                                          child: Text("widget"),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text("widget"),
-                                        )
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 10, 0, 10),
-                                      child: Container(
-                                        height: 2.5,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.grey),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 56,
-                            right: 20,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Keizersgrachi",
-                                  style: font_13_white,
-                                  textAlign: TextAlign.center,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.favorite,
-                                      color: whiteColor,
-                                    ),
-                                    Icon(
-                                      Icons.favorite,
-                                      color: whiteColor,
-                                    ),
-                                    Icon(
-                                      Icons.favorite,
-                                      color: whiteColor,
-                                    ),
-                                    Icon(
-                                      Icons.favorite,
-                                      color: whiteColor,
-                                    ),
-                                    Icon(
-                                      Icons.favorite_border,
-                                      color: whiteColor,
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  ),
+                ),
+              ],
+            );
           } else {
             return const Center(
               child: CircularProgressIndicator(),
@@ -368,7 +149,8 @@ class VideoScreenState extends State<VideoScreen> {
 }
 
 class _ControlsOverlay extends StatelessWidget {
-  const _ControlsOverlay({Key? key, required this.controller})
+  Map infodata;
+  _ControlsOverlay({Key? key, required this.controller, required this.infodata})
       : super(key: key);
 
   final VideoPlayerController controller;
@@ -410,6 +192,9 @@ class _ControlsOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Map infodata = this.infodata;
+    print("infodata");
+    print(infodata);
     return Stack(
       children: <Widget>[
         Positioned(
@@ -432,7 +217,8 @@ class _ControlsOverlay extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => Keizersgracht(),
+                                    builder: (context) =>
+                                        Keizersgracht(infodata: infodata),
                                   ),
                                 ),
                               },

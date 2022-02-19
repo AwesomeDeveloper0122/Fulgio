@@ -3,8 +3,8 @@
 import 'package:Fuligo/routes/route_costant.dart';
 import 'package:Fuligo/screens/avatar_screen.dart';
 import 'package:Fuligo/screens/keizersgracht.dart';
+import 'package:Fuligo/video/audio.dart';
 import 'package:Fuligo/video/video.dart';
-import 'package:Fuligo/video/videotest.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/utils/common_functions.dart';
 import 'package:Fuligo/utils/loading.dart';
@@ -31,7 +31,9 @@ Widget CircleImage(
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Keizersgracht(),
+                  builder: (context) => Keizersgracht(
+                    infodata: {},
+                  ),
                 ),
               );
               break;
@@ -94,6 +96,49 @@ Widget CircleNetworkImage(context, Map data) => Container(
             ),
           );
         },
+        child: Container(
+          child: ClipOval(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 3, color: whiteColor),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: Image.network(
+                data["image"][0],
+                width: 100,
+                height: 100,
+                fit: BoxFit.fill,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Center(
+                    child: kLoadingFadingWidget(context),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+Widget CircleAudioImage(context, Map data) => Container(
+      margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      child: GestureDetector(
+        onTap: () {
+          // showConfirm(context, "avatar", url);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AudioScreen(
+                mediadata: data,
+              ),
+              // builder: (context) => VideoPlayerScreen(),
+            ),
+          );
+        },
         child: ClipOval(
           child: Image.network(
             data["image"][0],
@@ -111,25 +156,5 @@ Widget CircleNetworkImage(context, Map data) => Container(
             },
           ),
         ),
-        // child: Container(
-        //   width: 80.0,
-        //   height: 80.0,
-        //   decoration: BoxDecoration(
-        //     image: DecorationImage(
-        //       image: NetworkImage(data["image"][0]),
-        //       fit: BoxFit.cover,
-        //     ),
-        //     borderRadius: BorderRadius.all(Radius.circular(50.0)),
-        //   ),
-        //   child: Container(
-        //     decoration: BoxDecoration(
-        //         borderRadius: BorderRadius.all(Radius.circular(50.0)),
-        //         gradient: const LinearGradient(
-        //             begin: Alignment.topLeft,
-        //             end: Alignment.bottomRight,
-        //             colors: [gradientFrom, bgColor]),
-        //         color: bgColor.withOpacity(0.3)),
-        //   ),
-        // ),
       ),
     );

@@ -24,12 +24,12 @@ class Verify extends StatefulWidget {
 }
 
 class VerifyState extends State<Verify> {
-  // late Position _currentPosition;
+// late Position _currentPosition;
   String? _currentAddress;
   late GoogleMapController myController;
 
   final LatLng _center = const LatLng(45.521563, -122.677433);
-  // LatLng? _mylocation;
+// LatLng? _mylocation;
 
   MapType _currentMapType = MapType.normal;
 
@@ -46,45 +46,45 @@ class VerifyState extends State<Verify> {
     });
   }
 
-  // _getAddressFromLatLng() async {
-  //   try {
-  //     List<Placemark> placemarks = await placemarkFromCoordinates(
-  //         _currentPosition.latitude, _currentPosition.longitude);
-  //     _mylocation =
-  //         LatLng(_currentPosition.latitude, _currentPosition.longitude);
-  //     setState(() {});
+// _getAddressFromLatLng() async {
+//   try {
+//     List<Placemark> placemarks = await placemarkFromCoordinates(
+//         _currentPosition.latitude, _currentPosition.longitude);
+//     _mylocation =
+//         LatLng(_currentPosition.latitude, _currentPosition.longitude);
+//     setState(() {});
 
-  //     Placemark place = placemarks[0];
+//     Placemark place = placemarks[0];
 
-  //     setState(() {
-  //       _currentAddress =
-  //           "${place.locality}, ${place.postalCode}, ${place.country}";
-  //       print("12312312312312312123");
-  //       print(_currentAddress);
-  //     });
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+//     setState(() {
+//       _currentAddress =
+//           "${place.locality}, ${place.postalCode}, ${place.country}";
+//       print("12312312312312312123");
+//       print(_currentAddress);
+//     });
+//   } catch (e) {
+//     print(e);
+//   }
+// }
 
-  // _getCurrentLocation() async {
-  //   LocationPermission permission;
-  //   // permission = await Geolocator.checkPermission();
-  //   permission = await Geolocator.requestPermission();
-  //   print("aaaaaaaaaaaaaaaaaaaaa");
-  //   print(permission);
-  //   Geolocator.getCurrentPosition(
-  //           desiredAccuracy: LocationAccuracy.best,
-  //           forceAndroidLocationManager: true)
-  //       .then((Position position) {
-  //     setState(() {
-  //       _currentPosition = position;
-  //       _getAddressFromLatLng();
-  //     });
-  //   }).catchError((e) {
-  //     print(e);
-  //   });
-  // }
+// _getCurrentLocation() async {
+//   LocationPermission permission;
+//   // permission = await Geolocator.checkPermission();
+//   permission = await Geolocator.requestPermission();
+//   print("aaaaaaaaaaaaaaaaaaaaa");
+//   print(permission);
+//   Geolocator.getCurrentPosition(
+//           desiredAccuracy: LocationAccuracy.best,
+//           forceAndroidLocationManager: true)
+//       .then((Position position) {
+//     setState(() {
+//       _currentPosition = position;
+//       _getAddressFromLatLng();
+//     });
+//   }).catchError((e) {
+//     print(e);
+//   });
+// }
 
   void _onMapCreated(GoogleMapController controller) {
     myController = controller;
