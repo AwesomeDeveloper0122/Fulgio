@@ -21,7 +21,7 @@ Widget TextHeaderTest(context, String title, String content) => Container(
             child: Container(
               width: 62,
               height: 2.5,
-              decoration: const BoxDecoration(color: Colors.grey),
+              decoration: const BoxDecoration(color: Colors.white30),
             ),
           ),
           Padding(

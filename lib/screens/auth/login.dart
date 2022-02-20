@@ -123,11 +123,11 @@ class LoginState extends State<Login> {
         _result = 1;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-          // UserCredential userCredential = await FirebaseAuth.instance
-          //     .createUserWithEmailAndPassword(email: email, password: pwd);
-          // print("================  create new user============== ");
-          // print(userCredential.user!);
-          // _result = 2;
+          UserCredential userCredential = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(email: email, password: pwd);
+          print("================  create new user============== ");
+          print(userCredential.user!);
+          _result = 2;
         } else if (e.code == 'wrong-password') {
           _result = 3;
         } else {

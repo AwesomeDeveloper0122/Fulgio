@@ -23,7 +23,7 @@ Widget TourBigImage(context, String url, String title, String content,
       },
       child: Container(
         width: 350,
-        height: 140,
+        height: 160,
         margin: const EdgeInsets.only(top: 40),
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -34,7 +34,7 @@ Widget TourBigImage(context, String url, String title, String content,
         ),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(25),
               gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -53,7 +53,7 @@ Widget TourBigImage(context, String url, String title, String content,
                 child: Container(
                   width: 62,
                   height: 2.5,
-                  decoration: const BoxDecoration(color: Colors.grey),
+                  decoration: const BoxDecoration(color: Colors.white54),
                 ),
               ),
               Text(
@@ -91,7 +91,7 @@ Widget ChatCard(context, String url, String title, String content, bool ischat,
         ),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(25),
               gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -110,7 +110,7 @@ Widget ChatCard(context, String url, String title, String content, bool ischat,
                 child: Container(
                   width: 62,
                   height: 2.5,
-                  decoration: const BoxDecoration(color: Colors.grey),
+                  decoration: const BoxDecoration(color: Colors.white54),
                 ),
               ),
               Text(

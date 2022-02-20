@@ -99,7 +99,7 @@ class MyAppState extends State<MyApp> {
         ),
       ],
       child: MaterialApp(
-          title: 'Fulgio',
+          title: 'Flugio',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: 'Noto_Sans_JP',

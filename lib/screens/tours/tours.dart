@@ -75,7 +75,7 @@ class ToursState extends State<Tours> {
               );
             },
             child: Container(
-              margin: const EdgeInsets.only(top: 40),
+              margin: const EdgeInsets.only(top: 30),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -83,8 +83,8 @@ class ToursState extends State<Tours> {
                     borderRadius: BorderRadius.circular(20),
                     child: Image.network(
                       each["image"],
-                      width: mq.width * 0.77,
-                      height: mq.height * 0.17,
+                      width: mq.width * 0.8,
+                      height: mq.height * 0.2,
                       fit: BoxFit.cover,
                       loadingBuilder: (BuildContext context, Widget child,
                           ImageChunkEvent? loadingProgress) {
@@ -99,10 +99,10 @@ class ToursState extends State<Tours> {
                   ),
                   Positioned(
                     child: Container(
-                      width: mq.width * 0.77,
-                      height: mq.height * 0.17,
+                      width: mq.width * 0.8,
+                      height: mq.height * 0.2,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(20),
                           gradient: const LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -122,7 +122,7 @@ class ToursState extends State<Tours> {
                               width: 62,
                               height: 2.5,
                               decoration:
-                                  const BoxDecoration(color: Colors.grey),
+                                  const BoxDecoration(color: Colors.white54),
                             ),
                           ),
                           Text(
