@@ -19,7 +19,6 @@ abstract class LocalText {
   static const NotFoundUser = 'Not found user';
   // ignore: constant_identifier_names
   static const NetError = 'Network Error';
-
   ///
   static const gender = 'gender';
 
