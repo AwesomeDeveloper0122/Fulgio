@@ -1,16 +1,17 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'dart:typed_data';
+
+import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/widgets/circleimage.dart';
+import 'package:Fuligo/widgets/clear_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-// import 'package:Fuligo/widgets/button.dart';
-// import 'package:Fuligo/widgets/imagedetail.dart';
-import 'package:Fuligo/widgets/subtxt.dart';
-import 'package:Fuligo/widgets/fuligo_card.dart';
-
-// import 'package:Fuligo/screens/tours.dart';
+import 'package:flutter/services.dart';
 
 class AvatarScreen extends StatefulWidget {
   const AvatarScreen({Key? key}) : super(key: key);
@@ -21,13 +22,56 @@ class AvatarScreen extends StatefulWidget {
 
 class AvatarScreenState extends State<AvatarScreen> {
   @override
+  List<Map> avatars = [];
+  List<Uint8List> imageList = [];
+
+  bool loading = true;
+  void initState() {
+    getAvatars();
+    super.initState();
+  }
+
+  Future<void> getAvatars() async {
+    QuerySnapshot orderSnapshot =
+        await FirebaseFirestore.instance.collection('avatar').get();
+    Reference ref;
+    String url;
+    Map temp;
+    if (orderSnapshot.docs.isNotEmpty) {
+      Uint8List uint8image;
+      for (var item in orderSnapshot.docs) {
+        ref = FirebaseStorage.instance.ref().child(item["img"]);
+        url = await ref.getDownloadURL();
+        Uint8List uint8image =
+            (await NetworkAssetBundle(Uri.parse(url)).load(""))
+                .buffer
+                .asUint8List();
+        imageList.add(uint8image);
+        temp = {
+          "id": item.id,
+          "img": url,
+          "isDefault": item["isDefault"],
+        };
+        avatars.add(temp);
+      }
+
+      loading = false;
+    }
+    setState(() {
+      avatars = avatars;
+      loading = loading;
+    });
+  }
+
   Widget build(BuildContext context) {
     List<Widget> avatarList = [];
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < avatars.length; i++) {
+      var item = avatars[i];
+
       avatarList.add(
-        CircleLocalImage(context, "assets/images/avatar-1.jpg"),
-      );
+          AvatarMenu(context, imageList[i], item["img"], item["id"], 80, 80));
     }
+
     var mq = MediaQuery.of(context).size;
     return Container(
       decoration: const BoxDecoration(
@@ -55,75 +99,28 @@ class AvatarScreenState extends State<AvatarScreen> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.15,
                     ),
-                    TextHeader1(
+                    PageHeader(
                       context,
                       "Avatar",
                       "Choose your avatar",
                     ),
-                    Container(
-                      width: mq.width,
-                      height: mq.height * 0.7,
-                      margin: const EdgeInsets.only(bottom: 10, top: 10),
-                      child: GridView.count(
-                          padding: const EdgeInsets.all(60),
-                          crossAxisCount: 2,
-                          children: avatarList),
-                    ),
+                    !loading && avatars.isNotEmpty
+                        ? Container(
+                            width: mq.width,
+                            height: mq.height * 0.7,
+                            margin: const EdgeInsets.only(bottom: 10, top: 10),
+                            child: GridView.count(
+                                padding: const EdgeInsets.all(60),
+                                crossAxisCount: 2,
+                                children: avatarList),
+                          )
+                        : Container(
+                            margin: EdgeInsets.only(top: mq.height * 0.3),
+                            child: kLoadingFadingWidget(context),
+                          )
                   ],
                 )),
-            Positioned(
-              top: 60,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.clear,
-                  size: 50,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            // Positioned(
-            //   bottom: 50,
-            //   child: Container(
-            //     padding: const EdgeInsets.only(right: 20, left: 20),
-            //     width: mq.width,
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       crossAxisAlignment: CrossAxisAlignment.center,
-            //       children: [
-            //         ImageDetail(context, "assets/images/1.jpeg", "Red right",
-            //             "Amsterdam"),
-            //         ImageDetail(
-            //             context, "assets/images/1.jpeg", "Old town", "Amsterdam"),
-            //         ImageDetail(
-            //             context, "assets/images/1.jpeg", "Old town", "Amsterdam")
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // Positioned(
-            //   bottom: 50,
-            //   child: Container(
-            //     width: mq.width,
-            //     child: Column(
-            //       mainAxisAlignment: MainAxisAlignment.start,
-            //       crossAxisAlignment: CrossAxisAlignment.center,
-            //       children: [
-            //         Container(
-            //           width: 350,
-            //           height: 50,
-            //           child: CustomButton(context, const Tours(), "Start tour"),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            SecondaryButton(context)
           ],
         ),
       ),

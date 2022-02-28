@@ -8,25 +8,26 @@ import 'package:Fuligo/widgets/text_header.dart';
 
 // import 'package:Fuligo/screens/tours.dart';
 
-class Keizersgracht extends StatefulWidget {
+class Info extends StatefulWidget {
   Map infodata;
-  Keizersgracht({Key? key, required this.infodata}) : super(key: key);
+  Info({Key? key, required this.infodata}) : super(key: key);
 
   @override
-  KeizersgrachtState createState() => KeizersgrachtState();
+  InfoState createState() => InfoState();
 }
 
-class KeizersgrachtState extends State<Keizersgracht> {
+class InfoState extends State<Info> {
   @override
   Widget build(BuildContext context) {
     Map infodata = widget.infodata;
-    print("infodata123");
-    print(infodata);
+    print("Info page");
+    print(infodata["image"]);
+
     var mq = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: NetworkImage(infodata["image"][0]), fit: BoxFit.fill),
+            image: NetworkImage(infodata["image"]), fit: BoxFit.fill),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -36,13 +37,7 @@ class KeizersgrachtState extends State<Keizersgracht> {
         body: Stack(
           children: [
             Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [gradientFrom, bgColor]),
-                    color: bgColor.withOpacity(0.8)),
+                decoration: BoxDecoration(color: aboveColor.withOpacity(0.8)),
                 width: mq.width,
                 height: mq.height,
                 padding: EdgeInsets.symmetric(horizontal: 40),
@@ -53,10 +48,10 @@ class KeizersgrachtState extends State<Keizersgracht> {
                     SizedBox(
                       height: mq.height * 0.17,
                     ),
-                    TextHeaderTest(
+                    PageHeader(
                       context,
-                      infodata["name"]["en_GB"]!,
-                      infodata["description"]["en_GB"]!,
+                      infodata["name"]!,
+                      infodata["description"]!,
                     ),
                   ],
                 )),

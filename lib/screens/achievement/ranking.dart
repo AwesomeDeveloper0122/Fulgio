@@ -1,19 +1,19 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'package:Fuligo/model/user_modal.dart';
+import 'dart:typed_data';
+
+import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
-import 'package:Fuligo/repositories/user_repository.dart';
-import 'package:Fuligo/widgets/circleimage.dart';
+import 'package:Fuligo/utils/loading.dart';
+import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-// import 'package:Fuligo/widgets/button.dart';
-// import 'package:Fuligo/widgets/imagedetail.dart';
-import 'package:Fuligo/widgets/subtxt.dart';
-import 'package:Fuligo/widgets/fuligo_card.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:Fuligo/screens/tours.dart';
 
@@ -27,53 +27,166 @@ class Ranking extends StatefulWidget {
 class RankingState extends State<Ranking> {
   void initState() {
     super.initState();
-
     getData();
   }
 
+  bool loading = true;
   List<Map> _users = [];
-  bool is_load = false;
+  List<Uint8List> imageList = [];
 
-  String avatar =
-      "https://firebasestorage.googleapis.com/v0/b/project-flugio.appspot.com/o/assets%2Fstatic%2Favatar-marieke-harmsen%402x.png?alt=media&token=8043d7f3-347b-457c-abf8-126a79449354";
-  int achievement_num = 0;
-  String userId = "";
-
-  Future<bool> getData() async {
-    UserModel _userInfo = AuthProvider.of(context).userModel;
+  Future<void> getData() async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
+    final prefs = await SharedPreferences.getInstance();
+    String avatar = "";
 
-    users.get().then((QuerySnapshot querySnapshot) {
-      for (var user in querySnapshot.docs) {
-        Map _usermap = user.data() as Map<String, dynamic>;
-        userId = user["uid"];
-        if (_usermap.containsKey("avatar")) {
-          if (_usermap.containsKey("achievements")) {
-            avatar = _usermap["avatar"];
-            List aaa = _usermap["achievements"];
-            achievement_num = aaa.length;
+    users.get().then((QuerySnapshot querySnapshot) async {
+      if (querySnapshot.docs.isNotEmpty) {
+        for (var user in querySnapshot.docs) {
+          final prefs = await SharedPreferences.getInstance();
+          int achievementNum = 0;
+          String name = "Anonymous User";
+          Map _userdata = user.data() as Map<String, dynamic>;
+
+          if (_userdata.containsKey("avatar")) {
+            var refId = user.get("avatar");
+
+            refId.get().then((DocumentSnapshot documentSnapshot) async {
+              if (documentSnapshot.exists) {
+                avatar = await getDownImageUrl(documentSnapshot.get('img'));
+              }
+            });
           } else {
-            avatar = _usermap["avatar"];
+            String defaultavatar = prefs.getString('defaultAvatar') ?? "";
+            avatar = await getDownImageUrl(defaultavatar);
           }
-        }
-        if (_usermap.containsKey("achievements")) {
-          List aaa = _usermap["achievements"];
-          achievement_num = aaa.length;
+          Uint8List uint8image =
+              (await NetworkAssetBundle(Uri.parse(avatar)).load(""))
+                  .buffer
+                  .asUint8List();
+
+          imageList.add(uint8image);
+          if (_userdata.containsKey("achievement")) {
+            achievementNum = _userdata["achievement"].length;
+          }
+
+          if (_userdata.containsKey("name")) {
+            name = _userdata["name"]["first"].toString() +
+                " " +
+                _userdata["name"]["last"].toString();
+          }
+          print("userAvatars");
+          print(avatar);
+          _users.add({
+            "avatar": avatar,
+            "name": name,
+            "num": achievementNum,
+            "uid": _userdata["uid"]
+          });
         }
 
-        _users.add({"avatar": avatar, "name": userId, "num": achievement_num});
+        loading = false;
         setState(() {});
-      }
+      } else {}
     });
+  }
 
-    return is_load;
+  Future<String> getDownImageUrl(location) async {
+    Reference ref = FirebaseStorage.instance.ref().child(location);
+    String url = await ref.getDownloadURL();
+
+    return url;
   }
 
   @override
   Widget build(BuildContext context) {
-    print("users345");
-    print(_users.length);
+    List<Widget> usersRanking = [];
     var mq = MediaQuery.of(context).size;
+    _users.sort((a, b) => b["num"].compareTo(a["num"]));
+    print("users is");
+    print(_users);
+    print(_users.length);
+    UserModel _userInfo = AuthProvider.of(context).userModel;
+    if (_users.isNotEmpty) {
+      for (var i = 0; i < _users.length; i++) {
+        var item = _users[i];
+        usersRanking.add(
+          Container(
+            margin: EdgeInsets.only(bottom: 20),
+            decoration: _userInfo.uid != item["uid"]
+                ? BoxDecoration(
+                    color: bgColor,
+                    gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [bgColor, gradientFrom]),
+                    borderRadius: BorderRadius.circular(25.0),
+                  )
+                : BoxDecoration(
+                    color: bgColor,
+                    gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Colors.white10, bgColor]),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              // leading: CircleImage(context, imageList[i], 80, 80, "ranking"),
+              leading: Container(
+                child: InkWell(
+                  onTap: () {},
+                  child: ClipOval(
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: MemoryImage(imageList[i], scale: 0.5),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              title: Text(
+                item["name"],
+                style: TextStyle(
+                    color: _userInfo.uid != item["uid"]
+                        ? Colors.white38
+                        : whiteColor,
+                    fontSize: 16),
+              ),
+              // trailing: CircleImage(context, item["avatar"], 80, 80, "ranking"),
+              trailing: Text('${i + 1}'),
+              subtitle: Text(
+                item["num"].toString() + '  achievements',
+                style: TextStyle(color: Colors.white38, fontSize: 14),
+              ),
+              onTap: () => {
+                // Navigator.pushNamed(context, RouteName.Startour),
+              },
+            ),
+          ),
+        );
+      }
+    } else {
+      usersRanking.add(Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: mq.height * 0.2,
+          ),
+          Text(
+            "No User data",
+            style: TextStyle(fontSize: 30, color: Colors.white30),
+          ),
+        ],
+      ));
+    }
+
     return Container(
       decoration: const BoxDecoration(
         color: bgColor,
@@ -96,101 +209,34 @@ class RankingState extends State<Ranking> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.17,
                   ),
-                  TextHeaderTest(
+                  PageHeader(
                     context,
                     "Ranking",
                     "So where do you stand? Let's see...",
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-                    child: Column(
-                      children: [
-                        // Container(
-                        //   margin: EdgeInsets.only(bottom: 20),
-                        //   decoration: BoxDecoration(
-                        //     color: bgColor,
-                        //     gradient: const LinearGradient(
-                        //         begin: Alignment.topLeft,
-                        //         end: Alignment.bottomRight,
-                        //         colors: [gradientFrom, bgColor]),
-                        //     borderRadius: BorderRadius.circular(25.0),
-                        //   ),
-                        //   child: ListTile(
-                        //     contentPadding: EdgeInsets.symmetric(
-                        //         horizontal: 20, vertical: 5),
-                        //     leading: CircleImage(context,
-                        //         "assets/images/1.jpeg", 50, 50, "ranking"),
-                        //     trailing: CircleImage(context,
-                        //         "assets/images/1.jpeg", 50, 50, "ranking"),
-                        //     title: Text(
-                        //       'Zurich-Amsterdam',
-                        //       style:
-                        //           TextStyle(color: Colors.white, fontSize: 16),
-                        //     ),
-                        //     subtitle: Text(
-                        //       '11-02-2021 | -2 CHF',
-                        //       style:
-                        //           TextStyle(color: Colors.grey, fontSize: 14),
-                        //     ),
-                        //     onTap: () => {
-                        //       // Navigator.pushNamed(context, RouteName.Startour),
-                        //       print("object"),
-                        //     },
-                        //   ),
-                        // ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          decoration: BoxDecoration(
-                            color: bgColor,
-                            gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [gradientFrom, bgColor]),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
-                            leading: Icon(Icons.location_on_outlined,
-                                color: Colors.white, size: 32),
-                            title: Text(
-                              'Zurich-Amsterdam',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                  !loading
+                      ? Container(
+                          // decoration: BoxDecoration(color: whiteColor),
+                          height: mq.height * 0.7,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 40),
+                          child: Scrollbar(
+                            child: ListView(
+                              shrinkWrap: true,
+                              children: usersRanking,
                             ),
-                            subtitle: Text(
-                              '11-02-2021 | -2 CHF',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 14),
-                            ),
-                            onTap: () => {
-                              // Navigator.pushNamed(context, RouteName.Startour),
-                            },
                           ),
-                        ),
-                      ],
-                    ),
-                  )
+                        )
+                      : Container(
+                          child: SizedBox(
+                            height: mq.height * 0.4,
+                            child: kLoadingFadingWidget(context),
+                          ),
+                        )
                 ],
               ),
             ),
-            Positioned(
-              top: 60,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.clear,
-                  size: 50,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            SecondaryButton(context)
           ],
         ),
       ),

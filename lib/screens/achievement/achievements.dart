@@ -1,12 +1,12 @@
 // ignore_for_file: sized_box_for_whitespace, prefer_final_fields
+
 import 'package:Fuligo/screens/achievement/credits.dart';
 import 'package:Fuligo/screens/achievement/ranking.dart';
 import 'package:intl/intl.dart';
 
-import 'package:Fuligo/model/user_modal.dart';
+import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/repositories/user_repository.dart';
-import 'package:Fuligo/routes/route_costant.dart';
 import 'package:Fuligo/screens/achievement/achievement_detail.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
@@ -18,6 +18,7 @@ import 'package:Fuligo/widgets/text_header.dart';
 
 import 'package:Fuligo/widgets/subtxt.dart';
 import 'package:Fuligo/widgets/fuligo_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import 'package:Fuligo/screens/tours.dart';
 
@@ -30,13 +31,13 @@ class Achievements extends StatefulWidget {
 
 class ArchivmentsState extends State<Achievements> {
   List allData = [];
-  bool is_load = false;
+  bool loading = true;
   late num user_credit;
   late num user_achieve;
-  List<QueryDocumentSnapshot> doc_list = [];
-  List user_achievement = [];
+  List<QueryDocumentSnapshot> docLists = [];
+  List userAchievements = [];
   List<Widget> widgets = [];
-  List<Map> arch_list = [];
+  List<Map> achieveLists = [];
 
   @override
   void initState() {
@@ -50,62 +51,56 @@ class ArchivmentsState extends State<Achievements> {
     UserModel _userInfo = AuthProvider.of(context).userModel;
     CollectionReference achievements =
         FirebaseFirestore.instance.collection('achievement');
+    final prefs = await SharedPreferences.getInstance();
+    String lang = prefs.getString('lang') ?? "en_GB";
 
-    try {
-      final result = await UserRepository.getUserByID(_userInfo.uid);
-      print("result");
-      print(result["credits"]);
-      user_achievement =
-          result['achievement']; // get achievement in User collection
+    final result = await UserRepository.getUserByID(_userInfo.uid);
 
-    } catch (e) {
-      user_achievement = [];
-    }
-    print('=======element1===========');
+    userAchievements =
+        result['achievement']; // get achievement in User collection
+
     achievements.get().then((QuerySnapshot querySnapshot) {
-      print('=======element2===========');
-      doc_list = querySnapshot.docs; //get achievement in Achievement collection
-      for (var element in doc_list) {
-        String updatedAt =
-            DateFormat('MM-dd-yyyy').format((element['updatedAt'].toDate()));
+      docLists = querySnapshot.docs;
+      if (docLists.isNotEmpty) {
+        for (var element in docLists) {
+          String updatedAt =
+              DateFormat('dd-MM-yyyy').format((element['updatedAt'].toDate()));
 
-        if (user_achievement.toString().contains(element.reference.id)) {
-          user_credit += element["credits"];
-          user_achieve++;
+          if (userAchievements.toString().contains(element.reference.id)) {
+            user_credit += element["credits"];
+            user_achieve++;
 
-          Map temp = {
-            "isDone": true,
-            "active": element['active'],
-            "name": element['name'],
-            "description": element['description'],
-            "credits": element['credits'],
-            "updatedAt": updatedAt
-          };
-          arch_list.add(temp);
-        } else {
-          Map temp = {
-            "isDone": false,
-            "active": element['active'],
-            "name": element['name'],
-            "description": element['description'],
-            "credits": element['credits'],
-            "updatedAt": updatedAt
-          };
-          arch_list.add(temp);
+            Map temp = {
+              "isDone": true,
+              "active": element['active'],
+              "name": element['name'][lang],
+              "description": element['description'][lang],
+              "credits": element['credits'],
+              "updatedAt": updatedAt
+            };
+            achieveLists.add(temp);
+          } else {
+            Map temp = {
+              "isDone": false,
+              "active": element['active'],
+              "name": element['name'][lang],
+              "description": element['description'][lang],
+              "credits": element['credits'],
+              "updatedAt": updatedAt
+            };
+            achieveLists.add(temp);
+          }
+          loading = false;
         }
+      } else {
+        loading = false;
       }
+      //get achievement in Achievement collection
 
-      is_load = true;
-      setState(() {
-        is_load = is_load;
-      });
+      setState(() {});
     });
 
-    // Get data from docs and convert map to List
-    // QuerySnapshot querySnapshot = await _collectionRef.get();
-    // allData = querySnapshot.docs.map((doc) => doc.reference.id).toList();
-
-    return is_load;
+    return loading;
   }
 
   List<Widget> getArchivementsItem(List<Map> newList) {
@@ -118,14 +113,14 @@ class ArchivmentsState extends State<Achievements> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ArchivementsDetail(data: newList[i]),
+                  builder: (context) => AchievementsDetail(data: newList[i]),
                 ),
               );
             },
             child: Container(
               padding: const EdgeInsets.all(5),
-              child:
-                  FuligoCard(context, newList[i]["name"]["en_GB"], whiteColor),
+              child: FuligoCard(
+                  context, newList[i]["name"].toString(), whiteColor),
             ),
           ),
         );
@@ -136,15 +131,15 @@ class ArchivmentsState extends State<Achievements> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  // builder: (context) => ArchivementsDetail(data: newList[i]),
-                  builder: (context) => ArchivementsDetail(data: newList[i]),
+                  // builder: (context) => AchievementsDetail(data: newList[i]),
+                  builder: (context) => AchievementsDetail(data: newList[i]),
                 ),
               );
             },
             child: Container(
               padding: const EdgeInsets.all(5),
               child:
-                  FuligoCard(context, newList[i]["name"]["en_GB"], greyColor),
+                  FuligoCard(context, newList[i]["name"].toString(), greyColor),
             ),
           ),
         );
@@ -162,9 +157,6 @@ class ArchivmentsState extends State<Achievements> {
         decoration: bgDecoration,
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          // appBar: AppBar(
-          //   title: Text('TEST'),
-          // ),
           body: Stack(
             children: [
               Container(
@@ -177,85 +169,100 @@ class ArchivmentsState extends State<Achievements> {
                     SizedBox(
                       height: mq.height * 0.17,
                     ),
-                    TextHeaderTest(
+                    PageHeader(
                       context,
-                      "Archivements",
+                      "Achivements",
                       "Each completed achievement \n brings you credit on Flugio, ",
                     ),
-                    is_load
-                        ? Column(
+                    Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 40),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(
-                                height: mq.height * 0.16,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 40),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Ranking(),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 55),
-                                        child: SubTxt(context, 'Achievements',
-                                            '$user_achieve of ${doc_list.length}'),
-                                      ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const Ranking(),
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                Credits(arch_list: arch_list),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 55),
-                                        child: SubTxt(context, 'Credit',
-                                            '$user_credit CHF'),
-                                      ),
-                                    )
-                                  ],
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 55),
+                                  child: SubTxt(context, 'Achievements',
+                                      '$user_achieve of ${docLists.length}'),
                                 ),
                               ),
-                              Container(
-                                width: mq.width,
-                                height: mq.height * 0.57,
-                                // decoration: BoxDecoration(
-                                //     color: Colors.white,
-                                //     borderRadius: BorderRadius.circular(10)),
-
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 30),
-                                child: GridView.count(
-                                  padding: const EdgeInsets.all(0),
-                                  crossAxisCount: 2,
-                                  children: getArchivementsItem(arch_list),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          Credits(achieveLists: achieveLists),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 55),
+                                  child: SubTxt(
+                                      context, 'Credit', '$user_credit CHF'),
                                 ),
-                              ),
+                              )
                             ],
-                          )
-                        : Container(
-                            child: SizedBox(
-                              height: mq.height * 0.3,
-                              child: kLoadingFadingWidget(context),
-                            ),
-                          )
+                          ),
+                        ),
+                        !loading
+                            ? achieveLists.isNotEmpty
+                                ? Container(
+                                    width: mq.width,
+                                    height: mq.height * 0.5,
+                                    // decoration: BoxDecoration(
+                                    //     color: Colors.white,
+                                    //     borderRadius:
+                                    //         BorderRadius.circular(10)),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30),
+                                    child: GridView.count(
+                                      padding: const EdgeInsets.all(0),
+                                      crossAxisCount: 2,
+                                      children:
+                                          getArchivementsItem(achieveLists),
+                                    ),
+                                  )
+                                : Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: mq.height * 0.2,
+                                      ),
+                                      Text(
+                                        "No order data",
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            color: Colors.white30),
+                                      ),
+                                    ],
+                                  )
+                            : Container(
+                                child: SizedBox(
+                                  height: mq.height * 0.3,
+                                  child: kLoadingFadingWidget(context),
+                                ),
+                              )
+                      ],
+                    )
                   ],
                 ),
               ),
-              ClearButton(context),
+              SecondaryButton(context),
             ],
           ),
         ),

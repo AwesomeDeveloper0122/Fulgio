@@ -1,61 +1,92 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'package:Fuligo/screens/cancel_tour.dart';
-import 'package:Fuligo/screens/keizersgracht.dart';
+import 'package:Fuligo/screens/video/info.dart';
 import 'package:Fuligo/screens/route_screen.dart';
 import 'package:Fuligo/utils/font_style.dart';
-import 'package:Fuligo/widgets/circleimage.dart';
+import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
-import 'package:Fuligo/widgets/text_header.dart';
-import 'package:Fuligo/widgets/custom_button.dart';
-import 'package:Fuligo/widgets/image_detail.dart';
-import 'package:Fuligo/widgets/subtxt.dart';
+
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
-// import 'package:audioplayers/audioplayers.dart';
 
-// import 'package:Fuligo/screens/tours.dart';
-
-class VideoScreen extends StatefulWidget {
-  Map mediadata;
-  VideoScreen({Key? key, required this.mediadata}) : super(key: key);
+// ignore: must_be_immutable
+class Video extends StatefulWidget {
+  String id;
+  Video({Key? key, required this.id}) : super(key: key);
 
   @override
-  VideoScreenState createState() => VideoScreenState();
+  VideoState createState() => VideoState();
 }
 
-class VideoScreenState extends State<VideoScreen> {
+class VideoState extends State<Video> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
+
   bool startedPlaying = false;
   String totalTimeString = "";
   String currentTimeString = "";
+  Map videoData = {};
+  bool loading = true;
 
+  @override
   void initState() {
     super.initState();
-    try {
-      if (widget.mediadata["video"].length > 0) {
-        _controller =
-            VideoPlayerController.network((widget.mediadata["video"]));
-        _initializeVideoPlayerFuture = _controller.initialize();
-
-        _controller.addListener(() {
-          setState(() {});
-        });
-        _controller.setLooping(true);
-        _controller.initialize().then((_) => setState(() {}));
-      } else if (widget.mediadata["audio"].length > 0) {
-        // AudioPlayer audioPlayer = AudioPlayer();
-      }
-    } catch (e) {
-      SmartDialog.showToast("No data");
-    }
+    getVideoData(widget.id);
 
     // _controller.play();
+  }
+
+  Future<String> getUrlFromFirebase(String firebaseURL) async {
+    Reference ref = FirebaseStorage.instance.ref().child(firebaseURL);
+    String url = await ref.getDownloadURL();
+
+    return url;
+  }
+
+  Future<void> getVideoData(id) async {
+    final prefs = await SharedPreferences.getInstance();
+    String lang = prefs.getString('lang') ?? "";
+    var collection = FirebaseFirestore.instance.collection('pointOfInterest');
+    var mediadata = await collection.doc(id).get();
+    var data = mediadata.data();
+    List imageUrl = data!["image"];
+    String infoimage = "";
+    infoimage = await getUrlFromFirebase(imageUrl[0]);
+    List imageNetList = [];
+    if (imageUrl.isNotEmpty) {
+      for (var item in imageUrl) {
+        imageNetList.add(await getUrlFromFirebase(item));
+      }
+    }
+    List videoUrl = mediadata.get("video");
+    String videoNetUrl = await getUrlFromFirebase(videoUrl[0]);
+    if (videoNetUrl.isNotEmpty) {
+      _controller = VideoPlayerController.network((videoNetUrl));
+      _initializeVideoPlayerFuture = _controller.initialize();
+
+      _controller.addListener(() {
+        loading = false;
+        setState(() {});
+      });
+      _controller.setLooping(true);
+      _controller.initialize().then((_) => setState(() {}));
+    }
+
+    videoData = {
+      "image": infoimage,
+      "name": data["name"][lang],
+      "description": data["description"][lang],
+      "rating": data["rating"],
+    };
+    setState(() {
+      videoData = videoData;
+    });
   }
 
   @override
@@ -66,88 +97,85 @@ class VideoScreenState extends State<VideoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var mq = MediaQuery.of(context).size;
-    Map mediadata = widget.mediadata;
     return Scaffold(
-      body: FutureBuilder(
-        future: _initializeVideoPlayerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Column(
-              children: <Widget>[
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
+        body: !loading
+            ? FutureBuilder(
+                future: _initializeVideoPlayerFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Column(
                       children: <Widget>[
-                        VideoPlayer(_controller),
-                        Container(
-                            child: _ControlsOverlay(
-                                controller: _controller, infodata: mediadata)),
-                        // VideoProgressIndicator(_controller, allowScrubbing: true),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 30),
-                          child: VideoProgressIndicator(
-                            _controller,
-                            allowScrubbing: true,
-                            colors: VideoProgressColors(
-                                backgroundColor: Colors.grey,
-                                // bufferedColor: Colors.yellow,
-                                playedColor: Colors.white),
-                          ),
-                        ),
-                        ClearButton(context),
-                        Positioned(
-                          top: 65,
-                          right: 20,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Keizersgrachi",
-                                style: font_13_white,
-                                textAlign: TextAlign.center,
-                              ),
-                              RatingBar.builder(
-                                initialRating: mediadata["rating"]!,
-                                minRating: 1,
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 5,
-                                itemSize: 20.0,
-                                itemPadding:
-                                    EdgeInsets.symmetric(horizontal: 2.0),
-                                itemBuilder: (context, _) => Icon(
-                                  Icons.favorite,
-                                  color: whiteColor,
+                        Expanded(
+                          child: AspectRatio(
+                            aspectRatio: _controller.value.aspectRatio,
+                            child: Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: <Widget>[
+                                VideoPlayer(_controller),
+                                Container(
+                                    child: _ControlsOverlay(
+                                        controller: _controller,
+                                        infodata: videoData)),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 30),
+                                  child: VideoProgressIndicator(
+                                    _controller,
+                                    allowScrubbing: true,
+                                    colors: const VideoProgressColors(
+                                        backgroundColor: Colors.grey,
+                                        // bufferedColor: Colors.yellow,
+                                        playedColor: Colors.white),
+                                  ),
                                 ),
-                                onRatingUpdate: (rating) {
-                                  print(rating);
-                                },
-                              ),
-                            ],
+                                SecondaryButton(context),
+                                Positioned(
+                                  top: 65,
+                                  right: 20,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        videoData["name"] ?? "",
+                                        style: font_13_white,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      RatingBar.builder(
+                                        initialRating: videoData["rating"]!,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 20.0,
+                                        itemPadding: const EdgeInsets.symmetric(
+                                            horizontal: 2.0),
+                                        itemBuilder: (context, _) => const Icon(
+                                          Icons.favorite,
+                                          color: whiteColor,
+                                        ),
+                                        onRatingUpdate: (rating) {},
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-    );
+                    );
+                  } else {
+                    return defaultloading(context);
+                  }
+                },
+              )
+            : defaultloading(context));
   }
 }
 
+// ignore: must_be_immutable
 class _ControlsOverlay extends StatelessWidget {
   Map infodata;
   _ControlsOverlay({Key? key, required this.controller, required this.infodata})
@@ -193,8 +221,7 @@ class _ControlsOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map infodata = this.infodata;
-    print("infodata");
-    print(infodata);
+
     return Stack(
       children: <Widget>[
         Positioned(
@@ -218,7 +245,7 @@ class _ControlsOverlay extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        Keizersgracht(infodata: infodata),
+                                        Info(infodata: infodata),
                                   ),
                                 ),
                               },
@@ -265,7 +292,8 @@ class _ControlsOverlay extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => RouteScreen(),
+                                    builder: (context) =>
+                                        RouteScreen(infodata: infodata),
                                   ),
                                 ),
                               },

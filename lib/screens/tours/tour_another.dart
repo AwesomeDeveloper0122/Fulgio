@@ -1,6 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
 import 'package:Fuligo/widgets/clear_button.dart';
+import 'package:Fuligo/widgets/custom_button.dart';
 import 'package:Fuligo/widgets/custom_image.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +58,7 @@ class TourAnotherState extends State<TourAnother> {
                     ),
                   ],
                 )),
-            ClearButton(context),
+            CrossButton(context),
             Positioned(
               bottom: 30,
               left: 20,
@@ -71,12 +72,12 @@ class TourAnotherState extends State<TourAnother> {
                   // crossAxisAlignment: CrossAxisAlignment.center,
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
-                    TourSmallImage(context, "assets/images/1.jpeg", "Red right",
-                        "Amsterdam"),
-                    TourSmallImage(context, "assets/images/1.jpeg", "Old town",
-                        "Amsterdam"),
-                    TourSmallImage(context, "assets/images/1.jpeg", "Old town",
-                        "Amsterdam")
+                    // TourSmallImage(context, "assets/images/1.jpeg", "Red right",
+                    //     "Amsterdam"),
+                    // TourSmallImage(context, "assets/images/1.jpeg", "Old town",
+                    //     "Amsterdam"),
+                    // TourSmallImage(context, "assets/images/1.jpeg", "Old town",
+                    //     "Amsterdam")
                   ],
                 ),
               ),

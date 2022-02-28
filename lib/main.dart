@@ -3,13 +3,9 @@
 import 'dart:convert';
 
 import 'package:Fuligo/provider/auth_provider.dart';
-import 'package:Fuligo/screens/achievement/achievements.dart';
-import 'package:Fuligo/screens/configuration/location.dart';
 import 'package:Fuligo/screens/home.dart';
 import 'package:Fuligo/screens/splash_page.dart';
-import 'package:Fuligo/screens/achievement/success.dart';
 // import 'package:Fuligo/screens/chat/chat_content.dart';
-import 'package:Fuligo/test.dart';
 import 'package:Fuligo/utils/common_header_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,23 +14,8 @@ import 'package:Fuligo/routes/route.dart' as router;
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-// import 'package:Fuligo/screens/splash_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-// import 'package:Fuligo/screens/keizersgracht.dart';
-// import 'package:Fuligo/screens/route_screen.dart';
-// import 'package:Fuligo/screens/achievements.dart';
-// import 'package:Fuligo/screens/success.dart';
-// import 'package:Fuligo/screens/ranking.dart';
-// import 'package:Fuligo/screens/avatar_screen.dart';
-// import 'package:Fuligo/screens/chat/chat.dart';
-// import 'package:Fuligo/screens/home.dart';
-// import 'package:Fuligo/test.dart';
-
-// void main() {
-//   runApp(const MyApp());
-// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,9 +42,10 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    setLang();
     getHeaderData(
-      CollectionNameList.display,
-      DocIdList.display,
+      CollectionNameList.header,
+      DocIdList.header,
     );
   }
 
@@ -99,16 +81,21 @@ class MyAppState extends State<MyApp> {
         ),
       ],
       child: MaterialApp(
-          title: 'Fulgio',
+          title: 'Flugio',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             fontFamily: 'Noto_Sans_JP',
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: (isLoad == "true") ? Home() : const SplashPage(),
+          home: (isLoad == "true") ? const Home() : const SplashPage(),
           builder: FlutterSmartDialog.init(),
           onGenerateRoute: router.generateRoute),
     );
+  }
+
+  Future<void> setLang() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('lang', "en_GB");
   }
 }

@@ -1,14 +1,13 @@
 // ignore_for_file: unused_local_variable
-import 'dart:convert';
 
-import 'package:Fuligo/model/user_modal.dart';
+import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/screens/verify.dart';
-import 'package:Fuligo/screens/verify_test.dart';
 import 'package:Fuligo/utils/common_functions.dart';
 import 'package:Fuligo/utils/common_header_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/repositories/user_repository.dart';
 import 'package:Fuligo/widgets/custom_button.dart';
@@ -16,10 +15,7 @@ import 'package:Fuligo/widgets/logo.dart';
 
 import 'package:Fuligo/routes/route_costant.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-// import 'package:Fuligo/widgets/dialog.dart';
 
-//common
-// import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/utils/localtext.dart';
 
 //import firebase
@@ -27,10 +23,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-// import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-// import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -50,7 +42,7 @@ class LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    getData(page);
+    getHeaderData(page);
     _initializeFirebase();
     setState(() {
       emailCtl.text = "";
@@ -59,39 +51,55 @@ class LoginState extends State<Login> {
     // setState(() {});
   }
 
-  void getData(pageName) async {
+  void getHeaderData(pageName) async {
     headerList = await getTitle(pageName);
-    print("-------------headerList-----------------");
-    print(headerList);
     title = headerList[0];
     subtitle = headerList[1];
     setState(() {});
   }
 
   Future<void> getUser(User user) async {
-    print("===========get user================");
-    // await UserRepository.addUser(userModel)
     final result = await UserRepository.getUserByID(user.uid);
-    print(user.uid);
-    print("========= result ===============");
-    print(result["achievement"].runtimeType);
-    print(result["achievement"]);
-    // List<dynamic> test = result["achievement"];
-    // List<Map<String, dynamic>> json;
-    // test.forEach((element) {
-    //   // Map<String, dynamic> ele = element;
-    //   print("=== element ===");
-    //   print(element.runtimeType);
-    //   print(element);
-    // });
+    String url = "";
 
-    if (result != null) {
-      UserModel _userModel = UserModel.fromJson(result);
-      // _userModel.getAchievement(result);
-      // print(_userModel.);
-      print("========= usermodel ===============");
-      AuthProvider.of(context).setUserModel(_userModel);
-    }
+    var refId = result["avatar"];
+    print(refId);
+    refId.get().then((DocumentSnapshot documentSnapshot) async {
+      if (documentSnapshot.exists) {
+        print('Document exists on the database');
+        Reference ref =
+            FirebaseStorage.instance.ref().child(documentSnapshot.get('img'));
+        url = await ref.getDownloadURL();
+        if (result != null) {
+          result["avatar"] = url;
+          print("UserInfo");
+          print(result);
+          UserModel _userModel = UserModel.fromJson(result);
+          AuthProvider.of(context).setUserModel(_userModel);
+        }
+      }
+    });
+    // if (result != null) {
+    //   UserModel _userModel = UserModel.fromJson(result);
+    //   AuthProvider.of(context).setUserModel(_userModel);
+    // }
+  }
+
+  Future<void> addNewUser(User user) async {
+    await UserRepository.addUser(user.uid);
+    await getUser(user);
+    // final result = await UserRepository.getUserByID(id);
+    // print("addNewUser");
+    // print(result);
+    // if (result != null) {
+    //   UserModel _userModel = UserModel.fromJson(result);
+    //   AuthProvider.of(context).setUserModel(_userModel);
+    // }
+
+    // if (result != null) {
+    //   UserModel _userModel = UserModel.fromJson(result);
+    //   AuthProvider.of(context).setUserModel(_userModel);
+    // }
   }
 
   Future<FirebaseApp> _initializeFirebase() async {
@@ -102,7 +110,7 @@ class LoginState extends State<Login> {
 
   void login() async {
     String email = emailCtl.text;
-    String pwd = "123123123";
+    String pwd = "123123";
 
     bool isValid = EmailValidator.validate(email);
     if (!isValid) {
@@ -123,13 +131,14 @@ class LoginState extends State<Login> {
         _result = 1;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-          // UserCredential userCredential = await FirebaseAuth.instance
-          //     .createUserWithEmailAndPassword(email: email, password: pwd);
-          // print("================  create new user============== ");
-          // print(userCredential.user!);
-          // _result = 2;
+          UserCredential userCredential = await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(email: email, password: pwd);
+          print("================  create new user============== ");
+          await addNewUser(userCredential.user!);
+          print(userCredential.user!);
+          _result = 2;
         } else if (e.code == 'wrong-password') {
-          _result = 3;
+          _result = 1;
         } else {
           _result = 4;
         }
@@ -194,8 +203,8 @@ class LoginState extends State<Login> {
               Center(
                 child: Column(
                   children: [
-                    Logo_test,
-                    TextHeaderTest(context, title, subtitle),
+                    Logo,
+                    PageHeader(context, title, subtitle),
                   ],
                 ),
               ),

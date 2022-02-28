@@ -10,7 +10,7 @@ Widget SubTxt(context, String uptxt, String downtxt) => Column(
       children: [
         Text(
           uptxt,
-          style: font_14_grey,
+          style: font_14_white_70,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 6),

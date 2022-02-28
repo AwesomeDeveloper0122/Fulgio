@@ -22,4 +22,10 @@ abstract class LocalText {
 
   ///
   static const gender = 'gender';
+
+  //
+  static const defaultAvatar =
+      "https://firebasestorage.googleapis.com/v0/b/project-flugio.appspot.com/o/assets%2Fstatic%2Favatar-marieke-harmsen%402x.png?alt=media&token=8043d7f3-347b-457c-abf8-126a79449354";
 }
+
+/// Header Data ////

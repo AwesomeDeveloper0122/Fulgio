@@ -50,7 +50,7 @@ class SucessState extends State<Sucess> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.15,
                   ),
-                  TextHeader1(
+                  PageHeader(
                     context,
                     "Sucess",
                     "You finished an achievement",
@@ -119,7 +119,7 @@ class SucessState extends State<Sucess> {
                       child: CustomButton(
                           context,
                           Credits(
-                            arch_list: [],
+                            achieveLists: [],
                           ),
                           "Close"),
                     ),

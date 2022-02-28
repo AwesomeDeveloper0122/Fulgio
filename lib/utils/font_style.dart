@@ -17,7 +17,7 @@ const font_18_white = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w400,
     letterSpacing: 1.3,
-    color: whiteColor);
+    color: Colors.white70);
 
 // ignore: constant_identifier_names
 const font_13_white = TextStyle(
@@ -43,3 +43,9 @@ const font_14_grey = TextStyle(
     fontWeight: FontWeight.w400,
     letterSpacing: 1,
     color: greyColor);
+
+const font_14_white_70 = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 1,
+    color: Colors.white70);

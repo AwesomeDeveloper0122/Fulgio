@@ -2,7 +2,7 @@ import 'dart:convert';
 
 // import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:Fuligo/model/user_modal.dart';
+import 'package:Fuligo/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:within/Models/index.dart';
@@ -13,12 +13,13 @@ class AuthProvider extends ChangeNotifier {
 
   /// user info - login info
 
-  UserModel _userModel = UserModel();
+  UserModel _userModel = UserModel(username: {});
   UserModel get userModel => _userModel;
 
   Future<void> setUserModel(UserModel userModel,
       {bool isNotifiable = true}) async {
     _userModel = userModel;
+
     if (isNotifiable) notifyListeners();
   }
 

@@ -1,22 +1,24 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'dart:typed_data';
+
 import 'package:Fuligo/utils/font_style.dart';
+import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:Fuligo/widgets/logo.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
-import 'package:Fuligo/widgets/text_header.dart';
-// import 'package:Fuligo/widgets/button.dart';
-// import 'package:Fuligo/widgets/imagedetail.dart';
-import 'package:Fuligo/widgets/subtxt.dart';
-import 'package:Fuligo/widgets/fuligo_card.dart';
 
 // import 'package:Fuligo/screens/tours.dart';
 
 class DocumentDetail extends StatefulWidget {
   List citydetail;
-  DocumentDetail({Key? key, required this.citydetail}) : super(key: key);
+  // ignore: non_constant_identifier_names
+  Uint8List image_url;
+  // ignore: non_constant_identifier_names
+  DocumentDetail({Key? key, required this.citydetail, required this.image_url})
+      : super(key: key);
 
   @override
   DocumentDetailState createState() => DocumentDetailState();
@@ -49,14 +51,14 @@ class DocumentDetailState extends State<DocumentDetail> {
             child: ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 3),
               leading: Icon(Icons.cloud_download_outlined,
-                  color: Colors.white, size: 32),
+                  color: Colors.white70, size: 32),
               title: Text(
                 item["label"],
                 style: font_14_white,
               ),
               subtitle: Text(
                 item["type"],
-                style: font_14_grey,
+                style: font_14_white_70,
               ),
               onTap: () => {
                 // Navigator.pushNamed(context, RouteName.Startour),
@@ -78,8 +80,7 @@ class DocumentDetailState extends State<DocumentDetail> {
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage(
-                        "https://firebasestorage.googleapis.com/v0/b/project-flugio.appspot.com/o/assets%2F1623336600707_9955.jpg?alt=media&token=75cc95c4-c371-4528-9c0f-b8ef2b73f855"),
+                    image: MemoryImage(widget.image_url, scale: 0.5),
                     fit: BoxFit.fill),
               ),
               width: mq.width,
@@ -97,40 +98,40 @@ class DocumentDetailState extends State<DocumentDetail> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Logo_test,
-                    Container(
-                      height: mq.height * 0.8,
-                      width: mq.width * 0.9,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: ListView(
-                        scrollDirection: Axis.vertical,
-                        padding: EdgeInsets.all(0),
-                        children: detaildata,
-                      ),
-                    ),
+                    Logo,
+                    detaildata.length > 0
+                        ? Container(
+                            height: mq.height * 0.75,
+                            // height: mq.height * 0.6,
+                            width: mq.width * 0.9,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: ListView(
+                              scrollDirection: Axis.vertical,
+                              padding: EdgeInsets.all(0),
+                              children: detaildata,
+                            ),
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: mq.height * 0.2,
+                              ),
+                              Text(
+                                "No detail data",
+                                style: TextStyle(
+                                    fontSize: 30, color: Colors.white30),
+                              ),
+                            ],
+                          ),
                   ],
                 ),
               ),
             ),
-            Positioned(
-              top: 60,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.clear,
-                  size: 50,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            SecondaryButton(context)
           ],
         ),
       ),

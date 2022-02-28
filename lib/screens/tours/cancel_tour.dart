@@ -2,7 +2,6 @@
 
 import 'package:Fuligo/screens/tours/start_tour.dart';
 import 'package:Fuligo/screens/tours/tours.dart';
-import 'package:Fuligo/video/video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:Fuligo/utils/common_colors.dart';
@@ -42,7 +41,7 @@ class CancelTourState extends State<CancelTour> {
             Center(
               child: Column(
                 children: [
-                  Logo_test,
+                  Logo,
                 ],
               ),
             ),
@@ -67,18 +66,7 @@ class CancelTourState extends State<CancelTour> {
                   80,
                   "tour"),
             ),
-            Positioned(
-              top: 50,
-              left: 20,
-              child: GestureDetector(
-                onTap: () => {_show()},
-                child: const Icon(
-                  Icons.menu,
-                  size: 50,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            MenuButton(context),
 //Cancel tour
             Positioned(
               bottom: 30,
@@ -89,7 +77,7 @@ class CancelTourState extends State<CancelTour> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      child: CanelButton(
+                      child: CancelButton(
                           context, const StartTour(), "Cancel Tour"),
                     ),
                   ],
@@ -98,7 +86,7 @@ class CancelTourState extends State<CancelTour> {
             ),
 //video list
             Positioned(
-              bottom: 90,
+              bottom: 100,
               child: Container(
                 width: mq.width,
                 child: Column(
@@ -122,7 +110,7 @@ class CancelTourState extends State<CancelTour> {
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [gradientFrom, bgColor]),
-                            color: bgColor.withOpacity(0.6)),
+                            color: bgColor.withOpacity(0.8)),
                         child: ListTile(
                           leading: Icon(
                             Icons.play_arrow,

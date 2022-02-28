@@ -75,8 +75,8 @@ class LocationState extends State<Location> {
             Center(
               child: Column(
                 children: [
-                  Logo_test,
-                  TextHeaderTest(context, "Location",
+                  Logo,
+                  PageHeader(context, "Location",
                       "In order to user the application and the naviagtions  technologie, enable your location tracking service"),
                 ],
               ),
@@ -95,7 +95,7 @@ class LocationState extends State<Location> {
                     color: bgColor,
                     onPressed: () {
                       //  Navigator.of(context).pushReplacementNamed(page);
-                      showConfirm(context, "tracking", "");
+                      showConfirm(context, "tracking", "", "");
                     },
                     textColor: bgColor,
                     child: Text(

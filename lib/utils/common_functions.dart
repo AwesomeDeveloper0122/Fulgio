@@ -1,9 +1,11 @@
 import 'dart:convert';
 
-import 'package:Fuligo/model/user_modal.dart';
+import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dialogs/flutter_dialogs.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<List<String>> getTitle(pageName) async {
@@ -17,7 +19,8 @@ Future<List<String>> getTitle(pageName) async {
   return a;
 }
 
-Future<void> showConfirm(BuildContext context, String str, String url) async {
+Future<void> showConfirm(
+    BuildContext context, String str, String url, String id) async {
   showPlatformDialog(
     context: context,
     builder: (_) => BasicDialogAlert(
@@ -34,7 +37,7 @@ Future<void> showConfirm(BuildContext context, String str, String url) async {
         BasicDialogAction(
           title: Text("Confirm"),
           onPressed: () {
-            str == "tracking" ? tracking() : changeAvatar(context, url);
+            str == "tracking" ? tracking() : changeAvatar(context, url, id);
           },
         ),
       ],
@@ -42,13 +45,28 @@ Future<void> showConfirm(BuildContext context, String str, String url) async {
   );
 }
 
-changeAvatar(BuildContext context, String url) {
+changeAvatar(BuildContext context, String url, String doc_id) {
   print("Change Avatar");
   UserModel _userInfo = AuthProvider.of(context).userModel;
   _userInfo.avatar = url;
+
   AuthProvider.of(context).setUserModel(_userInfo);
   print("_userInfo.avatar");
   print(_userInfo.avatar);
+  try {
+    DocumentReference ref =
+        FirebaseFirestore.instance.collection('avatar').doc(doc_id);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(_userInfo.uid)
+        .set({'avatar': ref}, SetOptions(merge: true));
+    Navigator.pop(context);
+    SmartDialog.showToast("change success");
+  } catch (e) {
+    SmartDialog.showToast("failed");
+  }
+
+  SmartDialog.dismiss();
 }
 
 tracking() {

@@ -8,6 +8,7 @@ const Color greyColor = Color(0xFFAAAAAA);
 const Color titleColor = Color(0xFF2d3c49);
 const Color tabColor = Color(0xFF393939);
 const Color hintColor = Color(0xFF474747);
+const Color aboveColor = Color(0xFF091818);
 
 // Background Color
 const Color bgColor = Color.fromRGBO(85, 144, 151, 1);

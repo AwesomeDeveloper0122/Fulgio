@@ -14,17 +14,17 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  String page = HeaderList.explorer;
-  String title = '';
-  String subtitle = '';
+  String pageName = HeaderList.explorer;
+  String? title = EXPLORER["title"];
+  String? subtitle = EXPLORER["subtitle"];
   List<String> headerList = [];
   @override
   void initState() {
     super.initState();
-    getData(page);
+    getHeaderData(pageName);
   }
 
-  void getData(pageName) async {
+  void getHeaderData(pageName) async {
     headerList = await getTitle(pageName);
     title = headerList[0];
     subtitle = headerList[1];
@@ -48,46 +48,15 @@ class HomeState extends State<Home> {
             Center(
               child: Column(
                 children: [
-                  Logo_test,
-                  TextHeaderTest(context, title, subtitle),
+                  Logo,
+                  PageHeader(context, title!, subtitle!),
                 ],
               ),
             ),
-            CustomButtonTest(context, const Login(), "Next")
+            PrimaryButton(context, const Login(), "Next")
           ],
         ),
       ),
-
-      // body: Stack(
-      //   children: <Widget>[
-      //     Column(
-      //       mainAxisAlignment: MainAxisAlignment.start,
-      //       crossAxisAlignment: CrossAxisAlignment.center,
-      //       children: [
-      //         TextHeader(
-      //           context,
-      //           "Explore",
-      //           "Exploer the city through digital city \nguids and exciting video content",
-      //         ),
-      //       ],
-      //     ),
-      //     Positioned(
-      //       bottom: 30,
-      //       child: SizedBox(
-      //         width: mq.width,
-      //         child: Column(
-      //           mainAxisAlignment: MainAxisAlignment.start,
-      //           crossAxisAlignment: CrossAxisAlignment.center,
-      //           children: [
-      //             Container(
-      //               child: CustomButton(context, const Login(), "Next"),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

@@ -13,25 +13,21 @@ import 'package:Fuligo/widgets/fuligo_card.dart';
 
 // import 'package:Fuligo/screens/tours.dart';
 
-class ArchivementsDetail extends StatefulWidget {
+class AchievementsDetail extends StatefulWidget {
   final Map data;
-  ArchivementsDetail({
+  AchievementsDetail({
     Key? key,
     required this.data,
   }) : super(key: key);
 // SecondScreenWithData({Key key, @required this.person}) : super(key: key);
   @override
-  ArchivementsDetailState createState() => ArchivementsDetailState();
+  AchievementsDetailState createState() => AchievementsDetailState();
 }
 
-class ArchivementsDetailState extends State<ArchivementsDetail> {
+class AchievementsDetailState extends State<AchievementsDetail> {
   @override
   Widget build(BuildContext context) {
-    print("123123");
-    print(widget.data);
     Map detaildata = widget.data;
-    // String achieve_date =
-    //     DateFormat('MM-dd-yyyy').format(detaildata["updatedAt"]);
 
     var mq = MediaQuery.of(context).size;
     return Container(
@@ -53,10 +49,10 @@ class ArchivementsDetailState extends State<ArchivementsDetail> {
                   SizedBox(
                     height: mq.height * 0.17,
                   ),
-                  TextHeaderTest(
+                  PageHeader(
                     context,
-                    detaildata["name"]["en_GB"],
-                    detaildata["description"]["en_GB"],
+                    detaildata["name"].toString(),
+                    detaildata["description"].toString(),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 40),
@@ -79,7 +75,7 @@ class ArchivementsDetailState extends State<ArchivementsDetail> {
                 ],
               ),
             ),
-            ClearButton(context),
+            SecondaryButton(context),
           ],
         ),
       ),

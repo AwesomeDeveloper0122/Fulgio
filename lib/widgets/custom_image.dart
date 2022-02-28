@@ -1,7 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:Fuligo/routes/route_costant.dart';
-import 'package:Fuligo/screens/chat/chat_again.dart';
+import 'package:Fuligo/screens/chat/chat_detail.dart';
 import 'package:Fuligo/screens/documents/documentdetail.dart';
-import 'package:Fuligo/screens/keizersgracht.dart';
+import 'package:Fuligo/screens/video/info.dart';
 import 'package:Fuligo/screens/achievement/ranking.dart';
 import 'package:Fuligo/screens/tours/tour_list.dart';
 import 'package:Fuligo/utils/common_colors.dart';
@@ -10,31 +12,32 @@ import 'package:Fuligo/utils/font_style.dart';
 import 'package:flutter/material.dart';
 
 // ignore: non_constant_identifier_names
-Widget TourBigImage(context, String url, String title, String content,
-        bool ischat, List list) =>
+Widget DocumentCard(
+        context, Uint8List image, String title, String content, List list) =>
     GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DocumentDetail(citydetail: list),
+            builder: (context) =>
+                DocumentDetail(citydetail: list, image_url: image),
           ),
         );
       },
       child: Container(
         width: 350,
-        height: 140,
+        height: 160,
         margin: const EdgeInsets.only(top: 40),
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(url),
+            image: MemoryImage(image, scale: 0.5),
             fit: BoxFit.fill,
           ),
           borderRadius: BorderRadius.circular(25.0),
         ),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(25),
               gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -53,7 +56,7 @@ Widget TourBigImage(context, String url, String title, String content,
                 child: Container(
                   width: 62,
                   height: 2.5,
-                  decoration: const BoxDecoration(color: Colors.grey),
+                  decoration: const BoxDecoration(color: Colors.white54),
                 ),
               ),
               Text(
@@ -66,15 +69,15 @@ Widget TourBigImage(context, String url, String title, String content,
       ),
     );
 // ignore: non_constant_identifier_names
-Widget ChatCard(context, String url, String title, String content, bool ischat,
-        String docId) =>
+Widget ChatCard(
+        context, Uint8List image, String title, String content, String docId) =>
     GestureDetector(
       onTap: () {
         // Navigator.pushNamed(context, RouteName.tourlist);
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatAgain(docId: docId),
+            builder: (context) => ChatDetail(docId: docId),
           ),
         );
       },
@@ -83,15 +86,23 @@ Widget ChatCard(context, String url, String title, String content, bool ischat,
         height: 140,
         margin: const EdgeInsets.only(top: 40),
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(url),
-            fit: BoxFit.fill,
-          ),
           borderRadius: BorderRadius.circular(25.0),
+          image: new DecorationImage(
+            fit: BoxFit.fill,
+            // image: MemoryImage(imageData, scale: 0.5),
+            image: MemoryImage(image, scale: 0.5),
+          ),
         ),
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     image: NetworkImage(url),
+        //     fit: BoxFit.fill,
+        //   ),
+        //   borderRadius: BorderRadius.circular(25.0),
+        // ),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(25),
               gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -110,7 +121,7 @@ Widget ChatCard(context, String url, String title, String content, bool ischat,
                 child: Container(
                   width: 62,
                   height: 2.5,
-                  decoration: const BoxDecoration(color: Colors.grey),
+                  decoration: const BoxDecoration(color: Colors.white54),
                 ),
               ),
               Text(
@@ -123,14 +134,14 @@ Widget ChatCard(context, String url, String title, String content, bool ischat,
       ),
     );
 // ignore: non_constant_identifier_names
-Widget TourSmallImage(context, String url, String title, String content) =>
+Widget TourSmallImage(context, Uint8List image, String title, String content) =>
     GestureDetector(
       onTap: () {
         // Navigator.pushNamed(context, RouteName.tourlist);
         // Navigator.push(
         //   context,
         //   MaterialPageRoute(
-        //     builder: (context) => Keizersgracht(),
+        //     builder: (context) => Info(),
         //   ),
         // );
       },
@@ -140,40 +151,49 @@ Widget TourSmallImage(context, String url, String title, String content) =>
         margin: EdgeInsets.only(right: 15),
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(url),
+            image: MemoryImage(image, scale: 0.5),
             fit: BoxFit.fill,
           ),
           borderRadius: BorderRadius.circular(25.0),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                color: greyColor,
-                fontWeight: FontWeight.w400,
-                letterSpacing: 1,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [gradientFrom, bgColor]),
+              color: bgColor.withOpacity(0.4)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  color: greyColor,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 1,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Container(
-                width: 30,
-                height: 2.5,
-                decoration: const BoxDecoration(color: greyColor),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Container(
+                  width: 30,
+                  height: 2.5,
+                  decoration: const BoxDecoration(color: greyColor),
+                ),
               ),
-            ),
-            Text(
-              content,
-              style: TextStyle(
-                color: whiteColor,
-                fontWeight: FontWeight.w400,
-                letterSpacing: 1,
+              Text(
+                content,
+                style: TextStyle(
+                  color: whiteColor,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 1,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

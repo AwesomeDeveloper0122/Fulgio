@@ -1,5 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'dart:typed_data';
+
 import 'package:Fuligo/screens/tours/tour_list.dart';
 import 'package:Fuligo/utils/font_style.dart';
 import 'package:Fuligo/utils/loading.dart';
@@ -10,6 +12,8 @@ import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Tours extends StatefulWidget {
   const Tours({Key? key}) : super(key: key);
@@ -23,35 +27,64 @@ class ToursState extends State<Tours> {
     getTourData();
   }
 
+  List<Uint8List> imageList = [];
   List tourData = [];
+  bool loading = true;
 
-  CollectionReference _tourCollection =
-      FirebaseFirestore.instance.collection('city');
+  final CollectionReference _tourCollection =
+      FirebaseFirestore.instance.collection('cityGuide');
 
   Future<List> getTourData() async {
     QuerySnapshot querySnapshot = await _tourCollection.get();
+    final prefs = await SharedPreferences.getInstance();
+    String lang = prefs.getString('lang') ?? "";
 
     // Get data from docs and convert map to List
-    List tourdata = querySnapshot.docs
-        .map(
-          (doc) => doc.data(),
-        )
-        .toList();
+    if (querySnapshot.docs.isNotEmpty) {
+      List snapdata = querySnapshot.docs
+          .map(
+            (doc) => doc.data(),
+          )
+          .toList();
+      print("toursimportant");
+      print(snapdata);
+      for (var item in snapdata) {
+        String imageUrl = await getUrlFromFirebase(item["image"][0]);
+        Uint8List uint8image =
+            (await NetworkAssetBundle(Uri.parse(imageUrl)).load(""))
+                .buffer
+                .asUint8List();
 
-    for (var item in tourdata) {
-      item["image"] = await getUrlFromFirebase((item["image"][0]));
+        imageList.add(uint8image);
+
+        String name = item["name"][lang];
+        String description = item["description"][lang];
+        List pointsList = item["pointOfInterests"];
+        Map temp = {
+          "name": name,
+          "description": description,
+          "pointslist": pointsList,
+          "active": item["active"],
+          "duration": item["duration"]
+        };
+        tourData.add(temp);
+      }
+      setState(() {
+        tourData = tourData;
+        imageList = imageList;
+        loading = false;
+      });
+    } else {
+      loading = false;
+      setState(() {});
     }
 
-    setState(() {
-      tourData = tourdata;
-    });
     return tourData;
   }
 
   Future<String> getUrlFromFirebase(String firebaseURL) async {
     Reference ref = FirebaseStorage.instance.ref().child(firebaseURL);
     String url = await ref.getDownloadURL();
-    print("123");
 
     return url;
   }
@@ -61,12 +94,13 @@ class ToursState extends State<Tours> {
     var mq = MediaQuery.of(context).size;
 
     List<Widget> tourlist = [];
-    for (var each in tourData) {
-      if (each["active"] == true) {
+    for (var i = 0; i < tourData.length; i++) {
+      var each = tourData[i];
+      if (each["active"] == false) {
+        /// each["active"] == true
         tourlist.add(
           GestureDetector(
             onTap: () {
-              // Navigator.pushNamed(context, RouteName.tourlist);
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -75,34 +109,27 @@ class ToursState extends State<Tours> {
               );
             },
             child: Container(
-              margin: const EdgeInsets.only(top: 40),
+              margin: const EdgeInsets.only(top: 30),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      each["image"],
-                      width: mq.width * 0.77,
-                      height: mq.height * 0.17,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return Center(
-                          child: kLoadingFadingWidget(context),
-                        );
-                      },
+                  Container(
+                    width: mq.width * 0.8,
+                    height: mq.height * 0.2,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: new DecorationImage(
+                        fit: BoxFit.cover,
+                        image: MemoryImage(imageList[i], scale: 0.5),
+                      ),
                     ),
                   ),
                   Positioned(
                     child: Container(
-                      width: mq.width * 0.77,
-                      height: mq.height * 0.17,
+                      width: mq.width * 0.8,
+                      height: mq.height * 0.2,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(20),
                           gradient: const LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -113,7 +140,7 @@ class ToursState extends State<Tours> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            each["name"]["en_GB"],
+                            each["name"],
                             style: font_20_white,
                           ),
                           Padding(
@@ -122,11 +149,11 @@ class ToursState extends State<Tours> {
                               width: 62,
                               height: 2.5,
                               decoration:
-                                  const BoxDecoration(color: Colors.grey),
+                                  const BoxDecoration(color: Colors.white54),
                             ),
                           ),
                           Text(
-                            each["description"]["en_GB"],
+                            each["description"],
                             style: font_13_white,
                           ),
                         ],
@@ -157,21 +184,36 @@ class ToursState extends State<Tours> {
                   SizedBox(
                     height: mq.height * 0.17,
                   ),
-                  TextHeaderTest(
+                  PageHeader(
                     context,
                     "Tours",
                     "Dicovery the city with one of \n our digital travel tours",
                   ),
-                  tourlist.isNotEmpty
-                      ? Container(
-                          padding: EdgeInsets.symmetric(vertical: 20),
-                          width: mq.width * 0.8,
-                          height: mq.height * 0.7,
-                          child: ListView(
-                            padding: EdgeInsets.all(0),
-                            children: tourlist,
-                          ),
-                        )
+                  !loading
+                      ? tourlist.isNotEmpty
+                          ? Container(
+                              padding: EdgeInsets.symmetric(vertical: 20),
+                              width: mq.width * 0.8,
+                              height: mq.height * 0.7,
+                              child: ListView(
+                                padding: EdgeInsets.all(0),
+                                children: tourlist,
+                              ),
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: mq.height * 0.2,
+                                ),
+                                Text(
+                                  "No Tour data",
+                                  style: TextStyle(
+                                      fontSize: 30, color: Colors.white30),
+                                ),
+                              ],
+                            )
                       : Container(
                           // color: widget.backgroundColor,
                           margin: EdgeInsets.symmetric(vertical: 100),
@@ -181,7 +223,7 @@ class ToursState extends State<Tours> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  height: mq.height * 0.2,
+                                  height: mq.height * 0.1,
                                 ),
                                 kLoadingFadingWidget(context),
                               ],
@@ -191,7 +233,7 @@ class ToursState extends State<Tours> {
                 ],
               ),
             ),
-            ClearButton(context),
+            SecondaryButton(context),
           ],
         ),
       ),

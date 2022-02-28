@@ -1,3 +1,4 @@
+import 'package:Fuligo/utils/common_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -26,4 +27,14 @@ Widget kLoadingFadingWidget(context) => Center(
         color: Theme.of(context).primaryColor,
         size: 50.0,
       ),
+    );
+Widget defaultloading(context) => Stack(
+      children: [
+        Positioned(
+          child: Container(
+            decoration: BoxDecoration(color: Colors.transparent),
+            child: kLoadingFadingWidget(context),
+          ),
+        ),
+      ],
     );
