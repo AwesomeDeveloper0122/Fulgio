@@ -8,24 +8,24 @@ import 'package:Fuligo/model/order_model.dart';
 import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
-import 'package:Fuligo/widgets/logo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
-import 'package:Fuligo/widgets/text_header.dart';
 import 'package:Fuligo/widgets/custom_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Chat extends StatefulWidget {
-  Chat({Key? key}) : super(key: key);
+class Documents extends StatefulWidget {
+  const Documents({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  ChatState createState() => ChatState();
+  DocumentsState createState() => DocumentsState();
 }
 
-class ChatState extends State<Chat> {
+class DocumentsState extends State<Documents> {
   List<OrderModel> orders = [];
   List docList = [];
   List orderIds = [];
@@ -38,34 +38,20 @@ class ChatState extends State<Chat> {
   }
 
   Future<List<OrderModel>> getOrderData() async {
-    // Get docs from collection reference
     List tempList = [];
 
     //Get language
     final prefs = await SharedPreferences.getInstance();
     String lang = prefs.getString('lang') ?? "";
 
-    // CollectionReference _interestRef =
-    //     FirebaseFirestore.instance.collection('order');
     UserModel _userInfo = AuthProvider.of(context).userModel;
     QuerySnapshot orderSnapshot =
         await FirebaseFirestore.instance.collection('order').get();
-    // Get data from DocumentRefernce
-    // DocumentReference docRef =
-    //     FirebaseFirestore.instance.doc("city/xrIDkBvtxYjXUYLgDtnG");
-    // docRef.get().then((DocumentSnapshot documentSnapshot) {
-    //   if (documentSnapshot.exists) {
-    //     // print('Document exists on the database');
-    //     // print(documentSnapshot.data());
-    //   }
-    // });
-
-    // Get data from docs and convert map to List
 
     orderSnapshot.docs
         .map(
           (doc) => {
-            print("11111111222222"),
+            print("user id"),
             print(_userInfo.uid),
             if (doc.get('userId') ==
                 "UVJ7ZRb12UVeL3YJvzAPXnA0Cem1") // UVJ7ZRb12UVeL3YJvzAPXnA0Cem1 is userInfo.uid //vVBdd7pUdjZY537PX6pT8FNCrA52
@@ -133,82 +119,77 @@ class ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    print("Start ChatItem");
-
-    List<Widget> chatItems = [];
+    List<Widget> documentitems = [];
     for (var i = 0; i < orders.length; i++) {
       var element = orders[i];
 
       String date = DateFormat('MM-dd-yyyy').format(element.datetime);
 
-      chatItems.add(
-        ChatCard(context, imageList[i], element.name, date, element.orderId),
+      documentitems.add(
+        DocumentCard(context, imageList[i], element.name, date, docList),
       );
     }
-
     var mq = MediaQuery.of(context).size;
-    return Container(
-      decoration: bgDecoration,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            Container(
-              width: mq.width,
-              height: mq.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Logo,
-                  PageHeader(
-                    context,
-                    "Chat",
-                    "For which order do you need support?",
+    return !loading
+        ? Container(
+            decoration: bgDecoration,
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Stack(
+                children: [
+                  Container(
+                    width: mq.width,
+                    height: mq.height,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.only(top: 40),
+                          child: const Image(
+                            image: AssetImage('assets/images/logo.png'),
+                            width: 100,
+                            height: 60,
+                          ),
+                        ),
+                        documentitems.isNotEmpty
+                            ? Container(
+                                // decoration: BoxDecoration(color: whiteColor),
+                                height: mq.height - 100,
+                                // padding: EdgeInsets.symmetric(
+                                //     horizontal: 20, vertical: 40),
+                                padding: EdgeInsets.fromLTRB(20, 40, 20, 0),
+                                child: Scrollbar(
+                                  isAlwaysShown: true,
+                                  child: ListView(
+                                    padding: EdgeInsets.all(0),
+                                    shrinkWrap: true,
+                                    children: documentitems,
+                                  ),
+                                ),
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: mq.height * 0.2,
+                                  ),
+                                  Text(
+                                    "No order data",
+                                    style: TextStyle(
+                                        fontSize: 30, color: Colors.white30),
+                                  ),
+                                ],
+                              )
+                      ],
+                    ),
                   ),
-                  !loading
-                      ? chatItems.isNotEmpty
-                          ? Container(
-                              // decoration: BoxDecoration(color: whiteColor),
-                              height: mq.height - 210,
-                              padding: EdgeInsets.fromLTRB(20, 40, 20, 0),
-                              child: Scrollbar(
-                                isAlwaysShown: true,
-                                child: ListView(
-                                  padding: EdgeInsets.all(0),
-                                  shrinkWrap: true,
-                                  children: chatItems,
-                                ),
-                              ),
-                            )
-                          // Column(
-                          //     children: chatItems,
-                          //   )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: mq.height * 0.2,
-                                ),
-                                Text(
-                                  "No order data",
-                                  style: TextStyle(
-                                      fontSize: 30, color: Colors.white30),
-                                ),
-                              ],
-                            )
-                      : Container(
-                          margin: EdgeInsets.only(top: mq.height * 0.3),
-                          child: kRingWidget(context),
-                        )
+                  SecondaryButton(context),
                 ],
               ),
             ),
-            SecondaryButton(context),
-          ],
-        ),
-      ),
-    );
+          )
+        : defaultloading(context);
   }
 }

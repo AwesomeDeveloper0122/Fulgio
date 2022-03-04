@@ -1,29 +1,20 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'package:Fuligo/model/order_model.dart';
 import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/repositories/user_repository.dart';
 import 'package:Fuligo/utils/font_style.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-// import 'package:Fuligo/widgets/button.dart';
-// import 'package:Fuligo/widgets/imagedetail.dart';
+
 import 'package:Fuligo/widgets/subtxt.dart';
-import 'package:Fuligo/widgets/fuligo_card.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// import 'package:Fuligo/screens/tours.dart';
-
-// ignore: must_be_immutable
 class Credits extends StatefulWidget {
   List<Map> achieveLists;
   Credits({Key? key, required this.achieveLists}) : super(key: key);
@@ -237,7 +228,7 @@ class CreditsState extends State<Credits> {
                             )
                       : Container(
                           margin: EdgeInsets.only(top: mq.height * 0.1),
-                          child: kLoadingFadingWidget(context),
+                          child: kRingWidget(context),
                         )
                 ],
               ),

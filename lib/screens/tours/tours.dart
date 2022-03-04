@@ -6,6 +6,7 @@ import 'package:Fuligo/screens/tours/tour_list.dart';
 import 'package:Fuligo/utils/font_style.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
+import 'package:Fuligo/widgets/custom_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -46,8 +47,7 @@ class ToursState extends State<Tours> {
             (doc) => doc.data(),
           )
           .toList();
-      print("toursimportant");
-      print(snapdata);
+
       for (var item in snapdata) {
         String imageUrl = await getUrlFromFirebase(item["image"][0]);
         Uint8List uint8image =
@@ -98,73 +98,7 @@ class ToursState extends State<Tours> {
       var each = tourData[i];
       if (each["active"] == false) {
         /// each["active"] == true
-        tourlist.add(
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TourList(detailData: each),
-                ),
-              );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(top: 30),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: mq.width * 0.8,
-                    height: mq.height * 0.2,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      image: new DecorationImage(
-                        fit: BoxFit.cover,
-                        image: MemoryImage(imageList[i], scale: 0.5),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    child: Container(
-                      width: mq.width * 0.8,
-                      height: mq.height * 0.2,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [gradientFrom, bgColor]),
-                          color: bgColor.withOpacity(0.4)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            each["name"],
-                            style: font_20_white,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Container(
-                              width: 62,
-                              height: 2.5,
-                              decoration:
-                                  const BoxDecoration(color: Colors.white54),
-                            ),
-                          ),
-                          Text(
-                            each["description"],
-                            style: font_13_white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
+        tourlist.add(TourCard(context, imageList[i], each));
       }
     }
 
@@ -193,8 +127,7 @@ class ToursState extends State<Tours> {
                       ? tourlist.isNotEmpty
                           ? Container(
                               padding: EdgeInsets.symmetric(vertical: 20),
-                              width: mq.width * 0.8,
-                              height: mq.height * 0.7,
+                              height: mq.height - 230,
                               child: ListView(
                                 padding: EdgeInsets.all(0),
                                 children: tourlist,
@@ -225,7 +158,7 @@ class ToursState extends State<Tours> {
                                 SizedBox(
                                   height: mq.height * 0.1,
                                 ),
-                                kLoadingFadingWidget(context),
+                                kRingWidget(context),
                               ],
                             ),
                           ),

@@ -217,11 +217,11 @@ class RankingState extends State<Ranking> {
                   !loading
                       ? Container(
                           // decoration: BoxDecoration(color: whiteColor),
-                          height: mq.height * 0.7,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 40),
+                          height: mq.height - 210,
+                          padding: EdgeInsets.fromLTRB(20, 40, 20, 0),
                           child: Scrollbar(
                             child: ListView(
+                              padding: EdgeInsets.all(0),
                               shrinkWrap: true,
                               children: usersRanking,
                             ),
@@ -230,7 +230,7 @@ class RankingState extends State<Ranking> {
                       : Container(
                           child: SizedBox(
                             height: mq.height * 0.4,
-                            child: kLoadingFadingWidget(context),
+                            child: kRingWidget(context),
                           ),
                         )
                 ],

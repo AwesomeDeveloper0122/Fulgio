@@ -56,38 +56,26 @@ class StartTourState extends State<StartTour> {
     Map location = {};
     String imgUrl = "";
     if (querySnapshot.docs.isNotEmpty) {
-      List snapdata = querySnapshot.docs
-          .map((doc) => {
-                doc.data(),
-                idList.add(doc.id),
-              })
-          .toList();
       print("important");
       for (var i = 0; i < querySnapshot.docs.length; i++) {
         var ele = querySnapshot.docs[i];
 
         try {
           videoUrl = ele.get("video");
-
-          print(videoUrl);
         } catch (e) {
           videoUrl = [];
-
-          print(videoUrl);
         }
 
         if (videoUrl.isNotEmpty) {
           imageUrlList = ele.get("image");
           location = ele.get('location');
           if (imageUrlList.isNotEmpty) {
-            // imgUrl = await getUrlFromFirebase(imageUrlList[0].toString());
-            // print("videourl");
-            // print(imgUrl);
-            Uint8List uint8image = (await NetworkAssetBundle(
-                        Uri.parse("https://picsum.photos/250?image=9"))
-                    .load(""))
-                .buffer
-                .asUint8List();
+            String videoimgurl =
+                await getUrlFromFirebase(imageUrlList[0].toString());
+            Uint8List uint8image =
+                (await NetworkAssetBundle(Uri.parse(videoimgurl)).load(""))
+                    .buffer
+                    .asUint8List();
             imageList.add(uint8image);
             n++;
           }
@@ -97,14 +85,12 @@ class StartTourState extends State<StartTour> {
           imageUrlList = ele.get("image");
           location = ele.get('location');
           if (imageUrlList.isNotEmpty) {
-            // imgUrl = await getUrlFromFirebase(imageUrlList[0].toString());
-            // print("audiourl");
-            // print(imgUrl);
-            Uint8List uint8image = (await NetworkAssetBundle(
-                        Uri.parse("https://picsum.photos/250?image=9"))
-                    .load(""))
-                .buffer
-                .asUint8List();
+            String audioimgUrl = await getUrlFromFirebase(imageUrlList[0]);
+
+            Uint8List uint8image =
+                (await NetworkAssetBundle(Uri.parse(audioimgUrl)).load(""))
+                    .buffer
+                    .asUint8List();
             imageList.add(uint8image);
             n++;
           }
@@ -139,6 +125,7 @@ class StartTourState extends State<StartTour> {
         var item = pointdata[i];
 
         if (item["flag"] == "video") {
+          print(item["location"]);
           mediaList.add(
             Positioned(
                 top: 0,
@@ -146,6 +133,7 @@ class StartTourState extends State<StartTour> {
                 child: CircleVideoImage(context, item, imageList[i])),
           );
         } else {
+          print(item["location"]);
           mediaList.add(
             Positioned(
                 top: 0,

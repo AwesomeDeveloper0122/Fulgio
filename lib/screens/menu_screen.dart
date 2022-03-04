@@ -3,6 +3,7 @@ import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/screens/achievement/achievements.dart';
 import 'package:Fuligo/screens/chat/chat.dart';
+import 'package:Fuligo/screens/map/map.dart';
 import 'package:Fuligo/screens/settings.dart';
 import 'package:Fuligo/screens/settings_test.dart';
 import 'package:Fuligo/widgets/popup.dart';
@@ -12,6 +13,8 @@ import 'package:Fuligo/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/circleimage.dart';
+
+import 'documents/documents.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({Key? key}) : super(key: key);
@@ -78,13 +81,12 @@ class Test extends StatelessWidget {
                       color: Colors.white70, fontSize: 20, letterSpacing: 1.5),
                 ),
                 onTap: () => {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) =>
-                  //         ChatAgain(documentId: 'qEnncoZSqLs8QE4jS3bF'),
-                  //   ),
-                  // ),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MapScreen(),
+                    ),
+                  ),
                 },
               ),
               ListTile(
@@ -105,9 +107,7 @@ class Test extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Chat(
-                        ischat: false,
-                      ),
+                      builder: (context) => Documents(),
                     ),
                   ),
                 },
@@ -131,7 +131,7 @@ class Test extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Chat(ischat: true),
+                      builder: (context) => Chat(),
                     ),
                   ),
                 },

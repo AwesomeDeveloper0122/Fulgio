@@ -100,105 +100,105 @@ class TourListState extends State<TourList> {
     var mq = MediaQuery.of(context).size;
     print(" ===== overview ==========");
     print(_detailData["pointslist"]);
-    return Container(
-      decoration: bgDecoration,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Container(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              !loading
-                  ? _pointwidgets.isNotEmpty
-                      ? Container(
-                          width: mq.width,
-                          height: mq.height,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                height: mq.height * 0.17,
-                              ),
-                              PageHeader(context, _detailData["name"],
-                                  _detailData["description"]),
-                              Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 40),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 60),
-                                      child: SubTxt(context, 'Stops',
-                                          _pointwidgets.length.toString()),
-                                    ),
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 60),
-                                      child: SubTxt(context, 'Duration',
-                                          '${widget.detailData["duration"]} Stunden'),
-                                    ),
-                                  ],
+    return !loading
+        ? Container(
+            decoration: bgDecoration,
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Container(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    _pointwidgets.isNotEmpty
+                        ? Container(
+                            width: mq.width,
+                            height: mq.height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: mq.height * 0.17,
                                 ),
+                                PageHeader(context, _detailData["name"],
+                                    _detailData["description"]),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 40),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 60),
+                                        child: SubTxt(context, 'Stops',
+                                            _pointwidgets.length.toString()),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 60),
+                                        child: SubTxt(context, 'Duration',
+                                            '${widget.detailData["duration"]} Stunden'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ))
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: mq.height * 0.2,
+                              ),
+                              Text(
+                                "No order data",
+                                style: TextStyle(
+                                    fontSize: 30, color: Colors.white30),
                               ),
                             ],
-                          ))
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          ),
+                    SecondaryButton(context),
+                    Positioned(
+                      bottom: 100,
+                      left: 20,
+                      child: SizedBox(
+                        height: 140,
+                        // padding: const EdgeInsets.only(right: 20, left: 20),
+                        width: mq.width,
+                        child: ListView(
+                          shrinkWrap: true,
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          scrollDirection: Axis.horizontal,
+                          children: _pointwidgets,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 30,
+                      child: Container(
+                        width: mq.width,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              height: mq.height * 0.2,
-                            ),
-                            Text(
-                              "No order data",
-                              style: TextStyle(
-                                  fontSize: 30, color: Colors.white30),
+                            Container(
+                              width: 350,
+                              height: 50,
+                              child: CustomButton(
+                                  context, const CancelTour(), "Start tour"),
                             ),
                           ],
-                        )
-                  : kLoadingFadingWidget(context),
-              SecondaryButton(context),
-              Positioned(
-                bottom: 100,
-                left: 20,
-                child: SizedBox(
-                  height: 140,
-                  // padding: const EdgeInsets.only(right: 20, left: 20),
-                  width: mq.width,
-                  child: ListView(
-                    shrinkWrap: true,
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    // crossAxisAlignment: CrossAxisAlignment.center,
-                    scrollDirection: Axis.horizontal,
-                    children: _pointwidgets,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 30,
-                child: Container(
-                  width: mq.width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 350,
-                        height: 50,
-                        child: CustomButton(
-                            context, const CancelTour(), "Start tour"),
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          )
+        : defaultloading(context);
   }
 }

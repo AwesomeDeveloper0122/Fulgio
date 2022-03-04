@@ -19,8 +19,13 @@ abstract class LocalText {
   static const NotFoundUser = 'Not found user';
   // ignore: constant_identifier_names
   static const NetError = 'Network Error';
+
   ///
   static const gender = 'gender';
+  static const urlTemplate =
+      'https://api.mapbox.com/styles/v1/sakura0122/cl0asbsbv000314menn31lgqa/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q';
+  static const accessToken =
+      'pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q';
 
   //
   static const defaultAvatar =

@@ -1,5 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'dart:async';
+
 import 'package:Fuligo/model/chat_model.dart';
 import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
@@ -28,6 +30,7 @@ class ChatDetailState extends State<ChatDetail> {
   String content = "";
   TextEditingController chatInput = TextEditingController();
   List chatList = [];
+  ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -47,6 +50,7 @@ class ChatDetailState extends State<ChatDetail> {
     try {
       DocumentSnapshot snapshot =
           await FirebaseFirestore.instance.collection('order').doc(id).get();
+      print("snapshot");
 
       chatList = snapshot['chatMessages'];
       loading = true;
@@ -68,6 +72,7 @@ class ChatDetailState extends State<ChatDetail> {
 
   Future<void> addChat(content) async {
     print("send click");
+
     CollectionReference order = FirebaseFirestore.instance.collection('order');
     ChatModel _chat = ChatModel(
       author: "user",
@@ -84,17 +89,23 @@ class ChatDetailState extends State<ChatDetail> {
     chatdata.add(_chat.toJson());
     chatInput.text = "";
 
-    return order
+    order
         .doc(widget.docId)
         .set({'chatMessages': chatdata}, SetOptions(merge: true))
         .then((value) => print("Chat Added"))
         .catchError((error) => print("Failed to add user: $error"));
+    setState(() {
+      chatList = chatList;
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
     UserModel userInfo = AuthProvider.of(context).userModel;
+    final ScrollController _scrollController = ScrollController();
 
     List<Widget> chatItems = [];
     if (chatList.isNotEmpty) {
@@ -175,27 +186,25 @@ class ChatDetailState extends State<ChatDetail> {
                   ? Positioned(
                       top: mq.height / 7,
                       // top: 0,
-                      // bottom: 70,
+
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Container(
-                            height: mq.height * 0.8,
+                            height: mq.height * 0.75,
                             decoration: bgDecoration,
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Container(
                               width: mq.width * 0.9,
                               // padding: EdgeInsets.all(20),
-                              child: Scrollbar(
-                                // isAlwaysShown: true,
-                                controller: _scrollController,
-                                child: ListView(
-                                  scrollDirection: Axis.vertical,
-                                  children: chatItems,
-                                  padding: const EdgeInsets.all(10),
-                                ),
+                              child: ListView(
+                                reverse: false,
+                                // controller: _scrollController,
+                                scrollDirection: Axis.vertical,
+                                children: chatItems,
+                                padding: const EdgeInsets.all(10),
                               ),
                             ),
                           ),
@@ -250,6 +259,10 @@ class ChatDetailState extends State<ChatDetail> {
                         width: mq.width * 0.2,
                         child: GestureDetector(
                           onTap: () => {
+                            Timer(
+                                Duration(milliseconds: 300),
+                                () => _controller.jumpTo(
+                                    _controller.position.maxScrollExtent)),
                             if (_formKey.currentState!.validate())
                               {
                                 send(),

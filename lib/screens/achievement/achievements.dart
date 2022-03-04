@@ -171,7 +171,7 @@ class ArchivmentsState extends State<Achievements> {
                     ),
                     PageHeader(
                       context,
-                      "Achivements",
+                      "Achievements",
                       "Each completed achievement \n brings you credit on Flugio, ",
                     ),
                     Column(
@@ -254,7 +254,7 @@ class ArchivmentsState extends State<Achievements> {
                             : Container(
                                 child: SizedBox(
                                   height: mq.height * 0.3,
-                                  child: kLoadingFadingWidget(context),
+                                  child: kRingWidget(context),
                                 ),
                               )
                       ],

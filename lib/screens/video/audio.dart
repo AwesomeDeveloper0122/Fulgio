@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:Fuligo/screens/video/info.dart';
 import 'package:Fuligo/screens/route_screen.dart';
@@ -10,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
@@ -94,19 +96,37 @@ class AudioState extends State<Audio> {
 
     var data = mediadata.data();
     List imageUrl = data!["image"];
+    print("imageUrl");
+    print(imageUrl);
     String infoimage = "";
     infoimage = await getUrlFromFirebase(imageUrl[0]);
 
-    for (var item in imageUrl) {
+    for (var i = 0; i < imageUrl.length; i++) {
+      var item = imageUrl[i];
       String img = await getUrlFromFirebase(item);
-      for (var i = 0; i < imageUrl.length; i++) {
-        images.add(
-          Image.network(
-            img,
-            fit: BoxFit.fill,
-          ),
-        );
-      }
+      Uint8List uint8image = (await NetworkAssetBundle(Uri.parse(img)).load(""))
+          .buffer
+          .asUint8List();
+
+      images.add(
+          // MemoryImage(uint8image, scale: 2));
+        Image.network(
+          img,
+          fit: BoxFit.fill,
+          // loadingBuilder: (BuildContext context, Widget child,
+          //     ImageChunkEvent? loadingProgress) {
+          //   if (loadingProgress == null) return child;
+          //   return Center(
+          //     child: CircularProgressIndicator(
+          //       value: loadingProgress.expectedTotalBytes != null
+          //           ? loadingProgress.cumulativeBytesLoaded /
+          //               loadingProgress.expectedTotalBytes!
+          //           : null,
+          //     ),
+          //   );
+          // },
+        ),
+      );
     }
 
     List audioUrl = data["audio"];
@@ -142,14 +162,19 @@ class AudioState extends State<Audio> {
     }
 
     var mq = MediaQuery.of(context).size;
-
+    print("audio image List");
+    print(images);
     return Scaffold(
         body: !loading
             ? Container(
                 width: mq.width,
                 height: mq.height,
                 decoration: BoxDecoration(
-                  color: bgColor,
+                  // color: bgColor.withAlpha(100),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          "https://images.unsplash.com/photo-1579202673506-ca3ce28943ef"),
+                      fit: BoxFit.cover),
                 ),
                 child: SafeArea(
                   child: Stack(children: [

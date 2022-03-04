@@ -6,6 +6,7 @@ import 'package:Fuligo/utils/font_style.dart';
 import 'package:Fuligo/widgets/logo.dart';
 
 Widget PageHeader(context, String title, String content) => Container(
+      // height: 70,
       // padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

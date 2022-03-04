@@ -1,8 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:Fuligo/utils/common_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 Widget SecondaryButton(context) => Positioned(
       top: 50,

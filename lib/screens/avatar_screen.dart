@@ -116,7 +116,7 @@ class AvatarScreenState extends State<AvatarScreen> {
                           )
                         : Container(
                             margin: EdgeInsets.only(top: mq.height * 0.3),
-                            child: kLoadingFadingWidget(context),
+                            child: kRingWidget(context),
                           )
                   ],
                 )),

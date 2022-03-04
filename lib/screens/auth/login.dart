@@ -79,27 +79,11 @@ class LoginState extends State<Login> {
         }
       }
     });
-    // if (result != null) {
-    //   UserModel _userModel = UserModel.fromJson(result);
-    //   AuthProvider.of(context).setUserModel(_userModel);
-    // }
   }
 
   Future<void> addNewUser(User user) async {
     await UserRepository.addUser(user.uid);
     await getUser(user);
-    // final result = await UserRepository.getUserByID(id);
-    // print("addNewUser");
-    // print(result);
-    // if (result != null) {
-    //   UserModel _userModel = UserModel.fromJson(result);
-    //   AuthProvider.of(context).setUserModel(_userModel);
-    // }
-
-    // if (result != null) {
-    //   UserModel _userModel = UserModel.fromJson(result);
-    //   AuthProvider.of(context).setUserModel(_userModel);
-    // }
   }
 
   Future<FirebaseApp> _initializeFirebase() async {

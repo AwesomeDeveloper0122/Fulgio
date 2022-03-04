@@ -86,7 +86,7 @@ Widget AvatarMenu(context, Uint8List image, String url, String id,
             height: height,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              image: new DecorationImage(
+              image: DecorationImage(
                 fit: BoxFit.cover,
                 image: MemoryImage(image, scale: 0.5),
               ),
@@ -142,6 +142,62 @@ Future<void> getMedia(context, id) async {
   }
 }
 
+Widget CircleVideoMapImage(context, String id, Uint8List image) => Container(
+      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Video(id: id),
+            ),
+          );
+        },
+        child: Container(
+          child: ClipOval(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: whiteColor),
+                borderRadius: BorderRadius.circular(50),
+                image: new DecorationImage(
+                  image: MemoryImage(image, scale: 0.5),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+// ignore: non_constant_identifier_names
+Widget CircleAudioMapImage(context, String id, Uint8List image) => Container(
+      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Audio(id: id),
+            ),
+          );
+        },
+        child: Container(
+          child: ClipOval(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: whiteColor),
+                borderRadius: BorderRadius.circular(50),
+                image: new DecorationImage(
+                  image: MemoryImage(image, scale: 0.5),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
 // ignore: non_constant_identifier_names
 Widget CircleVideoImage(context, Map item, Uint8List image) => Container(
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
@@ -159,7 +215,6 @@ Widget CircleVideoImage(context, Map item, Uint8List image) => Container(
             child: Container(
               width: 100,
               height: 100,
-
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: whiteColor),
                 borderRadius: BorderRadius.circular(50),
@@ -168,21 +223,6 @@ Widget CircleVideoImage(context, Map item, Uint8List image) => Container(
                   fit: BoxFit.cover,
                 ),
               ),
-              // child: Image.network(
-              //   item["image"][0],
-              //   width: 100,
-              //   height: 100,
-              //   fit: BoxFit.fill,
-              //   loadingBuilder: (BuildContext context, Widget child,
-              //       ImageChunkEvent? loadingProgress) {
-              //     if (loadingProgress == null) {
-              //       return child;
-              //     }
-              //     return Center(
-              //       child: kLoadingFadingWidget(context),
-              //     );
-              //   },
-              // ),
             ),
           ),
         ),

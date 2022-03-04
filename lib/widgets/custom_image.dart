@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:Fuligo/routes/route_costant.dart';
 import 'package:Fuligo/screens/chat/chat_detail.dart';
+import 'package:Fuligo/screens/chat/chat_detail_test.dart';
 import 'package:Fuligo/screens/documents/documentdetail.dart';
 import 'package:Fuligo/screens/video/info.dart';
 import 'package:Fuligo/screens/achievement/ranking.dart';
@@ -25,24 +26,33 @@ Widget DocumentCard(
         );
       },
       child: Container(
-        width: 350,
+        width: 370,
         height: 160,
-        margin: const EdgeInsets.only(top: 40),
+        margin: const EdgeInsets.only(bottom: 40),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: MemoryImage(image, scale: 0.5),
             fit: BoxFit.fill,
           ),
-          borderRadius: BorderRadius.circular(25.0),
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 12,
+              // blurStyle: BlurStyle.normal,
+              offset: Offset(1, 0), // changes position of shadow
+            ),
+          ],
         ),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(20),
               gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [gradientFrom, bgColor]),
-              color: bgColor.withOpacity(0.5)),
+              color: bgColor.withOpacity(0.35)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,29 +87,30 @@ Widget ChatCard(
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatDetail(docId: docId),
+            builder: (context) => ChatDetailTest(docId: docId),
           ),
         );
       },
       child: Container(
-        width: 350,
-        height: 140,
-        margin: const EdgeInsets.only(top: 40),
+        width: 370,
+        height: 160,
+        margin: const EdgeInsets.only(top: 30),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 12,
+              // blurStyle: BlurStyle.normal,
+              offset: Offset(1, 0), // changes position of shadow
+            ),
+          ],
           image: new DecorationImage(
             fit: BoxFit.fill,
-            // image: MemoryImage(imageData, scale: 0.5),
             image: MemoryImage(image, scale: 0.5),
           ),
         ),
-        // decoration: BoxDecoration(
-        //   image: DecorationImage(
-        //     image: NetworkImage(url),
-        //     fit: BoxFit.fill,
-        //   ),
-        //   borderRadius: BorderRadius.circular(25.0),
-        // ),
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
@@ -107,7 +118,7 @@ Widget ChatCard(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [gradientFrom, bgColor]),
-              color: bgColor.withOpacity(0.5)),
+              color: bgColor.withOpacity(0.35)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,7 +174,7 @@ Widget TourSmallImage(context, Uint8List image, String title, String content) =>
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [gradientFrom, bgColor]),
-              color: bgColor.withOpacity(0.4)),
+              color: bgColor.withOpacity(0.35)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -194,6 +205,79 @@ Widget TourSmallImage(context, Uint8List image, String title, String content) =>
               ),
             ],
           ),
+        ),
+      ),
+    );
+Widget TourCard(context, Uint8List image, Map each) => GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TourList(detailData: each),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 30),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 370,
+              height: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 1,
+                    blurRadius: 12,
+                    // blurStyle: BlurStyle.normal,
+                    offset: Offset(1, 0), // changes position of shadow
+                  ),
+                ],
+                image: new DecorationImage(
+                  fit: BoxFit.cover,
+                  image: MemoryImage(image, scale: 0.5),
+                ),
+              ),
+            ),
+            Positioned(
+              child: Container(
+                width: 370,
+                height: 150,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [gradientFrom, bgColor]),
+                    color: bgColor.withOpacity(0.35)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      each["name"],
+                      style: font_20_white,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Container(
+                        width: 62,
+                        height: 2.5,
+                        decoration: const BoxDecoration(color: Colors.white54),
+                      ),
+                    ),
+                    Text(
+                      each["description"],
+                      style: font_13_white,
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
