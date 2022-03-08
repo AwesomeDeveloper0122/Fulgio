@@ -15,6 +15,7 @@ import 'package:Fuligo/widgets/text_header.dart';
 import 'package:Fuligo/widgets/custom_button.dart';
 import 'package:Fuligo/widgets/subtxt.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TourList extends StatefulWidget {
   final Map detailData;
@@ -29,6 +30,7 @@ class TourListState extends State<TourList> {
   List<Uint8List> imageList = [];
   bool loading = true;
   FirebaseStorage storage = FirebaseStorage.instance;
+  @override
   void initState() {
     super.initState();
     Map detailData = widget.detailData;
@@ -37,14 +39,17 @@ class TourListState extends State<TourList> {
   }
 
   Future<void> getData(List _detail) async {
+    final prefs = await SharedPreferences.getInstance();
+    String lang = prefs.getString('lang') ?? "";
     if (_detail.isNotEmpty) {
       int n = 0;
       for (var referId in _detail) {
         referId.get().then((DocumentSnapshot documentSnapshot) async {
           if (documentSnapshot.exists) {
             print('Document exists on the database');
-            List imageList = documentSnapshot.get("image");
-            Reference ref = storage.ref().child(imageList[0]);
+
+            var image_ist = documentSnapshot.get("image");
+            Reference ref = storage.ref().child(image_ist[0]);
 
             String url = await ref.getDownloadURL();
             Uint8List uint8image =
@@ -54,14 +59,16 @@ class TourListState extends State<TourList> {
 
             imageList.add(uint8image);
 
-            String description = documentSnapshot.get('description')["en_GB"];
+            String description = documentSnapshot.get('description')[lang];
 
-            String name = documentSnapshot.get('name')["en_GB"];
+            String name = documentSnapshot.get('name')[lang];
+            var location = documentSnapshot.get('location');
 
             Map temp = {
               "description": description,
               "name": name,
               "image": url,
+              "location": location,
               // "datetime": datetime,
             };
 
@@ -71,6 +78,7 @@ class TourListState extends State<TourList> {
               setState(() {
                 _tourdetail = _tourdetail;
                 loading = false;
+                imageList = imageList;
               });
             }
           }
@@ -85,21 +93,21 @@ class TourListState extends State<TourList> {
   @override
   Widget build(BuildContext context) {
     Map _detailData = widget.detailData;
-    List<Widget> _pointwidgets = [];
-    print(" ===== CollectionReference ==========");
-    print(_tourdetail);
-    for (var i = 0; i < _tourdetail.length; i++) {
-      // for (var item in _tourdetail) {
-      var item = _tourdetail[i];
 
-      _pointwidgets.add(
-        TourSmallImage(context, imageList[i], "Stop ${i + 1}", item["name"]),
-      );
+    List<Widget> _pointwidgets = [];
+
+    if (_tourdetail.isNotEmpty) {
+      for (var i = 0; i < _tourdetail.length; i++) {
+        var item = _tourdetail[i];
+
+        _pointwidgets.add(
+          TourSmallImage(context, imageList[i], "Stop ${i + 1}", item["name"]),
+        );
+      }
     }
 
     var mq = MediaQuery.of(context).size;
-    print(" ===== overview ==========");
-    print(_detailData["pointslist"]);
+
     return !loading
         ? Container(
             decoration: bgDecoration,
@@ -144,20 +152,25 @@ class TourListState extends State<TourList> {
                                   ),
                                 ),
                               ],
-                            ))
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: mq.height * 0.2,
-                              ),
-                              Text(
-                                "No order data",
-                                style: TextStyle(
-                                    fontSize: 30, color: Colors.white30),
-                              ),
-                            ],
+                            ),
+                          )
+                        : Container(
+                            width: mq.width,
+                            height: mq.height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: mq.height * 0.1,
+                                ),
+                                Text(
+                                  "No order data",
+                                  style: TextStyle(
+                                      fontSize: 30, color: Colors.white30),
+                                ),
+                              ],
+                            ),
                           ),
                     SecondaryButton(context),
                     Positioned(
@@ -165,35 +178,36 @@ class TourListState extends State<TourList> {
                       left: 20,
                       child: SizedBox(
                         height: 140,
-                        // padding: const EdgeInsets.only(right: 20, left: 20),
                         width: mq.width,
                         child: ListView(
                           shrinkWrap: true,
-                          // mainAxisAlignment: MainAxisAlignment.center,
-                          // crossAxisAlignment: CrossAxisAlignment.center,
                           scrollDirection: Axis.horizontal,
                           children: _pointwidgets,
                         ),
                       ),
                     ),
-                    Positioned(
-                      bottom: 30,
-                      child: Container(
-                        width: mq.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 350,
-                              height: 50,
-                              child: CustomButton(
-                                  context, const CancelTour(), "Start tour"),
+                    _pointwidgets.isNotEmpty
+                        ? Positioned(
+                            bottom: 30,
+                            child: Container(
+                              width: mq.width,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 350,
+                                    height: 50,
+                                    child: CustomButton(
+                                        context,
+                                        CancelTour(id: _detailData["id"]),
+                                        "Start tour"),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          )
+                        : const Text(""),
                   ],
                 ),
               ),

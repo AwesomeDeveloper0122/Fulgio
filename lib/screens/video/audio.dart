@@ -30,6 +30,7 @@ class ThemeVariation {
 // ignore: must_be_immutable
 class Audio extends StatefulWidget {
   String id;
+
   Audio({Key? key, required this.id}) : super(key: key);
   @override
   AudioState createState() => AudioState();
@@ -59,6 +60,7 @@ class AudioState extends State<Audio> {
     getAudioData(widget.id);
 
     super.initState();
+
     _player = AudioPlayer();
     _durationState = Rx.combineLatest2<Duration, PlaybackEvent, DurationState>(
         _player.positionStream,
@@ -73,6 +75,8 @@ class AudioState extends State<Audio> {
   Future<void> _init() async {
     try {
       await _player.setUrl(audio_url);
+      _player.play();
+
       loading = false;
       setState(() {
         loading = loading;
@@ -109,7 +113,7 @@ class AudioState extends State<Audio> {
           .asUint8List();
 
       images.add(
-          // MemoryImage(uint8image, scale: 2));
+        // MemoryImage(uint8image, scale: 2));
         Image.network(
           img,
           fit: BoxFit.fill,
@@ -155,7 +159,7 @@ class AudioState extends State<Audio> {
   Widget build(BuildContext context) {
     double rating = 0.0;
 
-    if (audioData.isNotEmpty) {
+    if (audioData.isNotEmpty && images.isNotEmpty) {
       int aaa = audioData["rating"];
       rating = aaa.toDouble();
       loading = false;

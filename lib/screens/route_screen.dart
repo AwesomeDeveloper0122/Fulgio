@@ -23,6 +23,7 @@ class RouteScreenState extends State<RouteScreen> {
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
     Map infodata = widget.infodata;
+
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -54,8 +55,42 @@ class RouteScreenState extends State<RouteScreen> {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 30),
-                      child: CancelButton(
-                          context, const TourAnother(), "Show directions"),
+                      child: Positioned(
+                        bottom: 30,
+                        child: Center(
+                          child: SizedBox(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * 0.85,
+                            // ignore: deprecated_member_use
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(40.0),
+                                side:
+                                    BorderSide(color: Colors.white70, width: 2),
+                              ),
+                              color: Colors.transparent,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TourAnother(),
+                                  ),
+                                );
+                              },
+                              textColor: whiteColor,
+                              child: Text(
+                                "Show directions",
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 )),

@@ -11,8 +11,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const Login());
     case RouteName.Verify:
       return MaterialPageRoute(builder: (context) => const Verify());
-    case RouteName.Startour:
-      return MaterialPageRoute(builder: (context) => const StartTour());
+    // case RouteName.Startour:
+    //   return MaterialPageRoute(builder: (context) => StartTour(currentUserPosition: null,));
     // case RouteName.tourlist:
     //   return MaterialPageRoute(builder: (context) => const TourList());
     // case RouteName.tourdetail:

@@ -4,9 +4,7 @@ import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/screens/achievement/achievements.dart';
 import 'package:Fuligo/screens/chat/chat.dart';
 import 'package:Fuligo/screens/map/map.dart';
-import 'package:Fuligo/screens/settings.dart';
 import 'package:Fuligo/screens/settings_test.dart';
-import 'package:Fuligo/widgets/popup.dart';
 
 import 'package:Fuligo/widgets/custom_button.dart';
 

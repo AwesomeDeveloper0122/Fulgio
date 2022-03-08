@@ -1,64 +1,74 @@
-// ignore_for_file: sized_box_for_whitespace
-
 import 'dart:typed_data';
 
 import 'package:Fuligo/utils/loading.dart';
+import 'package:Fuligo/utils/localtext.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//Screens
-import 'package:Fuligo/screens/tours/tours.dart';
+import 'package:flutter_map/flutter_map.dart';
 
-//Widgets
-import 'package:Fuligo/widgets/custom_button.dart';
-import 'package:Fuligo/widgets/logo.dart';
-import 'package:Fuligo/widgets/circleimage.dart';
+import 'package:latlong2/latlong.dart';
 
+import '../../utils/common_colors.dart';
+import '../../widgets/circleimage.dart';
+import '../../widgets/custom_button.dart';
+import '../tours/tours.dart';
+import 'package:mapbox_api/mapbox_api.dart';
+
+// ignore: must_be_immutable
 class StartTour extends StatefulWidget {
-  const StartTour({Key? key}) : super(key: key);
+  LatLng currentUserPosition;
+  StartTour({Key? key, required this.currentUserPosition}) : super(key: key);
 
   @override
-  StartTourState createState() => StartTourState();
+  _StartTourState createState() => _StartTourState();
 }
 
-class StartTourState extends State<StartTour> {
+class _StartTourState extends State<StartTour> {
+  MapController mapController = MapController();
+  final mapbox = MapboxApi(
+    accessToken: LocalText.accessToken,
+  );
+
   List pointdata = [];
   bool loading = true;
   List imageNetList = [];
   List<Uint8List> imageList = [];
+  List<Marker> markers = [];
+
   final CollectionReference _pointCollection =
       FirebaseFirestore.instance.collection('pointOfInterest');
+
   @override
-  // ignore: must_call_super
   void initState() {
+    super.initState();
     getPointData();
   }
 
-  Future<String> getUrlFromFirebase(String firebaseURL) async {
-    print("firebaseURL");
-    print(firebaseURL);
-
-    Reference ref = FirebaseStorage.instance.ref().child(firebaseURL);
-    String url = await ref.getDownloadURL();
-    print("network url");
-    print(url);
-
-    return url;
-  }
-
   Future<List> getPointData() async {
+    markers.add(
+      Marker(
+        point: widget.currentUserPosition, //current user poistion
+        builder: (ctx) => const IconButton(
+          icon: Icon(Icons.circle),
+          iconSize: 50,
+          color: Colors.red,
+          onPressed: null,
+          // color: Colors.red,
+        ),
+      ),
+    );
     QuerySnapshot querySnapshot = await _pointCollection.get();
     List videoUrl = [];
     List imageUrlList = [];
-    List idList = [];
     int n = 0;
     Map location = {};
-    String imgUrl = "";
+
     if (querySnapshot.docs.isNotEmpty) {
-      print("important");
       for (var i = 0; i < querySnapshot.docs.length; i++) {
         var ele = querySnapshot.docs[i];
+        var id = ele.id;
 
         try {
           videoUrl = ele.get("video");
@@ -69,7 +79,10 @@ class StartTourState extends State<StartTour> {
         if (videoUrl.isNotEmpty) {
           imageUrlList = ele.get("image");
           location = ele.get('location');
+          print("videoLocation");
+          print(location);
           if (imageUrlList.isNotEmpty) {
+            String videoId = ele.id;
             String videoimgurl =
                 await getUrlFromFirebase(imageUrlList[0].toString());
             Uint8List uint8image =
@@ -77,13 +90,23 @@ class StartTourState extends State<StartTour> {
                     .buffer
                     .asUint8List();
             imageList.add(uint8image);
+            markers.add(
+              Marker(
+                width: 120.0,
+                height: 144.0,
+                point: LatLng(location["latitude"], location["longtitude"]),
+                builder: (ctx) =>
+                    CircleVideoMapImage(context, videoId, uint8image),
+              ),
+            );
             n++;
           }
-          String id = ele.id;
-          pointdata.add({"id": id, "location": location, "flag": "video"});
         } else {
           imageUrlList = ele.get("image");
           location = ele.get('location');
+          print("audioLocation");
+          print(location);
+          String audioId = ele.id;
           if (imageUrlList.isNotEmpty) {
             String audioimgUrl = await getUrlFromFirebase(imageUrlList[0]);
 
@@ -92,15 +115,24 @@ class StartTourState extends State<StartTour> {
                     .buffer
                     .asUint8List();
             imageList.add(uint8image);
+            markers.add(
+              Marker(
+                width: 120.0,
+                height: 144.0,
+                point: LatLng(location["latitude"], location["longtitude"]),
+                builder: (ctx) =>
+                    CircleAudioMapImage(context, audioId, uint8image),
+              ),
+            );
             n++;
           }
-          String id = ele.id;
-          pointdata.add({"id": id, "location": location, "flag": "audio"});
         }
       }
+
       if (n == querySnapshot.docs.length) {
         setState(() {
           pointdata = pointdata;
+          markers = markers;
           loading = false;
           imageList = imageList;
         });
@@ -108,98 +140,64 @@ class StartTourState extends State<StartTour> {
     } else {
       setState(() {
         loading = false;
+        markers = markers;
       });
     }
-    print("pointdata");
-    print(pointdata);
+
     return pointdata;
+  }
+
+  Future<String> getUrlFromFirebase(String firebaseURL) async {
+    Reference ref = FirebaseStorage.instance.ref().child(firebaseURL);
+    String url = await ref.getDownloadURL();
+
+    return url;
   }
 
   @override
   Widget build(BuildContext context) {
-    var mq = MediaQuery.of(context).size;
-    List<Widget> mediaList = [];
-
-    if (pointdata.isNotEmpty) {
-      for (var i = 0; i < pointdata.length; i++) {
-        var item = pointdata[i];
-
-        if (item["flag"] == "video") {
-          print(item["location"]);
-          mediaList.add(
-            Positioned(
-                top: 0,
-                left: 0,
-                child: CircleVideoImage(context, item, imageList[i])),
-          );
-        } else {
-          print(item["location"]);
-          mediaList.add(
-            Positioned(
-                top: 0,
-                left: 0,
-                child: CircleAudioImage(context, item, imageList[i])),
-          );
-        }
-      }
-    } else if (loading) {
-      mediaList.add(
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: mq.height * 0.5,
-            ),
-            kLoadingFadingWidget(context)
-          ],
-        ),
-      );
-    } else {
-      mediaList.add(
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: mq.height * 0.2,
-            ),
-            Text(
-              "No order data",
-              style: TextStyle(fontSize: 30, color: Colors.white30),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/map_test.png"),
-          fit: BoxFit.fitHeight,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Center(
-              child: Column(
-                children: [
-                  Logo,
-                ],
+    return Scaffold(
+      body: !loading
+          ? Stack(alignment: Alignment.center, children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [gradientFrom, bgColor]),
+                    color: bgColor.withOpacity(0.5)),
+                child: FlutterMap(
+                  options: MapOptions(
+                    center: widget.currentUserPosition, // current user postion
+                    zoom: 15.0,
+                    bounds: LatLngBounds(
+                      LatLng(
+                          widget.currentUserPosition.latitude - 1,
+                          widget.currentUserPosition.longitude -
+                              1), // [west,south]
+                      LatLng(widget.currentUserPosition.latitude + 1,
+                          widget.currentUserPosition.longitude + 1),
+                    ), // [/ [east,north]
+                    boundsOptions:
+                        const FitBoundsOptions(padding: EdgeInsets.all(8.0)),
+                  ),
+                  layers: [
+                    TileLayerOptions(
+                      urlTemplate: LocalText.styleWithBackground,
+                      additionalOptions: {
+                        'accessToken': LocalText.accessToken,
+                      },
+                    ),
+                    MarkerLayerOptions(markers: markers),
+                  ],
+                  mapController: mapController,
+                ),
               ),
-            ),
-            Column(
-              children: mediaList,
-            ),
-            MenuButton(context),
-            PrimaryButton(context, const Tours(), "Start tour")
-          ],
-        ),
-      ),
+              MenuButton(context),
+              PrimaryButton(context, const Tours(), "Start tour")
+            ])
+          : defaultloading(context),
     );
   }
 }

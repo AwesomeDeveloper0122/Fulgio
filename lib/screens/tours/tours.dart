@@ -2,8 +2,6 @@
 
 import 'dart:typed_data';
 
-import 'package:Fuligo/screens/tours/tour_list.dart';
-import 'package:Fuligo/utils/font_style.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:Fuligo/widgets/custom_image.dart';
@@ -39,16 +37,24 @@ class ToursState extends State<Tours> {
     QuerySnapshot querySnapshot = await _tourCollection.get();
     final prefs = await SharedPreferences.getInstance();
     String lang = prefs.getString('lang') ?? "";
-
+    List snapdata = [];
+    List idList = [];
     // Get data from docs and convert map to List
     if (querySnapshot.docs.isNotEmpty) {
-      List snapdata = querySnapshot.docs
-          .map(
-            (doc) => doc.data(),
-          )
-          .toList();
+      for (var element in querySnapshot.docs) {
+        snapdata.add(element.data());
+        print("elementID");
+        print(element.id);
+        idList.add(element.id);
+      }
+      // List snapdata = querySnapshot.docs
+      //     .map(
+      //       (doc) => doc.data(),
+      //     )
+      //     .toList();
 
-      for (var item in snapdata) {
+      for (var i = 0; i < snapdata.length; i++) {
+        var item = snapdata[i];
         String imageUrl = await getUrlFromFirebase(item["image"][0]);
         Uint8List uint8image =
             (await NetworkAssetBundle(Uri.parse(imageUrl)).load(""))
@@ -61,6 +67,7 @@ class ToursState extends State<Tours> {
         String description = item["description"][lang];
         List pointsList = item["pointOfInterests"];
         Map temp = {
+          "id": idList[i],
           "name": name,
           "description": description,
           "pointslist": pointsList,

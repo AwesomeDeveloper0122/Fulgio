@@ -1,9 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
-import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/utils/font_style.dart';
-import 'package:Fuligo/widgets/logo.dart';
 
 Widget PageHeader(context, String title, String content) => Container(
       // height: 70,

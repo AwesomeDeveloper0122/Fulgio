@@ -29,7 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # google_maps_flutter: ^0.5.21  
+  google_maps_flutter: ^0.5.21  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -69,16 +69,16 @@ dependencies:
   rxdart: ^0.27.3
   carousel_slider: ^4.0.0
   flutter_rating_bar: ^4.0.0
-  intro_slider: ^3.0.3
-  accordion: ^2.2.1
-  # mapbox_gl: ^0.15.0
   location: ^4.3.0
+  accordion: ^2.2.1
+  mapbox_api: ^1.0.0
+  polyline: ^1.0.2
+  flutter_fadein: ^2.0.0
   # mapbox_gl: ^0.15.0
   # user_location: ^0.06
   # audioplayers: ^0.20.1
   # geocoding: ^2.0.2
   # location: ^4.3.0
-  
   
  
 
@@ -123,13 +123,11 @@ flutter:
     - assets/images/png/icon-map.png
     - assets/images/png/icon-document.png
     - assets/images/png/icon-achievement.png
-    - assets/images/png/icon-support.png
     - assets/images/png/icon-route.png
     - assets/images/png/icon-heart.png
     - assets/images/png/icon-cross.png
     - assets/images/png/icon-menu-small.png
-    - assets/images/png/icon-airports.png
-    - assets/images/png/icon-achievement.png
+    - assets/images/png/icon-support.png
     - assets/3.mp3
     
 

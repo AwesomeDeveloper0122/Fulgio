@@ -40,7 +40,8 @@ Widget PrimaryButton(context, StatefulWidget page, String txt) => Positioned(
         ),
       ),
     );
-Widget CancelButton(context, StatefulWidget page, String txt) => Positioned(
+// ignore: non_constant_identifier_names
+Widget CancelButton(context, String txt) => Positioned(
       bottom: 30,
       child: Center(
         child: SizedBox(
@@ -54,13 +55,7 @@ Widget CancelButton(context, StatefulWidget page, String txt) => Positioned(
             ),
             color: Colors.transparent,
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => page,
-                ),
-              );
-              //  Navigator.of(context).pushReplacementNamed(page);
+              Navigator.of(context).pop();
             },
             textColor: whiteColor,
             child: Text(

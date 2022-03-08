@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/screens/home.dart';
 import 'package:Fuligo/screens/splash_page.dart';
-// import 'package:Fuligo/screens/chat/chat_content.dart';
 import 'package:Fuligo/utils/common_header_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';

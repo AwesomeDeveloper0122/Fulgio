@@ -4,6 +4,8 @@ import 'package:Fuligo/routes/route_costant.dart';
 import 'package:Fuligo/screens/chat/chat_detail.dart';
 import 'package:Fuligo/screens/chat/chat_detail_test.dart';
 import 'package:Fuligo/screens/documents/documentdetail.dart';
+import 'package:Fuligo/screens/map/map.dart';
+import 'package:Fuligo/screens/tours/cancel_tour.dart';
 import 'package:Fuligo/screens/video/info.dart';
 import 'package:Fuligo/screens/achievement/ranking.dart';
 import 'package:Fuligo/screens/tours/tour_list.dart';
@@ -11,6 +13,7 @@ import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/utils/font_style.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: non_constant_identifier_names
 Widget DocumentCard(
@@ -208,12 +211,16 @@ Widget TourSmallImage(context, Uint8List image, String title, String content) =>
         ),
       ),
     );
+// ignore: non_constant_identifier_names
 Widget TourCard(context, Uint8List image, Map each) => GestureDetector(
-      onTap: () {
+      onTap: () async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('parentID', each["id"]);
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => TourList(detailData: each),
+            // builder: (context) => CancelTour(),
           ),
         );
       },
@@ -258,7 +265,7 @@ Widget TourCard(context, Uint8List image, Map each) => GestureDetector(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      each["name"],
+                      each["name"].toString(),
                       style: font_20_white,
                     ),
                     Padding(
@@ -270,7 +277,7 @@ Widget TourCard(context, Uint8List image, Map each) => GestureDetector(
                       ),
                     ),
                     Text(
-                      each["description"],
+                      each["description"].toString(),
                       style: font_13_white,
                     ),
                   ],

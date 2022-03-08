@@ -18,6 +18,7 @@ import 'package:video_player/video_player.dart';
 // ignore: must_be_immutable
 class Video extends StatefulWidget {
   String id;
+
   Video({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -76,6 +77,7 @@ class VideoState extends State<Video> {
       });
       _controller.setLooping(true);
       _controller.initialize().then((_) => setState(() {}));
+      _controller.play(); //auto play
     }
 
     videoData = {

@@ -1,6 +1,7 @@
 // ignore_for_file: unused_element
 
 import 'package:Fuligo/routes/route_costant.dart';
+import 'package:Fuligo/screens/tours/start_tour.dart';
 import 'package:Fuligo/utils/localtext.dart';
 import 'package:Fuligo/widgets/logo.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:location/location.dart';
+import 'package:flutter_fadein/flutter_fadein.dart';
 
 class Verify extends StatefulWidget {
   const Verify({Key? key}) : super(key: key);
@@ -20,15 +22,15 @@ class Verify extends StatefulWidget {
 }
 
 class VerifyState extends State<Verify> {
-  LatLng _center = LatLng(51.5074, 0.1278);
-  MapController _mapController = MapController();
+  LatLng currentUserPoistion = LatLng(38.9036614038578, -76.99211156195398);
   List<Marker> markers = [];
+  @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    getUserPosition();
   }
 
-  _getCurrentLocation() async {
+  Future<void> getUserPosition() async {
     Location location = Location();
 
     bool _serviceEnabled;
@@ -52,28 +54,10 @@ class VerifyState extends State<Verify> {
     }
 
     _locationData = await location.getLocation();
-    print("current user locatiom");
-    print(_locationData);
 
     setState(() {
-      _center = LatLng(_locationData.latitude!, _locationData.longitude!);
-    });
-  }
-
-  addPin(LatLng latlng) {
-    setState(() {
-      markers.add(Marker(
-        width: 30.0,
-        height: 30.0,
-        point: latlng,
-        builder: (ctx) => IconButton(
-          icon: Icon(Icons.circle),
-          iconSize: 30,
-          color: Colors.blue,
-          onPressed: null,
-          // color: Colors.red,
-        ),
-      ));
+      currentUserPoistion =
+          LatLng(_locationData.latitude!, _locationData.longitude!);
     });
   }
 
@@ -90,9 +74,6 @@ class VerifyState extends State<Verify> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        // appBar: AppBar(
-        //   title: Text('TEST'),
-        // ),
         body: Stack(
           alignment: Alignment.center,
           children: <Widget>[
@@ -104,7 +85,12 @@ class VerifyState extends State<Verify> {
                       "Great! Please verify your e-mail start"),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, RouteName.Startour);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StartTour(
+                                currentUserPosition: currentUserPoistion)),
+                      );
                     },
                     child: Container(
                       height: mapHeight.height,
@@ -148,13 +134,13 @@ class VerifyState extends State<Verify> {
                               Flexible(
                                 child: FlutterMap(
                                   options: MapOptions(
-                                    // onLongPress: this.addPin(latlng),
-                                    center: _center,
+                                    center: currentUserPoistion,
                                     zoom: 16.0,
                                   ),
                                   layers: [
                                     TileLayerOptions(
-                                      urlTemplate: LocalText.urlTemplate,
+                                      urlTemplate:
+                                          'https://api.mapbox.com/styles/v1/sakura0122/cl0asbsbv000314menn31lgqa/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q',
                                       additionalOptions: {
                                         'accessToken': LocalText.accessToken,
                                       },
@@ -162,30 +148,16 @@ class VerifyState extends State<Verify> {
                                     MarkerLayerOptions(
                                       markers: [
                                         Marker(
-                                          width: 20.0,
-                                          height: 20.0,
-                                          point: LatLng(51.5074, 0.1278),
-                                          // point: _center,
-                                          builder: (ctx) => const IconButton(
-                                            icon: Icon(Icons.circle),
-                                            iconSize: 30,
-                                            color: Colors.blue,
+                                          point: currentUserPoistion,
+                                          builder: (ctx) => IconButton(
+                                            icon: Icon(Icons.person_pin_circle),
+                                            iconSize: 40,
+                                            color: Color.fromARGB(
+                                                255, 243, 33, 33),
                                             onPressed: null,
                                             // color: Colors.red,
                                           ),
                                         ),
-                                        // Marker(
-                                        //   width: 20.0,
-                                        //   height: 20.0,
-                                        //   point: LatLng(48.5074, 0.1278),
-                                        //   builder: (ctx) => Container(
-                                        //     child: IconButton(
-                                        //       icon: Icon(Icons.location_on),
-                                        //       onPressed: null,
-                                        //       color: Colors.red,
-                                        //     ),
-                                        //   ),
-                                        // ),
                                       ],
                                     ),
                                   ],

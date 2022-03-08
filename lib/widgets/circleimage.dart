@@ -110,59 +110,61 @@ Widget AvatarMenu(context, Uint8List image, String url, String id,
       ),
     );
 
-Future<void> getMedia(context, id) async {
-  var collection = FirebaseFirestore.instance.collection('pointOfInterest');
-  var mediadata = await collection.doc(id).get();
-  if (mediadata.exists) {
-    List videoUrl = [];
-    try {
-      videoUrl = mediadata.get("video");
-    } catch (e) {
-      videoUrl = [];
-    }
-    if (videoUrl.isNotEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Video(
-            id: id,
-          ),
-        ),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Audio(
-            id: id,
-          ),
-        ),
-      );
-    }
-  }
-}
+// Future<void> getMedia(context, id) async {
+//   var collection = FirebaseFirestore.instance.collection('pointOfInterest');
+//   var mediadata = await collection.doc(id).get();
+//   if (mediadata.exists) {
+//     List videoUrl = [];
+//     try {
+//       videoUrl = mediadata.get("video");
+//     } catch (e) {
+//       videoUrl = [];
+//     }
+//     if (videoUrl.isNotEmpty) {
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => Video(
+//             id: id,
+//           ),
+//         ),
+//       );
+//     } else {
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => Audio(
+//             id: id,
+//           ),
+//         ),
+//       );
+//     }
+//   }
+// }
 
+// ignore: non_constant_identifier_names
 Widget CircleVideoMapImage(context, String id, Uint8List image) => Container(
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: GestureDetector(
         onTap: () {
+          print("video");
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Video(id: id),
+              builder: (context) => Video(
+                id: id,
+              ),
             ),
           );
         },
-        child: Container(
-          child: ClipOval(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: whiteColor),
-                borderRadius: BorderRadius.circular(50),
-                image: new DecorationImage(
-                  image: MemoryImage(image, scale: 0.5),
-                  fit: BoxFit.cover,
-                ),
+        child: ClipOval(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: whiteColor),
+              borderRadius: BorderRadius.circular(50),
+              image: DecorationImage(
+                image: MemoryImage(image, scale: 0.5),
+                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -174,6 +176,7 @@ Widget CircleAudioMapImage(context, String id, Uint8List image) => Container(
       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: GestureDetector(
         onTap: () {
+          print("audio");
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -199,81 +202,81 @@ Widget CircleAudioMapImage(context, String id, Uint8List image) => Container(
     );
 
 // ignore: non_constant_identifier_names
-Widget CircleVideoImage(context, Map item, Uint8List image) => Container(
-      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Video(id: item["id"]),
-            ),
-          );
-        },
-        child: Container(
-          child: ClipOval(
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: whiteColor),
-                borderRadius: BorderRadius.circular(50),
-                image: new DecorationImage(
-                  image: MemoryImage(image, scale: 0.5),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+// Widget CircleVideoImage(context, Map item, Uint8List image) => Container(
+//       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+//       child: GestureDetector(
+//         onTap: () {
+//           Navigator.push(
+//             context,
+//             MaterialPageRoute(
+//               builder: (context) => Video(id: item["id"]),
+//             ),
+//           );
+//         },
+//         child: Container(
+//           child: ClipOval(
+//             child: Container(
+//               width: 100,
+//               height: 100,
+//               decoration: BoxDecoration(
+//                 border: Border.all(width: 1, color: whiteColor),
+//                 borderRadius: BorderRadius.circular(50),
+//                 image: new DecorationImage(
+//                   image: MemoryImage(image, scale: 0.5),
+//                   fit: BoxFit.cover,
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
 // ignore: non_constant_identifier_names
-Widget CircleAudioImage(context, Map item, Uint8List image) => Container(
-      margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Audio(id: item["id"]),
-            ),
-          );
-        },
-        child: Container(
-          child: ClipOval(
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: whiteColor),
-                borderRadius: BorderRadius.circular(50),
-                image: new DecorationImage(
-                  image: MemoryImage(image, scale: 0.5),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              // decoration: BoxDecoration(
-              //   border: Border.all(width: 3, color: whiteColor),
-              //   borderRadius: BorderRadius.circular(50),
-              // ),
-              // child: Image.network(
-              //   item["image"][0],
-              //   width: 100,
-              //   height: 100,
-              //   fit: BoxFit.fill,
-              //   loadingBuilder: (BuildContext context, Widget child,
-              //       ImageChunkEvent? loadingProgress) {
-              //     if (loadingProgress == null) {
-              //       return child;
-              //     }
-              //     return Center(
-              //       child: kLoadingFadingWidget(context),
-              //     );
-              //   },
-              // ),
-            ),
-          ),
-        ),
-      ),
-    );
+// Widget CircleAudioImage(context, Map item, Uint8List image) => Container(
+//       margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+//       child: GestureDetector(
+//         onTap: () {
+//           Navigator.push(
+//             context,
+//             MaterialPageRoute(
+//               builder: (context) => Audio(id: item["id"]),
+//             ),
+//           );
+//         },
+//         child: Container(
+//           child: ClipOval(
+//             child: Container(
+//               width: 100,
+//               height: 100,
+//               decoration: BoxDecoration(
+//                 border: Border.all(width: 1, color: whiteColor),
+//                 borderRadius: BorderRadius.circular(50),
+//                 image: new DecorationImage(
+//                   image: MemoryImage(image, scale: 0.5),
+//                   fit: BoxFit.cover,
+//                 ),
+//               ),
+//               // decoration: BoxDecoration(
+//               //   border: Border.all(width: 3, color: whiteColor),
+//               //   borderRadius: BorderRadius.circular(50),
+//               // ),
+//               // child: Image.network(
+//               //   item["image"][0],
+//               //   width: 100,
+//               //   height: 100,
+//               //   fit: BoxFit.fill,
+//               //   loadingBuilder: (BuildContext context, Widget child,
+//               //       ImageChunkEvent? loadingProgress) {
+//               //     if (loadingProgress == null) {
+//               //       return child;
+//               //     }
+//               //     return Center(
+//               //       child: kLoadingFadingWidget(context),
+//               //     );
+//               //   },
+//               // ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
