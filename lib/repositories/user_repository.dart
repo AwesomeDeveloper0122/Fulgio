@@ -2,6 +2,7 @@
 import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,10 +11,8 @@ class UserRepository {
   static String _userCollectionname = "users";
 
   static Future<void> addUser(String id) async {
-    String result;
-    String defaultImgId;
     DocumentReference ref;
-    print("------------ Add user--------------");
+
     CollectionReference user = FirebaseFirestore.instance.collection('users');
     QuerySnapshot avatarSnapshot =
         await FirebaseFirestore.instance.collection('avatar').get();
@@ -25,8 +24,8 @@ class UserRepository {
         user
             .doc(id)
             .set({'uid': id, "avatar": ref}, SetOptions(merge: true))
-            .then((value) => result = "success")
-            .catchError((error) => result = "error");
+            .then((value) => {})
+            .catchError((error) => {});
         break;
       }
     }
@@ -36,9 +35,12 @@ class UserRepository {
   static Future getUserByID(String uid) async {
     String url;
     Map userdata;
+    /////////////////////
+
+    /////////////////////
     DocumentSnapshot currentUser =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
-    print("==== current User ===========");
+
     CollectionReference user = FirebaseFirestore.instance.collection('users');
     QuerySnapshot avatarSnapshot =
         await FirebaseFirestore.instance.collection('avatar').get();

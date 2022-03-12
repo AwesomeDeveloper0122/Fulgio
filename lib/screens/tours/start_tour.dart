@@ -47,18 +47,19 @@ class _StartTourState extends State<StartTour> {
   }
 
   Future<List> getPointData() async {
-    markers.add(
-      Marker(
-        point: widget.currentUserPosition, //current user poistion
-        builder: (ctx) => const IconButton(
-          icon: Icon(Icons.circle),
-          iconSize: 50,
-          color: Colors.red,
-          onPressed: null,
-          // color: Colors.red,
-        ),
+    markers.add(Marker(
+      point: widget.currentUserPosition, //current user poistion
+      builder: (ctx) => const IconButton(
+        icon: Icon(Icons.circle),
+        iconSize: 50,
+        color: Colors.red,
+        onPressed: null,
+        // color: Colors.red,
       ),
-    );
+    )
+        // builder: (ctx) =>
+        //     Image(image: AssetImage("assets/images/png/icon-heart.png"))),
+        );
     QuerySnapshot querySnapshot = await _pointCollection.get();
     List videoUrl = [];
     List imageUrlList = [];
@@ -68,7 +69,6 @@ class _StartTourState extends State<StartTour> {
     if (querySnapshot.docs.isNotEmpty) {
       for (var i = 0; i < querySnapshot.docs.length; i++) {
         var ele = querySnapshot.docs[i];
-        var id = ele.id;
 
         try {
           videoUrl = ele.get("video");
@@ -79,8 +79,7 @@ class _StartTourState extends State<StartTour> {
         if (videoUrl.isNotEmpty) {
           imageUrlList = ele.get("image");
           location = ele.get('location');
-          print("videoLocation");
-          print(location);
+
           if (imageUrlList.isNotEmpty) {
             String videoId = ele.id;
             String videoimgurl =
@@ -104,8 +103,7 @@ class _StartTourState extends State<StartTour> {
         } else {
           imageUrlList = ele.get("image");
           location = ele.get('location');
-          print("audioLocation");
-          print(location);
+
           String audioId = ele.id;
           if (imageUrlList.isNotEmpty) {
             String audioimgUrl = await getUrlFromFirebase(imageUrlList[0]);
@@ -170,7 +168,7 @@ class _StartTourState extends State<StartTour> {
                 child: FlutterMap(
                   options: MapOptions(
                     center: widget.currentUserPosition, // current user postion
-                    zoom: 15.0,
+                    minZoom: 10.0,
                     bounds: LatLngBounds(
                       LatLng(
                           widget.currentUserPosition.latitude - 1,

@@ -74,6 +74,8 @@ dependencies:
   mapbox_api: ^1.0.0
   polyline: ^1.0.2
   flutter_fadein: ^2.0.0
+  # flutter_mapbox_navigation: ^0.0.26
+  # flutter_flightmap_navigation: ^1.0.4
   # mapbox_gl: ^0.15.0
   # user_location: ^0.06
   # audioplayers: ^0.20.1

@@ -4,7 +4,7 @@ import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/screens/achievement/achievements.dart';
 import 'package:Fuligo/screens/chat/chat.dart';
 import 'package:Fuligo/screens/map/map.dart';
-import 'package:Fuligo/screens/settings_test.dart';
+import 'package:Fuligo/screens/settings.dart';
 
 import 'package:Fuligo/widgets/custom_button.dart';
 
@@ -41,8 +41,6 @@ class Test extends StatelessWidget {
 
   Widget build(BuildContext context) {
     UserModel _userInfo = AuthProvider.of(context).userModel;
-
-    print("========= userInfo ============");
 
     return Stack(
       children: [
@@ -130,6 +128,9 @@ class Test extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => Chat(),
+                      // builder: (context) => ChatTest(
+                      //   docId: "rWKqClPXawJvJQs4HUmf",
+                      // ),
                     ),
                   ),
                 },
@@ -177,7 +178,7 @@ class Test extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SettingTest(),
+                      builder: (context) => const Settings(),
                     ),
                   );
                 },

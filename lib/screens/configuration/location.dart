@@ -1,30 +1,24 @@
 // ignore_for_file: deprecated_member_use, unused_local_variable
 
-import 'dart:convert';
-
-import 'package:Fuligo/screens/chat/chat.dart';
+import 'package:Fuligo/screens/VerifyTracking.dart';
+import 'package:Fuligo/screens/verify.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/utils/common_functions.dart';
 import 'package:Fuligo/utils/common_header_list.dart';
 import 'package:flutter/material.dart';
-import 'package:Fuligo/screens/auth/login.dart';
-import 'package:Fuligo/widgets/custom_button.dart';
 import 'package:Fuligo/widgets/text_header.dart';
 import 'package:Fuligo/widgets/logo.dart';
-import 'package:flutter_dialogs/flutter_dialogs.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/common_functions.dart';
 // import 'package:Fuligo/utils/common_colors.dart';
 
-class Location extends StatefulWidget {
-  const Location({Key? key}) : super(key: key);
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({Key? key}) : super(key: key);
 
   @override
-  LocationState createState() => LocationState();
+  LocationScreenState createState() => LocationScreenState();
 }
 
-class LocationState extends State<Location> {
+class LocationScreenState extends State<LocationScreen> {
   String page = HeaderList.explorer;
   String title = '';
   String subtitle = '';
@@ -94,8 +88,15 @@ class LocationState extends State<Location> {
                     ),
                     color: bgColor,
                     onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => VerifyTracking(
+                                  permission: "false",
+                                )),
+                      );
                       //  Navigator.of(context).pushReplacementNamed(page);
-                      showConfirm(context, "tracking", "", "");
+                      // showConfirm(context, "tracking", "", "");
                     },
                     textColor: bgColor,
                     child: Text(

@@ -1,5 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:Fuligo/utils/loading.dart';
@@ -22,6 +23,7 @@ class Tours extends StatefulWidget {
 }
 
 class ToursState extends State<Tours> {
+  @override
   void initState() {
     getTourData();
   }
@@ -43,15 +45,8 @@ class ToursState extends State<Tours> {
     if (querySnapshot.docs.isNotEmpty) {
       for (var element in querySnapshot.docs) {
         snapdata.add(element.data());
-        print("elementID");
-        print(element.id);
         idList.add(element.id);
       }
-      // List snapdata = querySnapshot.docs
-      //     .map(
-      //       (doc) => doc.data(),
-      //     )
-      //     .toList();
 
       for (var i = 0; i < snapdata.length; i++) {
         var item = snapdata[i];
@@ -65,12 +60,13 @@ class ToursState extends State<Tours> {
 
         String name = item["name"][lang];
         String description = item["description"][lang];
-        List pointsList = item["pointOfInterests"];
+        List pointOfInterests = item["pointOfInterests"];
+
         Map temp = {
           "id": idList[i],
           "name": name,
           "description": description,
-          "pointslist": pointsList,
+          "pointOfInterests": pointOfInterests,
           "active": item["active"],
           "duration": item["duration"]
         };
@@ -85,6 +81,8 @@ class ToursState extends State<Tours> {
       loading = false;
       setState(() {});
     }
+    print("tourData.toList()");
+    print(tourData.toList());
 
     return tourData;
   }

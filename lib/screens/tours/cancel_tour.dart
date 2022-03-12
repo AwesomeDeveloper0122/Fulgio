@@ -20,9 +20,9 @@ import '../../widgets/circleimage.dart';
 import '../../widgets/custom_button.dart';
 import 'package:mapbox_api/mapbox_api.dart';
 import 'package:http/http.dart' as http;
-
 import '../video/video.dart';
 
+// ignore: must_be_immutable
 class CancelTour extends StatefulWidget {
   String id;
   CancelTour({Key? key, required this.id}) : super(key: key);
@@ -134,8 +134,7 @@ class _CancelTourState extends State<CancelTour> {
         .doc(widget.id)
         .get();
     List pointList = snapshot["pointOfInterests"];
-    print("selpointList");
-    print(pointList);
+
     if (pointList.isNotEmpty) {
       for (var j = 0; j < pointList.length; j++) {
         var refId = pointList[j];
@@ -235,10 +234,6 @@ class _CancelTourState extends State<CancelTour> {
           }
         }
       }
-      print("shortDistance");
-      print(shortDistance);
-      print("nearestPosition");
-      print(nearestPosition);
 
       if (n == querySnapshot.docs.length) {
         setState(() {
@@ -330,40 +325,49 @@ class _CancelTourState extends State<CancelTour> {
     return Scaffold(
       body: !loading
           ? Stack(alignment: Alignment.center, children: <Widget>[
-              FlutterMap(
-                options: MapOptions(
-                  center: currentUserPoistion, // current user postion
-                  minZoom: 13.0,
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [gradientFrom, bgColor]),
+                    color: bgColor.withOpacity(0.5)),
+                child: FlutterMap(
+                  options: MapOptions(
+                    center: currentUserPoistion, // current user postion
+                    minZoom: 13.0,
 
-                  bounds: LatLngBounds(
-                    LatLng(currentUserPoistion.latitude - 1,
-                        currentUserPoistion.longitude - 1), // [west,south]
-                    LatLng(currentUserPoistion.latitude + 1,
-                        currentUserPoistion.longitude + 1),
-                  ), // [east,north]
-                  boundsOptions:
-                      const FitBoundsOptions(padding: EdgeInsets.all(8.0)),
-                ),
-                layers: [
-                  TileLayerOptions(
-                    urlTemplate: LocalText.styleWithBackground,
-                    // urlTemplate:
-                    //     'https://api.mapbox.com/styles/v1/sakura0122/cl0asbsbv000314menn31lgqa/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q',
-                    additionalOptions: {
-                      'accessToken': LocalText.accessToken,
-                    },
+                    bounds: LatLngBounds(
+                      LatLng(currentUserPoistion.latitude - 0.5,
+                          currentUserPoistion.longitude - 0.5), // [west,south]
+                      LatLng(currentUserPoistion.latitude + 0.5,
+                          currentUserPoistion.longitude + 0.5),
+                    ), // [east,north]
+                    boundsOptions:
+                        const FitBoundsOptions(padding: EdgeInsets.all(8.0)),
                   ),
-                  MarkerLayerOptions(
-                      markers: markers, rotateAlignment: Alignment.center),
-                  PolylineLayerOptions(polylineCulling: false, polylines: [
-                    Polyline(
-                        isDotted: true,
-                        points: points,
-                        strokeWidth: 8.0,
-                        color: Colors.white)
-                  ])
-                ],
-                mapController: mapController,
+                  layers: [
+                    TileLayerOptions(
+                      urlTemplate: LocalText.styleWithBackground,
+                      // urlTemplate:
+                      //     'https://api.mapbox.com/styles/v1/sakura0122/cl0asbsbv000314menn31lgqa/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q',
+                      additionalOptions: {
+                        'accessToken': LocalText.accessToken,
+                      },
+                    ),
+                    PolylineLayerOptions(polylineCulling: true, polylines: [
+                      Polyline(
+                          isDotted: true,
+                          points: points,
+                          strokeWidth: 8.0,
+                          color: Colors.white)
+                    ]),
+                    MarkerLayerOptions(
+                        markers: markers, rotateAlignment: Alignment.center),
+                  ],
+                  mapController: mapController,
+                ),
               ),
               MenuButton(context),
               Positioned(

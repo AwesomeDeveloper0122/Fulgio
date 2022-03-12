@@ -1,13 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:Fuligo/routes/route_costant.dart';
-import 'package:Fuligo/screens/chat/chat_detail.dart';
-import 'package:Fuligo/screens/chat/chat_detail_test.dart';
+import 'package:Fuligo/screens/chat/chat_room.dart';
 import 'package:Fuligo/screens/documents/documentdetail.dart';
-import 'package:Fuligo/screens/map/map.dart';
-import 'package:Fuligo/screens/tours/cancel_tour.dart';
-import 'package:Fuligo/screens/video/info.dart';
-import 'package:Fuligo/screens/achievement/ranking.dart';
 import 'package:Fuligo/screens/tours/tour_list.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/utils/font_style.dart';
@@ -86,11 +80,10 @@ Widget ChatCard(
         context, Uint8List image, String title, String content, String docId) =>
     GestureDetector(
       onTap: () {
-        // Navigator.pushNamed(context, RouteName.tourlist);
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatDetailTest(docId: docId),
+            builder: (context) => ChatRoom(docId: docId),
           ),
         );
       },
@@ -105,11 +98,11 @@ Widget ChatCard(
               color: Colors.black.withOpacity(0.2),
               spreadRadius: 1,
               blurRadius: 12,
-              // blurStyle: BlurStyle.normal,
-              offset: Offset(1, 0), // changes position of shadow
+
+              offset: const Offset(1, 0), // changes position of shadow
             ),
           ],
-          image: new DecorationImage(
+          image: DecorationImage(
             fit: BoxFit.fill,
             image: MemoryImage(image, scale: 0.5),
           ),

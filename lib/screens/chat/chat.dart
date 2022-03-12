@@ -65,10 +65,10 @@ class ChatState extends State<Chat> {
     orderSnapshot.docs
         .map(
           (doc) => {
-            print("11111111222222"),
+            print("UserInfo id"),
             print(_userInfo.uid),
             if (doc.get('userId') ==
-                "UVJ7ZRb12UVeL3YJvzAPXnA0Cem1") // UVJ7ZRb12UVeL3YJvzAPXnA0Cem1 is userInfo.uid //vVBdd7pUdjZY537PX6pT8FNCrA52
+                "uMoRorj7sbfwP7VOrQWft1EwWIS2") // UVJ7ZRb12UVeL3YJvzAPXnA0Cem1 is userInfo.uid //vVBdd7pUdjZY537PX6pT8FNCrA52
               {
                 docList.add(doc.get('documents')),
                 tempList.add(doc.get('city')), // refernce id
@@ -161,11 +161,17 @@ class ChatState extends State<Chat> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Logo,
-                  PageHeader(
-                    context,
-                    "Chat",
-                    "For which order do you need support?",
-                  ),
+                  chatItems.isNotEmpty
+                      ? PageHeader(
+                          context,
+                          "Chat",
+                          "For which order do you need support?",
+                        )
+                      : PageHeader(
+                          context,
+                          "Chat",
+                          "Support is only available for users \n whom have made an order ",
+                        ),
                   !loading
                       ? chatItems.isNotEmpty
                           ? Container(
@@ -184,20 +190,7 @@ class ChatState extends State<Chat> {
                           // Column(
                           //     children: chatItems,
                           //   )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: mq.height * 0.2,
-                                ),
-                                Text(
-                                  "No order data",
-                                  style: TextStyle(
-                                      fontSize: 30, color: Colors.white30),
-                                ),
-                              ],
-                            )
+                          : Text("")
                       : Container(
                           margin: EdgeInsets.only(top: mq.height * 0.3),
                           child: kRingWidget(context),

@@ -21,8 +21,11 @@ import 'package:Fuligo/utils/localtext.dart';
 //import firebase
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dialogs/flutter_dialogs.dart';
 
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+
+import '../VerifyTracking.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -109,28 +112,50 @@ class LoginState extends State<Login> {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: pwd);
-        print("--------------signInWithEmailAndPassword-----------------");
-        print(userCredential.user!);
+
         await getUser(userCredential.user!);
-        _result = 1;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           UserCredential userCredential = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: pwd);
-          print("================  create new user============== ");
+
           await addNewUser(userCredential.user!);
-          print(userCredential.user!);
-          _result = 2;
-        } else if (e.code == 'wrong-password') {
-          _result = 1;
-        } else {
-          _result = 4;
         }
       }
       SmartDialog.dismiss();
-
-      await toDoResult(_result);
+      await enableTracking();
     }
+  }
+
+  Future<void> enableTracking() async {
+    showPlatformDialog(
+      context: context,
+      builder: (_) => BasicDialogAlert(
+        title: Text("Enable tracking?"),
+        content: Text("Are you really?"),
+        actions: <Widget>[
+          BasicDialogAction(
+            title: Text("Cancel"),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Verify()),
+              );
+            },
+          ),
+          BasicDialogAction(
+            title: Text("Confirm"),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => VerifyTracking(permission: "true")),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> toDoResult(int result) async {

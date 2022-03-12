@@ -35,7 +35,7 @@ class TourListState extends State<TourList> {
     super.initState();
     Map detailData = widget.detailData;
 
-    getData(detailData["pointslist"]);
+    getData(detailData["pointOfInterests"]);
   }
 
   Future<void> getData(List _detail) async {
@@ -93,7 +93,8 @@ class TourListState extends State<TourList> {
   @override
   Widget build(BuildContext context) {
     Map _detailData = widget.detailData;
-
+    print("_tourdetail");
+    print(_tourdetail);
     List<Widget> _pointwidgets = [];
 
     if (_tourdetail.isNotEmpty) {

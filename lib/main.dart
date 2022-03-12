@@ -87,7 +87,7 @@ class MyAppState extends State<MyApp> {
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: (isLoad == "true") ? const Home() : const SplashPage(),
+          home: (isLoad == "true") ? Home() : const SplashPage(),
           builder: FlutterSmartDialog.init(),
           onGenerateRoute: router.generateRoute),
     );

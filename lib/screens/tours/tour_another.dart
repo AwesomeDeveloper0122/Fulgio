@@ -1,11 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:Fuligo/screens/video/audio.dart';
+import 'package:Fuligo/screens/achievement/success.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/utils/localtext.dart';
-import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -15,17 +14,13 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
-import '../../utils/common_colors.dart';
 import '../../widgets/circleimage.dart';
-import '../../widgets/custom_button.dart';
 import 'package:mapbox_api/mapbox_api.dart';
 import 'package:http/http.dart' as http;
 
 import '../../widgets/custom_image.dart';
 import '../../widgets/subtxt.dart';
-import '../video/video.dart';
 
 class TourAnother extends StatefulWidget {
   TourAnother({Key? key}) : super(key: key);
@@ -36,8 +31,9 @@ class TourAnother extends StatefulWidget {
 
 class _TourAnotherState extends State<TourAnother> {
   MapController mapController = MapController();
+
   LatLng currentUserPoistion =
-      LatLng(38.9036614038578, -76.99211156195398); // call getcurrentposition
+      LatLng(38.37923, -77.0728); // call getcurrentposition
 
   final mapbox = MapboxApi(
     accessToken: LocalText.accessToken,
@@ -60,8 +56,9 @@ class _TourAnotherState extends State<TourAnother> {
   double lat1 = 0.00;
   double lat2 = 0.00;
   int remaining = 0;
-  int stopCounts = 0;
+  int stopcount = 0;
   int passCounts = 0;
+  late Timer _timer;
 
   final CollectionReference _tourCollection =
       FirebaseFirestore.instance.collection('cityGuide');
@@ -76,21 +73,76 @@ class _TourAnotherState extends State<TourAnother> {
     getPointInterest();
   }
 
-  Future<void> drawPoint(lon1, lat1, lon2, lat2) async {
-    print(lon1);
-    print(lat1);
-    print(lon2);
-    print(lat2);
+  Future<void> calculateDistance(List points) async {
+    LatLng userPosition = currentUserPoistion;
 
-    // points.add(currentUserPoistion);
-    // String request =
-    //     "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/47.467561,-110.046834;50.467561,11.046834?steps=true&geometries=geojson&access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q";
-    // String request =
-    //     "https://api.mapbox.com/directions/v5/mapbox/cycling/-82.662323,45.523751;-82.64394599688436,45.5334555889784?steps=true&geometries=geojson&access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q";
-    // final response = await http.get(Uri.parse(
-    //     'https://api.mapbox.com/directions/v5/mapbox/cycling/51.50743,0.12782;27.59072,76.61892?steps=true&geometries=geojson&access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q'));
+    LatLng des = LatLng(
+        points[passCounts]["latitude"], points[passCounts]["longtitude"]);
+    final Distance distance = Distance();
+    var between = distance.as(LengthUnit.Meter, userPosition, des);
+
+    if (between > -500 && between < 500) {
+      passCounts++;
+      setState(() {
+        passCounts = passCounts;
+      });
+    }
+  }
+
+  Future<void> getUserPosition() async {
+    Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+
+    setState(() {
+      currentUserPoistion =
+          LatLng(_locationData.latitude!, _locationData.longitude!);
+    });
+  }
+
+  Future<void> drawPoint(List pointList) async {
+    String waypoints = "";
+
+    for (var i = 0; i < pointList.length; i++) {
+      var item = pointList[i];
+      if (i == pointList.length - 1) {
+        waypoints = waypoints +
+            item["longtitude"].toString() +
+            "," +
+            item["latitude"].toString();
+      } else {
+        waypoints = waypoints +
+            item["longtitude"].toString() +
+            "," +
+            item["latitude"].toString() +
+            ";";
+      }
+    }
+    print("waypointsString");
+    print(waypoints);
+
     String request =
-        "https://api.mapbox.com/directions/v5/mapbox/walking/${lon1},${lat1};${lon2},${lat2}?steps=true&geometries=geojson&access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q";
+        "https://api.mapbox.com/directions/v5/mapbox/walking/${waypoints}?steps=true&geometries=geojson&access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q";
     final response = await http.get(Uri.parse(request));
 
     if (response.statusCode == 200) {
@@ -105,10 +157,10 @@ class _TourAnotherState extends State<TourAnother> {
       });
 
       var coordinates = data["routes"][0]["geometry"]["coordinates"];
-      print("coordinates");
-      print(coordinates);
+      // print("coordinates");
+      // print(coordinates);
 
-      for (var i = 0; i < coordinates.length; i++) {
+      for (var i = 1; i < coordinates.length - 1; i++) {
         points.add(
           LatLng(
             coordinates[i][1],
@@ -151,13 +203,12 @@ class _TourAnotherState extends State<TourAnother> {
         .doc(parentID)
         .get();
     List pointOfInterests = snapshot["pointOfInterests"];
-    print("pointOfInterests");
-    print(pointOfInterests);
 
     if (pointOfInterests.isNotEmpty) {
-      stopCounts = pointOfInterests.length;
+      stopcount = pointOfInterests.length;
       for (var j = 0; j < pointOfInterests.length; j++) {
         var refId = pointOfInterests[j];
+
         refId.get().then((DocumentSnapshot documentSnapshot) async {
           if (documentSnapshot.exists) {
             List videoUrl = [];
@@ -166,10 +217,9 @@ class _TourAnotherState extends State<TourAnother> {
             } catch (e) {
               videoUrl = [];
             }
+            var sellocation = documentSnapshot.get('location');
 
             if (videoUrl.isNotEmpty) {
-              var sellocation = documentSnapshot.get('location');
-
               partPoints.add(sellocation); // location of PointofInterests
 
               var image_ist = documentSnapshot.get("image");
@@ -205,7 +255,7 @@ class _TourAnotherState extends State<TourAnother> {
                 ),
               );
             } else {
-              var sellocation = documentSnapshot.get('location');
+              // var sellocation = documentSnapshot.get('location');
 
               partPoints.add(sellocation); // location of PointofInterests
 
@@ -243,26 +293,11 @@ class _TourAnotherState extends State<TourAnother> {
               );
             }
 
-            print("11111partPoints");
-            print(partPoints);
-            if (partPoints.length == pointOfInterests.length) {
-              if (partPoints.length == 1) {
-                drawPoint(
-                    currentUserPoistion.longitude,
-                    currentUserPoistion.latitude,
-                    partPoints[0]["longtitude"],
-                    partPoints[0]["latitude"]);
-              } else {
-                int lastindex = partPoints.length - 1;
-                print("partPoints[lastindex]");
-                print(partPoints[lastindex]);
-                drawPoint(
-                    partPoints[0]["longtitude"],
-                    partPoints[0]["latitude"],
-                    partPoints[lastindex]["longtitude"],
-                    partPoints[lastindex]["latitude"]);
-              }
-            }
+            await drawPoint(partPoints);
+            calculateDistance(partPoints);
+            _timer = Timer.periodic(new Duration(seconds: 5), (timer) {
+              calculateDistance(partPoints);
+            });
 
             n++;
             if (n == pointOfInterests.length) {
@@ -271,7 +306,7 @@ class _TourAnotherState extends State<TourAnother> {
                 loading = false;
                 imageList = imageList;
                 partPoints = partPoints;
-                stopCounts = stopCounts;
+                stopcount = stopcount;
               });
             }
           }
@@ -293,6 +328,9 @@ class _TourAnotherState extends State<TourAnother> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _pointwidgets = [];
+    // print("passCounts ${passCounts}");
+    // print("points");
+    // print(points);
 
     if (_tourdetail.isNotEmpty) {
       for (var i = 0; i < _tourdetail.length; i++) {
@@ -300,6 +338,14 @@ class _TourAnotherState extends State<TourAnother> {
 
         _pointwidgets.add(
           TourSmallImage(context, imageList[i], "Stop ${i + 1}", item["name"]),
+        );
+      }
+      if (passCounts == _tourdetail.length) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Success(),
+          ),
         );
       }
     }
@@ -333,19 +379,33 @@ class _TourAnotherState extends State<TourAnother> {
                       'accessToken': LocalText.accessToken,
                     },
                   ),
-                  MarkerLayerOptions(
-                      markers: markers, rotateAlignment: Alignment.center),
-                  PolylineLayerOptions(polylineCulling: false, polylines: [
+                  PolylineLayerOptions(polylineCulling: true, polylines: [
                     Polyline(
                         isDotted: true,
                         points: points,
-                        strokeWidth: 8.0,
+                        strokeWidth: 4.0,
                         color: Colors.white)
-                  ])
+                  ]),
+                  MarkerLayerOptions(
+                      markers: markers, rotateAlignment: Alignment.center),
                 ],
                 mapController: mapController,
               ),
-              SecondaryButton(context),
+              // Cross button
+              Positioned(
+                top: 50,
+                left: 20,
+                child: GestureDetector(
+                  onTap: () => {
+                    _timer.cancel(),
+                    Navigator.pop(context),
+                  },
+                  child: Image.asset(
+                    'assets/images/png/icon-cross.png',
+                    scale: 0.8,
+                  ),
+                ),
+              ),
               Positioned(
                 bottom: 30,
                 left: 20,
@@ -381,7 +441,7 @@ class _TourAnotherState extends State<TourAnother> {
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 5),
                               child: SubTxt(context, 'Stops',
-                                  '${passCounts} / ${stopCounts}'),
+                                  '${passCounts} / ${stopcount}'),
                             ),
                           ],
                         ),

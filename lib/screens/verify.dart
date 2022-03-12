@@ -1,13 +1,19 @@
 // ignore_for_file: unused_element
 
+import 'dart:math';
+
 import 'package:Fuligo/routes/route_costant.dart';
+import 'package:Fuligo/screens/achievement/success.dart';
+import 'package:Fuligo/screens/configuration/location.dart';
 import 'package:Fuligo/screens/tours/start_tour.dart';
 import 'package:Fuligo/utils/localtext.dart';
 import 'package:Fuligo/widgets/logo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/widgets/text_header.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import 'package:latlong2/latlong.dart';
 
@@ -24,6 +30,8 @@ class Verify extends StatefulWidget {
 class VerifyState extends State<Verify> {
   LatLng currentUserPoistion = LatLng(38.9036614038578, -76.99211156195398);
   List<Marker> markers = [];
+  bool permission = false;
+  bool emailVerified = false;
   @override
   void initState() {
     super.initState();
@@ -31,6 +39,17 @@ class VerifyState extends State<Verify> {
   }
 
   Future<void> getUserPosition() async {
+    print("123123123");
+    User? fire_user = FirebaseAuth.instance.currentUser;
+    print("fire_user");
+    print(fire_user);
+
+    if (fire_user != null && !fire_user.emailVerified) {
+      await fire_user.sendEmailVerification();
+    }
+
+    emailVerified = fire_user!.emailVerified;
+
     Location location = Location();
 
     bool _serviceEnabled;
@@ -47,10 +66,14 @@ class VerifyState extends State<Verify> {
 
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
+      print("denied");
+
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
         return;
       }
+    } else {
+      permission = true;
     }
 
     _locationData = await location.getLocation();
@@ -88,85 +111,13 @@ class VerifyState extends State<Verify> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => StartTour(
-                                currentUserPosition: currentUserPoistion)),
+                            builder: (context) => LocationScreen()),
                       );
                     },
                     child: Container(
                       height: mapHeight.height,
                       width: mq.width * 0.6,
-                      margin: const EdgeInsets.only(top: 15),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(25.0),
-                        ),
-                      ),
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Allow to use your \n location? ",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: const Text(
-                                        "Turning on location services allows us \n to show you whe pals are nearby..",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Flexible(
-                                child: FlutterMap(
-                                  options: MapOptions(
-                                    center: currentUserPoistion,
-                                    zoom: 16.0,
-                                  ),
-                                  layers: [
-                                    TileLayerOptions(
-                                      urlTemplate:
-                                          'https://api.mapbox.com/styles/v1/sakura0122/cl0asbsbv000314menn31lgqa/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q',
-                                      additionalOptions: {
-                                        'accessToken': LocalText.accessToken,
-                                      },
-                                    ),
-                                    MarkerLayerOptions(
-                                      markers: [
-                                        Marker(
-                                          point: currentUserPoistion,
-                                          builder: (ctx) => IconButton(
-                                            icon: Icon(Icons.person_pin_circle),
-                                            iconSize: 40,
-                                            color: Color.fromARGB(
-                                                255, 243, 33, 33),
-                                            onPressed: null,
-                                            // color: Colors.red,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                      child: Text(""),
                     ),
                   )
                 ],
