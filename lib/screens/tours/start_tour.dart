@@ -9,12 +9,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 
 import 'package:latlong2/latlong.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import '../../utils/common_colors.dart';
 import '../../widgets/circleimage.dart';
 import '../../widgets/custom_button.dart';
 import '../tours/tours.dart';
 import 'package:mapbox_api/mapbox_api.dart';
+
+import '../video/audio.dart';
+import '../video/video.dart';
 
 // ignore: must_be_immutable
 class StartTour extends StatefulWidget {
@@ -76,50 +80,78 @@ class _StartTourState extends State<StartTour> {
           videoUrl = [];
         }
 
-        if (videoUrl.isNotEmpty) {
-          imageUrlList = ele.get("image");
-          location = ele.get('location');
+        imageUrlList = ele.get("app_image");
 
+        location = ele.get('location');
+        String id = ele.id;
+
+        if (videoUrl.isNotEmpty) {
           if (imageUrlList.isNotEmpty) {
-            String videoId = ele.id;
-            String videoimgurl =
-                await getUrlFromFirebase(imageUrlList[0].toString());
-            Uint8List uint8image =
-                (await NetworkAssetBundle(Uri.parse(videoimgurl)).load(""))
-                    .buffer
-                    .asUint8List();
-            imageList.add(uint8image);
             markers.add(
               Marker(
                 width: 120.0,
                 height: 144.0,
-                point: LatLng(location["latitude"], location["longtitude"]),
-                builder: (ctx) =>
-                    CircleVideoMapImage(context, videoId, uint8image),
+                point: LatLng(location["latitude"], location["longitude"]),
+                builder: (ctx) => Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Video(
+                            id: id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: ClipOval(
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: imageUrlList[0],
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             );
             n++;
           }
         } else {
-          imageUrlList = ele.get("image");
-          location = ele.get('location');
-
-          String audioId = ele.id;
           if (imageUrlList.isNotEmpty) {
-            String audioimgUrl = await getUrlFromFirebase(imageUrlList[0]);
-
-            Uint8List uint8image =
-                (await NetworkAssetBundle(Uri.parse(audioimgUrl)).load(""))
-                    .buffer
-                    .asUint8List();
-            imageList.add(uint8image);
             markers.add(
               Marker(
-                width: 120.0,
-                height: 144.0,
-                point: LatLng(location["latitude"], location["longtitude"]),
-                builder: (ctx) =>
-                    CircleAudioMapImage(context, audioId, uint8image),
+                width: 120,
+                height: 120,
+                point: LatLng(location["latitude"], location["longitude"]),
+                builder: (ctx) => Container(
+                  // margin:
+                  //     const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("audio");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Audio(id: id),
+                        ),
+                      );
+                    },
+                    child: ClipOval(
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: imageUrlList[0],
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             );
             n++;

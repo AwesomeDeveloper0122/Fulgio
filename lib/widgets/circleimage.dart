@@ -12,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 // ignore: non_constant_identifier_names
 Widget CircleImage(
@@ -70,8 +71,8 @@ Widget CircleImage(
       ),
     );
 // ignore: non_constant_identifier_names
-Widget AvatarMenu(context, Uint8List image, String url, String id,
-        double height, double width) =>
+Widget AvatarMenu(
+        context, String url, String id, double height, double width) =>
     Container(
       height: height,
       width: width,
@@ -81,16 +82,20 @@ Widget AvatarMenu(context, Uint8List image, String url, String id,
           showConfirm(context, "avatar", url, id);
         },
         child: ClipOval(
-          child: Container(
-            width: width,
-            height: height,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: MemoryImage(image, scale: 0.5),
-              ),
-            ),
+          // child: Container(
+          //   width: width,
+          //   height: height,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(20),
+          //     image: DecorationImage(
+          //       fit: BoxFit.cover,
+          //       image: NetworkImage(url),
+          //     ),
+          //   ),
+          // ),
+          child: FadeInImage.memoryNetwork(
+            placeholder: kTransparentImage,
+            image: url,
           ),
           // child: Image.network(
           //   url,

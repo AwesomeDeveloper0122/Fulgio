@@ -1,10 +1,5 @@
 // import 'package:allger/Models/user_model.dart';
-import 'package:Fuligo/model/user_model.dart';
-import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
@@ -19,7 +14,7 @@ class UserRepository {
     for (var item in avatarSnapshot.docs) {
       if (item["isDefault"] == true) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('defaultAvatar', item["img"]!);
+        await prefs.setString('defaultAvatar', item["app_img"]!);
         ref = FirebaseFirestore.instance.collection('avatar').doc(item.id);
         user
             .doc(id)
@@ -47,7 +42,7 @@ class UserRepository {
     for (var item in avatarSnapshot.docs) {
       if (item["isDefault"] == true) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('defaultAvatar', item["img"]!);
+        await prefs.setString('defaultAvatar', item["app_img"]!);
 
         break;
       }

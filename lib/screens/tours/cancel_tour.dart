@@ -143,7 +143,7 @@ class _CancelTourState extends State<CancelTour> {
             var sellocation = documentSnapshot.get('location');
             selectedLocation.add(sellocation);
             await calculateDistance(
-                sellocation["latitude"]!, sellocation["longtitude"]!, j);
+                sellocation["latitude"]!, sellocation["longitude"]!, j);
           }
         });
       }
@@ -191,7 +191,7 @@ class _CancelTourState extends State<CancelTour> {
               Marker(
                 width: 120.0,
                 height: 144.0,
-                point: LatLng(location["latitude"], location["longtitude"]),
+                point: LatLng(location["latitude"], location["longitude"]),
                 builder: (ctx) =>
                     CircleVideoMapImage(context, videoId, uint8image),
               ),
@@ -225,7 +225,7 @@ class _CancelTourState extends State<CancelTour> {
               Marker(
                 width: 120.0,
                 height: 144.0,
-                point: LatLng(location["latitude"]!, location["longtitude"]!),
+                point: LatLng(location["latitude"]!, location["longitude"]!),
                 builder: (ctx) =>
                     CircleAudioMapImage(context, audioId, uint8image),
               ),

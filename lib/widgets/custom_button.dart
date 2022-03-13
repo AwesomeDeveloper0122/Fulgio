@@ -1,7 +1,6 @@
 import 'package:Fuligo/screens/menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 // ignore: non_constant_identifier_names

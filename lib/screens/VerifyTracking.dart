@@ -54,7 +54,10 @@ class VerifyTrackingState extends State<VerifyTracking> {
 
   Future<void> checkEmailVerified() async {
     User? fireUser = FirebaseAuth.instance.currentUser;
+
     await fireUser?.reload();
+    print("fireUser!.emailVerified");
+    print(fireUser!.emailVerified);
     final signedInUser = fireUser;
     if (signedInUser != null && signedInUser.emailVerified) {
       timer.cancel();
@@ -149,85 +152,97 @@ class VerifyTrackingState extends State<VerifyTracking> {
                   Logo,
                   PageHeader(context, "Verify",
                       "Great! Please verify your e-mail start"),
-                  Container(
-                    height: mapHeight.height,
-                    width: mq.width * 0.6,
-                    margin: const EdgeInsets.only(top: 15),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(25.0),
+                  GestureDetector(
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StartTour(
+                              currentUserPosition: currentUserPoistion),
+                        ),
                       ),
-                    ),
-                    child: Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(25.0),
-                        child: Container(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Allow to use your \n location? ",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: const Text(
-                                        "Turning on location services allows us \n to show you whe pals are nearby..",
+                    },
+                    child: Container(
+                      height: mapHeight.height,
+                      width: mq.width * 0.6,
+                      margin: const EdgeInsets.only(top: 15),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(25.0),
+                        ),
+                      ),
+                      child: Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25.0),
+                          child: Container(
+                            padding: const EdgeInsets.only(top: 15),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Allow to use your \n location? ",
                                         style: TextStyle(
-                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
                                         ),
+                                        textAlign: TextAlign.center,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Flexible(
-                                child: FlutterMap(
-                                  options: MapOptions(
-                                    center: currentUserPoistion,
-                                    zoom: 16.0,
-                                  ),
-                                  layers: [
-                                    TileLayerOptions(
-                                      urlTemplate:
-                                          'https://api.mapbox.com/styles/v1/sakura0122/cl0asbsbv000314menn31lgqa/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q',
-                                      additionalOptions: {
-                                        'accessToken': LocalText.accessToken,
-                                      },
-                                    ),
-                                    MarkerLayerOptions(
-                                      markers: [
-                                        Marker(
-                                          point: currentUserPoistion,
-                                          builder: (ctx) => IconButton(
-                                            icon: Icon(Icons.person_pin_circle),
-                                            iconSize: 40,
-                                            color: Color.fromARGB(
-                                                255, 243, 33, 33),
-                                            onPressed: null,
-                                            // color: Colors.red,
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                        child: const Text(
+                                          "Turning on location services allows us \n to show you whe pals are nearby..",
+                                          style: TextStyle(
+                                            fontSize: 12,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              )
-                            ],
+                                Flexible(
+                                  child: FlutterMap(
+                                    options: MapOptions(
+                                      center: currentUserPoistion,
+                                      zoom: 16.0,
+                                    ),
+                                    layers: [
+                                      TileLayerOptions(
+                                        urlTemplate:
+                                            'https://api.mapbox.com/styles/v1/sakura0122/cl0asbsbv000314menn31lgqa/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q',
+                                        additionalOptions: {
+                                          'accessToken': LocalText.accessToken,
+                                        },
+                                      ),
+                                      MarkerLayerOptions(
+                                        markers: [
+                                          Marker(
+                                            point: currentUserPoistion,
+                                            builder: (ctx) => IconButton(
+                                              icon:
+                                                  Icon(Icons.person_pin_circle),
+                                              iconSize: 40,
+                                              color: Color.fromARGB(
+                                                  255, 243, 33, 33),
+                                              onPressed: null,
+                                              // color: Colors.red,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

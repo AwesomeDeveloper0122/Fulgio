@@ -41,6 +41,8 @@ class Test extends StatelessWidget {
 
   Widget build(BuildContext context) {
     UserModel _userInfo = AuthProvider.of(context).userModel;
+    print("_userInfo.avatar");
+    print(_userInfo.avatar);
 
     return Stack(
       children: [

@@ -1,17 +1,16 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:Fuligo/screens/video/info.dart';
 import 'package:Fuligo/screens/route_screen.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/utils/font_style.dart';
 import 'package:Fuligo/utils/loading.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
@@ -48,12 +47,22 @@ class AudioState extends State<Audio> {
   final _barCapShape = BarCapShape.round;
 
   List<Widget> images = [];
+  List cachedimages = [];
   Map audioData = {};
   String audio_url = '';
   bool loading = true;
 
   Color? _thumbGlowColor;
   final _thumbCanPaintOutsideBar = true;
+
+  final List<String> imgList = [
+    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
+    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
+    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
+    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+  ];
 
   @override
   void initState() {
@@ -92,6 +101,21 @@ class AudioState extends State<Audio> {
     return url;
   }
 
+  Future<List<CachedNetworkImageProvider>> _loadAllImages(List imgList) async {
+    List<CachedNetworkImageProvider> cachedImages = [];
+    for (int i = 0; i < imgList.length; i++) {
+      var configuration = createLocalImageConfiguration(context);
+      cachedImages.add(
+          new CachedNetworkImageProvider(imgList[i])..resolve(configuration));
+    }
+    setState(() {
+      cachedimages = cachedImages;
+    });
+    print("cachedImages");
+    print(cachedImages);
+    return cachedImages;
+  }
+
   Future<void> getAudioData(id) async {
     final prefs = await SharedPreferences.getInstance();
     String lang = prefs.getString('lang') ?? "";
@@ -99,41 +123,36 @@ class AudioState extends State<Audio> {
     var mediadata = await collection.doc(id).get();
 
     var data = mediadata.data();
-    List imageUrl = data!["image"];
+    List imageUrl = data!["app_image"];
     print("imageUrl");
     print(imageUrl);
     String infoimage = "";
-    infoimage = await getUrlFromFirebase(imageUrl[0]);
+    infoimage = imageUrl[0];
+    // _loadAllImages(imageUrl);
 
     for (var i = 0; i < imageUrl.length; i++) {
       var item = imageUrl[i];
-      String img = await getUrlFromFirebase(item);
-      Uint8List uint8image = (await NetworkAssetBundle(Uri.parse(img)).load(""))
-          .buffer
-          .asUint8List();
+      // String img = await getUrlFromFirebase(item);
+      // Uint8List uint8image = (await NetworkAssetBundle(Uri.parse(img)).load(""))
+      //     .buffer
+      //     .asUint8List();
 
       images.add(
         // MemoryImage(uint8image, scale: 2));
-        Image.network(
-          img,
-          fit: BoxFit.fill,
-          // loadingBuilder: (BuildContext context, Widget child,
-          //     ImageChunkEvent? loadingProgress) {
-          //   if (loadingProgress == null) return child;
-          //   return Center(
-          //     child: CircularProgressIndicator(
-          //       value: loadingProgress.expectedTotalBytes != null
-          //           ? loadingProgress.cumulativeBytesLoaded /
-          //               loadingProgress.expectedTotalBytes!
-          //           : null,
-          //     ),
-          //   );
-          // },
+        // Image.network(
+        //   item,
+        //   fit: BoxFit.fill,
+        //   gaplessPlayback: true,
+        // ),
+        Image(
+          image: CachedNetworkImageProvider(item),
+          fit: BoxFit.cover,
         ),
       );
     }
 
     List audioUrl = data["audio"];
+    // ignore: non_constant_identifier_names
     String AudioNetUrl = await getUrlFromFirebase(audioUrl[0]);
 
     audioData = {
@@ -145,6 +164,7 @@ class AudioState extends State<Audio> {
     setState(() {
       audioData = audioData;
       audio_url = AudioNetUrl;
+      images = images;
     });
     _init();
   }
@@ -158,22 +178,21 @@ class AudioState extends State<Audio> {
   @override
   Widget build(BuildContext context) {
     double rating = 0.0;
-
-    if (audioData.isNotEmpty && images.isNotEmpty) {
-      int aaa = audioData["rating"];
-      rating = aaa.toDouble();
+    print("images");
+    print(images);
+    if (audioData.isNotEmpty && cachedimages.isNotEmpty) {
+      rating = audioData["rating"].toDouble();
       loading = false;
     }
 
     var mq = MediaQuery.of(context).size;
-    print("audio image List");
-    print(images);
+
     return Scaffold(
         body: !loading
             ? Container(
                 width: mq.width,
                 height: mq.height,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   // color: bgColor.withAlpha(100),
                   image: DecorationImage(
                       image: NetworkImage(

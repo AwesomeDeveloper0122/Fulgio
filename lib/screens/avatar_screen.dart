@@ -23,7 +23,6 @@ class AvatarScreen extends StatefulWidget {
 class AvatarScreenState extends State<AvatarScreen> {
   @override
   List<Map> avatars = [];
-  List<Uint8List> imageList = [];
 
   bool loading = true;
   void initState() {
@@ -34,22 +33,21 @@ class AvatarScreenState extends State<AvatarScreen> {
   Future<void> getAvatars() async {
     QuerySnapshot orderSnapshot =
         await FirebaseFirestore.instance.collection('avatar').get();
-    Reference ref;
-    String url;
+
     Map temp;
     if (orderSnapshot.docs.isNotEmpty) {
-      Uint8List uint8image;
       for (var item in orderSnapshot.docs) {
-        ref = FirebaseStorage.instance.ref().child(item["img"]);
-        url = await ref.getDownloadURL();
-        Uint8List uint8image =
-            (await NetworkAssetBundle(Uri.parse(url)).load(""))
-                .buffer
-                .asUint8List();
-        imageList.add(uint8image);
+        // ref = FirebaseStorage.instance.ref().child(item["img"]);
+        // url = await ref.getDownloadURL();
+
+        // Uint8List uint8image =
+        //     (await NetworkAssetBundle(Uri.parse(url)).load(""))
+        //         .buffer
+        //         .asUint8List();
+        // imageList.add(uint8image);
         temp = {
           "id": item.id,
-          "img": url,
+          "img": item["app_img"],
           "isDefault": item["isDefault"],
         };
         avatars.add(temp);
@@ -68,8 +66,7 @@ class AvatarScreenState extends State<AvatarScreen> {
     for (var i = 0; i < avatars.length; i++) {
       var item = avatars[i];
 
-      avatarList.add(
-          AvatarMenu(context, imageList[i], item["img"], item["id"], 80, 80));
+      avatarList.add(AvatarMenu(context, item["img"], item["id"], 80, 80));
     }
 
     var mq = MediaQuery.of(context).size;

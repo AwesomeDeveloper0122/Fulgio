@@ -33,7 +33,7 @@ class _TourAnotherState extends State<TourAnother> {
   MapController mapController = MapController();
 
   LatLng currentUserPoistion =
-      LatLng(38.37923, -77.0728); // call getcurrentposition
+      LatLng(39.37923, -77.0728); // call getcurrentposition
 
   final mapbox = MapboxApi(
     accessToken: LocalText.accessToken,
@@ -76,8 +76,8 @@ class _TourAnotherState extends State<TourAnother> {
   Future<void> calculateDistance(List points) async {
     LatLng userPosition = currentUserPoistion;
 
-    LatLng des = LatLng(
-        points[passCounts]["latitude"], points[passCounts]["longtitude"]);
+    LatLng des =
+        LatLng(points[passCounts]["latitude"], points[passCounts]["longitude"]);
     final Distance distance = Distance();
     var between = distance.as(LengthUnit.Meter, userPosition, des);
 
@@ -121,18 +121,20 @@ class _TourAnotherState extends State<TourAnother> {
   }
 
   Future<void> drawPoint(List pointList) async {
+    print("pointList");
+    print(pointList);
     String waypoints = "";
 
     for (var i = 0; i < pointList.length; i++) {
       var item = pointList[i];
       if (i == pointList.length - 1) {
         waypoints = waypoints +
-            item["longtitude"].toString() +
+            item["longitude"].toString() +
             "," +
             item["latitude"].toString();
       } else {
         waypoints = waypoints +
-            item["longtitude"].toString() +
+            item["longitude"].toString() +
             "," +
             item["latitude"].toString() +
             ";";
@@ -249,7 +251,7 @@ class _TourAnotherState extends State<TourAnother> {
                 Marker(
                   width: 120.0,
                   height: 144.0,
-                  point: LatLng(location["latitude"], location["longtitude"]),
+                  point: LatLng(location["latitude"], location["longitude"]),
                   builder: (ctx) =>
                       CircleVideoMapImage(context, videoId, uint8image),
                 ),
@@ -286,18 +288,19 @@ class _TourAnotherState extends State<TourAnother> {
                 Marker(
                   width: 120.0,
                   height: 144.0,
-                  point: LatLng(location["latitude"], location["longtitude"]),
+                  point: LatLng(location["latitude"], location["longitude"]),
                   builder: (ctx) =>
                       CircleAudioMapImage(context, videoId, uint8image),
                 ),
               );
             }
-
-            await drawPoint(partPoints);
-            calculateDistance(partPoints);
-            _timer = Timer.periodic(new Duration(seconds: 5), (timer) {
+            if (partPoints.length > 1) {
+              await drawPoint(partPoints);
               calculateDistance(partPoints);
-            });
+              _timer = Timer.periodic(new Duration(seconds: 5), (timer) {
+                calculateDistance(partPoints);
+              });
+            }
 
             n++;
             if (n == pointOfInterests.length) {
@@ -357,15 +360,15 @@ class _TourAnotherState extends State<TourAnother> {
           ? Stack(alignment: Alignment.center, children: <Widget>[
               FlutterMap(
                 options: MapOptions(
-                  center: LatLng(partPoints[0]["longtitude"],
+                  center: LatLng(partPoints[0]["longitude"],
                       partPoints[0]["latitude"]), // current user postion
                   minZoom: 13.0,
 
                   bounds: LatLngBounds(
                     LatLng(partPoints[0]["latitude"] - 1,
-                        partPoints[0]["longtitude"] - 1), // [west,south]
+                        partPoints[0]["longitude"] - 1), // [west,south]
                     LatLng(partPoints[0]["latitude"] + 1,
-                        partPoints[0]["longtitude"] + 1),
+                        partPoints[0]["longitude"] + 1),
                   ), // [east,north]
                   boundsOptions:
                       const FitBoundsOptions(padding: EdgeInsets.all(8.0)),

@@ -12,8 +12,8 @@ import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 // import 'package:Fuligo/screens/tours.dart';
 
@@ -32,7 +32,7 @@ class RankingState extends State<Ranking> {
 
   bool loading = true;
   List<Map> _users = [];
-  List<Uint8List> imageList = [];
+  List imageList = [];
 
   Future<void> getData() async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -46,25 +46,25 @@ class RankingState extends State<Ranking> {
           int achievementNum = 0;
           String name = "Anonymous User";
           Map _userdata = user.data() as Map<String, dynamic>;
+          String avatar = "";
 
           if (_userdata.containsKey("avatar")) {
             var refId = user.get("avatar");
 
             refId.get().then((DocumentSnapshot documentSnapshot) async {
               if (documentSnapshot.exists) {
-                avatar = await getDownImageUrl(documentSnapshot.get('img'));
+                print(documentSnapshot.data());
+                // avatar = await getDownImageUrl(documentSnapshot.get('img'));
+                avatar = documentSnapshot["app_img"];
+                print("currunt sueravatar");
+                print(avatar);
               }
             });
           } else {
             String defaultavatar = prefs.getString('defaultAvatar') ?? "";
-            avatar = await getDownImageUrl(defaultavatar);
+            avatar = defaultavatar;
           }
-          Uint8List uint8image =
-              (await NetworkAssetBundle(Uri.parse(avatar)).load(""))
-                  .buffer
-                  .asUint8List();
-
-          imageList.add(uint8image);
+          imageList.add(avatar);
           if (_userdata.containsKey("achievement")) {
             achievementNum = _userdata["achievement"].length;
           }
@@ -102,11 +102,9 @@ class RankingState extends State<Ranking> {
     List<Widget> usersRanking = [];
     var mq = MediaQuery.of(context).size;
     _users.sort((a, b) => b["num"].compareTo(a["num"]));
-    print("users is");
-    print(_users);
-    print(_users.length);
+
     UserModel _userInfo = AuthProvider.of(context).userModel;
-    if (_users.isNotEmpty) {
+    if (imageList.isNotEmpty) {
       for (var i = 0; i < _users.length; i++) {
         var item = _users[i];
         usersRanking.add(
@@ -135,18 +133,22 @@ class RankingState extends State<Ranking> {
               leading: Container(
                 child: InkWell(
                   onTap: () {},
-                  child: ClipOval(
-                    child: Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: MemoryImage(imageList[i], scale: 0.5),
-                        ),
-                      ),
-                    ),
+                  // child: ClipOval(
+                  //   child: Container(
+                  //     width: 80,
+                  //     height: 80,
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(20),
+                  //       image: DecorationImage(
+                  //         fit: BoxFit.cover,
+                  //         image: NetworkImage(imageList[i]),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: imageList[i],
                   ),
                 ),
               ),

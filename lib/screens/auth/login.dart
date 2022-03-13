@@ -66,17 +66,16 @@ class LoginState extends State<Login> {
     String url = "";
 
     var refId = result["avatar"];
-    print(refId);
+
     refId.get().then((DocumentSnapshot documentSnapshot) async {
       if (documentSnapshot.exists) {
-        print('Document exists on the database');
-        Reference ref =
-            FirebaseStorage.instance.ref().child(documentSnapshot.get('img'));
-        url = await ref.getDownloadURL();
+        // print('Document exists on the database');
+        // Reference ref =
+        //     FirebaseStorage.instance.ref().child(documentSnapshot.get('img'));
+        // url = await ref.getDownloadURL();
         if (result != null) {
-          result["avatar"] = url;
-          print("UserInfo");
-          print(result);
+          result["avatar"] = documentSnapshot["app_img"];
+
           UserModel _userModel = UserModel.fromJson(result);
           AuthProvider.of(context).setUserModel(_userModel);
         }
