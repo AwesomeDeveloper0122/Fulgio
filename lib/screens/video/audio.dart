@@ -180,7 +180,7 @@ class AudioState extends State<Audio> {
     double rating = 0.0;
     print("images");
     print(images);
-    if (audioData.isNotEmpty && cachedimages.isNotEmpty) {
+    if (audioData.isNotEmpty) {
       rating = audioData["rating"].toDouble();
       loading = false;
     }

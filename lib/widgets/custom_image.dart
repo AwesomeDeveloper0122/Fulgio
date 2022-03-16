@@ -11,14 +11,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: non_constant_identifier_names
 Widget DocumentCard(
-        context, Uint8List image, String title, String content, List list) =>
+        context, String image_url, String title, String content, List list) =>
     GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
-                DocumentDetail(citydetail: list, image_url: image),
+                DocumentDetail(citydetail: list, image_url: image_url),
           ),
         );
       },
@@ -28,7 +28,7 @@ Widget DocumentCard(
         margin: const EdgeInsets.only(bottom: 40),
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: MemoryImage(image, scale: 0.5),
+            image: NetworkImage(image_url),
             fit: BoxFit.fill,
           ),
           borderRadius: BorderRadius.circular(20.0),
@@ -76,10 +76,11 @@ Widget DocumentCard(
       ),
     );
 // ignore: non_constant_identifier_names
-Widget ChatCard(
-        context, Uint8List image, String title, String content, String docId) =>
+Widget ChatCard(context, String image_url, String title, String content,
+        String docId) =>
     GestureDetector(
       onTap: () {
+        print(docId);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -104,7 +105,8 @@ Widget ChatCard(
           ],
           image: DecorationImage(
             fit: BoxFit.fill,
-            image: MemoryImage(image, scale: 0.5),
+            // image: MemoryImage(image, scale: 0.5),
+            image: NetworkImage(image_url),
           ),
         ),
         child: Container(

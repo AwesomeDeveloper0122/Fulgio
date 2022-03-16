@@ -1,17 +1,15 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'dart:typed_data';
-
+import 'package:Fuligo/model/user_model.dart';
+import 'package:Fuligo/provider/auth_provider.dart';
+import 'package:Fuligo/screens/menu_screen.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/widgets/circleimage.dart';
-import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/widgets/text_header.dart';
-import 'package:flutter/services.dart';
 
 class AvatarScreen extends StatefulWidget {
   const AvatarScreen({Key? key}) : super(key: key);
@@ -37,17 +35,9 @@ class AvatarScreenState extends State<AvatarScreen> {
     Map temp;
     if (orderSnapshot.docs.isNotEmpty) {
       for (var item in orderSnapshot.docs) {
-        // ref = FirebaseStorage.instance.ref().child(item["img"]);
-        // url = await ref.getDownloadURL();
-
-        // Uint8List uint8image =
-        //     (await NetworkAssetBundle(Uri.parse(url)).load(""))
-        //         .buffer
-        //         .asUint8List();
-        // imageList.add(uint8image);
         temp = {
           "id": item.id,
-          "img": item["app_img"],
+          "app_img": item["app_img"],
           "isDefault": item["isDefault"],
         };
         avatars.add(temp);
@@ -62,11 +52,17 @@ class AvatarScreenState extends State<AvatarScreen> {
   }
 
   Widget build(BuildContext context) {
+    UserModel _userInfo = AuthProvider.of(context).userModel;
     List<Widget> avatarList = [];
     for (var i = 0; i < avatars.length; i++) {
       var item = avatars[i];
-
-      avatarList.add(AvatarMenu(context, item["img"], item["id"], 80, 80));
+      if (_userInfo.avatar == item["app_img"]) {
+        avatarList.add(
+            AvatarMenu(context, item["app_img"], item["id"], 200, 200, true));
+      } else {
+        avatarList.add(
+            AvatarMenu(context, item["app_img"], item["id"], 200, 200, false));
+      }
     }
 
     var mq = MediaQuery.of(context).size;
@@ -80,9 +76,6 @@ class AvatarScreenState extends State<AvatarScreen> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        // appBar: AppBar(
-        //   title: Text('TEST'),
-        // ),
         body: Stack(
           children: [
             Container(
@@ -117,7 +110,24 @@ class AvatarScreenState extends State<AvatarScreen> {
                           )
                   ],
                 )),
-            SecondaryButton(context)
+            Positioned(
+              top: 50,
+              left: 20,
+              child: GestureDetector(
+                onTap: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MenuScreen(),
+                    ),
+                  ),
+                },
+                child: Image.asset(
+                  'assets/images/png/icon-cross.png',
+                  scale: 0.8,
+                ),
+              ),
+            )
           ],
         ),
       ),

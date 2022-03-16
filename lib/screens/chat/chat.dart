@@ -2,6 +2,7 @@
 import 'dart:typed_data';
 
 import 'package:Fuligo/utils/loading.dart';
+import 'package:Fuligo/utils/localtext.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:Fuligo/model/order_model.dart';
@@ -30,7 +31,7 @@ class ChatState extends State<Chat> {
   List docList = [];
   List orderIds = [];
   bool loading = true;
-  List<Uint8List> imageList = [];
+  // List<Uint8List> imageList = [];
 
   void initState() {
     getOrderData();
@@ -40,27 +41,10 @@ class ChatState extends State<Chat> {
   Future<List<OrderModel>> getOrderData() async {
     // Get docs from collection reference
     List tempList = [];
-
-    //Get language
-    final prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('lang') ?? "";
-
-    // CollectionReference _interestRef =
-    //     FirebaseFirestore.instance.collection('order');
     UserModel _userInfo = AuthProvider.of(context).userModel;
+
     QuerySnapshot orderSnapshot =
         await FirebaseFirestore.instance.collection('order').get();
-    // Get data from DocumentRefernce
-    // DocumentReference docRef =
-    //     FirebaseFirestore.instance.doc("city/xrIDkBvtxYjXUYLgDtnG");
-    // docRef.get().then((DocumentSnapshot documentSnapshot) {
-    //   if (documentSnapshot.exists) {
-    //     // print('Document exists on the database');
-    //     // print(documentSnapshot.data());
-    //   }
-    // });
-
-    // Get data from docs and convert map to List
 
     orderSnapshot.docs
         .map(
@@ -68,7 +52,7 @@ class ChatState extends State<Chat> {
             print("UserInfo id"),
             print(_userInfo.uid),
             if (doc.get('userId') ==
-                "uMoRorj7sbfwP7VOrQWft1EwWIS2") // UVJ7ZRb12UVeL3YJvzAPXnA0Cem1 is userInfo.uid //vVBdd7pUdjZY537PX6pT8FNCrA52
+                "KqYlUZcpn5ffjYhowjDRMMT0TTf1") // UVJ7ZRb12UVeL3YJvzAPXnA0Cem1 is userInfo.uid //vVBdd7pUdjZY537PX6pT8FNCrA52
               {
                 docList.add(doc.get('documents')),
                 tempList.add(doc.get('city')), // refernce id
@@ -88,15 +72,15 @@ class ChatState extends State<Chat> {
                 .ref()
                 .child(documentSnapshot.get('image')[0]);
             String url = await ref.getDownloadURL();
-            Uint8List uint8image =
-                (await NetworkAssetBundle(Uri.parse(url)).load(""))
-                    .buffer
-                    .asUint8List();
+            // Uint8List uint8image =
+            //     (await NetworkAssetBundle(Uri.parse(url)).load(""))
+            //         .buffer
+            //         .asUint8List();
 
-            imageList.add(uint8image);
+            // imageList.add(uint8image);
 
-            String name = documentSnapshot.get('name')[lang];
-            // String image = documentSnapshot.get('image')[0];
+            String name = documentSnapshot.get('name')[_userInfo.app_lang];
+
             DateTime datetime = documentSnapshot.get('updatedAt').toDate();
 
             Map temp = {
@@ -134,7 +118,7 @@ class ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     print("Start ChatItem");
-
+    UserModel _userInfo = AuthProvider.of(context).userModel;
     List<Widget> chatItems = [];
     for (var i = 0; i < orders.length; i++) {
       var element = orders[i];
@@ -142,7 +126,7 @@ class ChatState extends State<Chat> {
       String date = DateFormat('MM-dd-yyyy').format(element.datetime);
 
       chatItems.add(
-        ChatCard(context, imageList[i], element.name, date, element.orderId),
+        ChatCard(context, element.image, element.name, date, element.orderId),
       );
     }
 
@@ -164,13 +148,15 @@ class ChatState extends State<Chat> {
                   chatItems.isNotEmpty
                       ? PageHeader(
                           context,
-                          "Chat",
-                          "For which order do you need support?",
+                          LocalText.chat_menu[_userInfo.app_lang].toString(),
+                          LocalText.chat_description[_userInfo.app_lang]
+                              .toString(),
                         )
                       : PageHeader(
                           context,
-                          "Chat",
-                          "Support is only available for users \n whom have made an order ",
+                          LocalText.chat_menu[_userInfo.app_lang].toString(),
+                          LocalText.no_chat_description[_userInfo.app_lang]
+                              .toString(),
                         ),
                   !loading
                       ? chatItems.isNotEmpty

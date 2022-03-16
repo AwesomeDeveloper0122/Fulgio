@@ -11,6 +11,7 @@ class UserModel {
 
   String avatar;
   String email;
+  String app_lang;
   // List<Reference>? archievement;
 
   UserModel({
@@ -18,6 +19,7 @@ class UserModel {
     required this.username,
     this.avatar = "",
     this.email = "",
+    this.app_lang = "en_GB",
     // this.archievement,
   });
 
@@ -27,7 +29,8 @@ class UserModel {
             ? json['name']
             : {"first": "Anonymous", "last": "User"},
         avatar = (json['avatar'] != null) ? json['avatar'] : "",
-        email = (json['email'] != null) ? json['email'] : "";
+        email = (json['email'] != null) ? json['email'] : "",
+        app_lang = (json['app_lang'] != null) ? json['app_lang'] : "en_GB";
 
   // Map<String, dynamic> toJson() {
   //   return {

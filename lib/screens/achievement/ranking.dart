@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/utils/loading.dart';
+import 'package:Fuligo/utils/localtext.dart';
 import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -36,8 +37,6 @@ class RankingState extends State<Ranking> {
 
   Future<void> getData() async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
-    final prefs = await SharedPreferences.getInstance();
-    String avatar = "";
 
     users.get().then((QuerySnapshot querySnapshot) async {
       if (querySnapshot.docs.isNotEmpty) {
@@ -49,22 +48,19 @@ class RankingState extends State<Ranking> {
           String avatar = "";
 
           if (_userdata.containsKey("avatar")) {
+            print("is avatar");
             var refId = user.get("avatar");
 
-            refId.get().then((DocumentSnapshot documentSnapshot) async {
+            await refId.get().then((DocumentSnapshot documentSnapshot) async {
               if (documentSnapshot.exists) {
-                print(documentSnapshot.data());
-                // avatar = await getDownImageUrl(documentSnapshot.get('img'));
                 avatar = documentSnapshot["app_img"];
-                print("currunt sueravatar");
-                print(avatar);
               }
             });
           } else {
             String defaultavatar = prefs.getString('defaultAvatar') ?? "";
             avatar = defaultavatar;
           }
-          imageList.add(avatar);
+
           if (_userdata.containsKey("achievement")) {
             achievementNum = _userdata["achievement"].length;
           }
@@ -74,8 +70,7 @@ class RankingState extends State<Ranking> {
                 " " +
                 _userdata["name"]["last"].toString();
           }
-          print("userAvatars");
-          print(avatar);
+
           _users.add({
             "avatar": avatar,
             "name": name,
@@ -85,6 +80,7 @@ class RankingState extends State<Ranking> {
         }
 
         loading = false;
+
         setState(() {});
       } else {}
     });
@@ -101,10 +97,11 @@ class RankingState extends State<Ranking> {
   Widget build(BuildContext context) {
     List<Widget> usersRanking = [];
     var mq = MediaQuery.of(context).size;
+
     _users.sort((a, b) => b["num"].compareTo(a["num"]));
 
     UserModel _userInfo = AuthProvider.of(context).userModel;
-    if (imageList.isNotEmpty) {
+    if (_users.isNotEmpty) {
       for (var i = 0; i < _users.length; i++) {
         var item = _users[i];
         usersRanking.add(
@@ -148,7 +145,7 @@ class RankingState extends State<Ranking> {
                   // ),
                   child: FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
-                    image: imageList[i],
+                    image: item["avatar"],
                   ),
                 ),
               ),
@@ -163,7 +160,8 @@ class RankingState extends State<Ranking> {
               // trailing: CircleImage(context, item["avatar"], 80, 80, "ranking"),
               trailing: Text('${i + 1}'),
               subtitle: Text(
-                item["num"].toString() + '  achievements',
+                item["num"].toString() +
+                    '  ${LocalText.achievements_menu[_userInfo.app_lang]}',
                 style: TextStyle(color: Colors.white38, fontSize: 14),
               ),
               onTap: () => {
@@ -213,8 +211,9 @@ class RankingState extends State<Ranking> {
                   ),
                   PageHeader(
                     context,
-                    "Ranking",
-                    "So where do you stand? Let's see...",
+                    LocalText.ranking_title[_userInfo.app_lang].toString(),
+                    LocalText.ranking_description[_userInfo.app_lang]
+                        .toString(),
                   ),
                   !loading
                       ? Container(

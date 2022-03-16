@@ -15,7 +15,7 @@ import 'package:Fuligo/utils/common_colors.dart';
 class DocumentDetail extends StatefulWidget {
   List citydetail;
   // ignore: non_constant_identifier_names
-  Uint8List image_url;
+  String image_url;
   // ignore: non_constant_identifier_names
   DocumentDetail({Key? key, required this.citydetail, required this.image_url})
       : super(key: key);
@@ -80,8 +80,7 @@ class DocumentDetailState extends State<DocumentDetail> {
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: MemoryImage(widget.image_url, scale: 0.5),
-                    fit: BoxFit.fill),
+                    image: NetworkImage(widget.image_url), fit: BoxFit.fill),
               ),
               width: mq.width,
               height: mq.height,

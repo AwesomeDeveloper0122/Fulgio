@@ -18,12 +18,6 @@ import 'package:transparent_image/transparent_image.dart';
 Widget CircleImage(
         context, String url, double height, double width, String str) =>
     Container(
-      // decoration: BoxDecoration(
-      //   border: Border.all(color: whiteColor, width: 1),
-      //   borderRadius: BorderRadius.all(
-      //     Radius.circular(25.0),
-      //   ),
-      // ),
       height: height,
       width: width,
       margin: (str != "ranking") ? EdgeInsets.all(20) : EdgeInsets.all(0),
@@ -71,48 +65,55 @@ Widget CircleImage(
       ),
     );
 // ignore: non_constant_identifier_names
-Widget AvatarMenu(
-        context, String url, String id, double height, double width) =>
-    Container(
-      height: height,
-      width: width,
-      margin: EdgeInsets.all(20),
-      child: InkWell(
-        onTap: () {
-          showConfirm(context, "avatar", url, id);
-        },
-        child: ClipOval(
-          // child: Container(
-          //   width: width,
-          //   height: height,
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(20),
-          //     image: DecorationImage(
-          //       fit: BoxFit.cover,
-          //       image: NetworkImage(url),
-          //     ),
-          //   ),
-          // ),
-          child: FadeInImage.memoryNetwork(
-            placeholder: kTransparentImage,
-            image: url,
+Widget AvatarMenu(context, String url, String id, double height, double width,
+        bool is_me) =>
+    Stack(
+      children: [
+        Container(
+          height: height,
+          width: width,
+          margin: EdgeInsets.all(20),
+          child: InkWell(
+            onTap: () {
+              showConfirm(context, "avatar", url, id);
+            },
+            child: ClipOval(
+              child: Container(
+                child: FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: url,
+                ),
+              ),
+
+              // child: Image.network(
+              //   url,
+              //   height: height,
+              //   width: width,
+              //   loadingBuilder: (BuildContext context, Widget child,
+              //       ImageChunkEvent? loadingProgress) {
+              //     if (loadingProgress == null) {
+              //       return child;
+              //     }
+              //     return Center(
+              //       child: kLoadingFadingWidget(context),
+              //     );
+              //   },
+              // ),
+            ),
           ),
-          // child: Image.network(
-          //   url,
-          //   height: height,
-          //   width: width,
-          //   loadingBuilder: (BuildContext context, Widget child,
-          //       ImageChunkEvent? loadingProgress) {
-          //     if (loadingProgress == null) {
-          //       return child;
-          //     }
-          //     return Center(
-          //       child: kLoadingFadingWidget(context),
-          //     );
-          //   },
-          // ),
         ),
-      ),
+        is_me
+            ? Positioned(
+                top: 25,
+                right: 35,
+                child: Icon(
+                  Icons.check_circle,
+                  color: whiteColor,
+                  size: 16.0,
+                ),
+              )
+            : Text(""),
+      ],
     );
 
 // Future<void> getMedia(context, id) async {

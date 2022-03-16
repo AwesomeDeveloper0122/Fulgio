@@ -5,6 +5,7 @@ import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/repositories/user_repository.dart';
 import 'package:Fuligo/utils/font_style.dart';
 import 'package:Fuligo/utils/loading.dart';
+import 'package:Fuligo/utils/localtext.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -41,8 +42,8 @@ class CreditsState extends State<Credits> {
     List orderlist = [];
     List deductedlist = [];
     UserModel _userInfo = AuthProvider.of(context).userModel;
-    final prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('lang') ?? "";
+    // final prefs = await SharedPreferences.getInstance();
+    // String lang = prefs.getString('lang') ?? "";
     QuerySnapshot orderSnapshot =
         await FirebaseFirestore.instance.collection('order').get();
 
@@ -86,7 +87,7 @@ class CreditsState extends State<Credits> {
           if (documentSnapshot.exists) {
             print('Document exists on the database');
 
-            String name = documentSnapshot.get('name')[lang];
+            String name = documentSnapshot.get('name')[_userInfo.app_lang];
 
             String datetime = DateFormat('dd-MM-yyyy')
                 .format(documentSnapshot.get('updatedAt').toDate());
@@ -125,10 +126,7 @@ class CreditsState extends State<Credits> {
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
-
-    print("orderlist567");
-    print(creditsLists);
-    print(loading);
+    UserModel _userInfo = AuthProvider.of(context).userModel;
 
     List<Widget> creditData = [];
 
@@ -186,8 +184,8 @@ class CreditsState extends State<Credits> {
                   ),
                   PageHeader(
                     context,
-                    "Credits",
-                    "Your credit will be automatically applied \n to your next booking with Flugio. \n No actions are required",
+                    LocalText.credit[_userInfo.app_lang].toString(),
+                    LocalText.credit_description[_userInfo.app_lang].toString(),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 40),
@@ -196,12 +194,17 @@ class CreditsState extends State<Credits> {
                       children: [
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 60),
-                          child: SubTxt(context, 'Avaialble',
+                          child: SubTxt(
+                              context,
+                              LocalText.available[_userInfo.app_lang]
+                                  .toString(),
                               " CHF " + availabelCredits.toString()),
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 60),
-                          child: SubTxt(context, 'Used',
+                          child: SubTxt(
+                              context,
+                              LocalText.used[_userInfo.app_lang].toString(),
                               " CHF " + usedCredits.toString()),
                         ),
                       ],

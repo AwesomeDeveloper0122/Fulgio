@@ -2,6 +2,7 @@ import 'package:Fuligo/screens/menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:page_transition/page_transition.dart';
 
 // ignore: non_constant_identifier_names
 Widget PrimaryButton(context, StatefulWidget page, String txt) => Positioned(
@@ -17,10 +18,18 @@ Widget PrimaryButton(context, StatefulWidget page, String txt) => Positioned(
             ),
             color: bgColor,
             onPressed: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => page,
+              //   ),
+              // );
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => page,
+                PageTransition(
+                  type: PageTransitionType.fade,
+                  child: page,
+                  duration: Duration(milliseconds: 800),
                 ),
               );
               //  Navigator.of(context).pushReplacementNamed(page);
@@ -167,7 +176,23 @@ Widget MenuButton(context) => Positioned(
       top: 50,
       left: 20,
       child: GestureDetector(
-        onTap: () => {_show()},
+        onTap: () => {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.fade,
+              child: MenuScreen(),
+              duration: Duration(microseconds: 800),
+            ),
+          ),
+          // _show(),
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => MenuScreen(),
+          //   ),
+          // ),
+        },
         child: Image.asset(
           'assets/images/png/icon-menu-small.png',
           scale: 0.8,

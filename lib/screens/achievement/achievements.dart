@@ -2,6 +2,7 @@
 
 import 'package:Fuligo/screens/achievement/credits.dart';
 import 'package:Fuligo/screens/achievement/ranking.dart';
+import 'package:Fuligo/utils/localtext.dart';
 import 'package:intl/intl.dart';
 
 import 'package:Fuligo/model/user_model.dart';
@@ -51,8 +52,8 @@ class ArchivmentsState extends State<Achievements> {
     UserModel _userInfo = AuthProvider.of(context).userModel;
     CollectionReference achievements =
         FirebaseFirestore.instance.collection('achievement');
-    final prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('lang') ?? "en_GB";
+    // final prefs = await SharedPreferences.getInstance();
+    // String lang = prefs.getString('lang') ?? "en_GB";
 
     final result = await UserRepository.getUserByID(_userInfo.uid);
 
@@ -73,8 +74,8 @@ class ArchivmentsState extends State<Achievements> {
             Map temp = {
               "isDone": true,
               "active": element['active'],
-              "name": element['name'][lang],
-              "description": element['description'][lang],
+              "name": element['name'][_userInfo.app_lang],
+              "description": element['description'][_userInfo.app_lang],
               "credits": element['credits'],
               "updatedAt": updatedAt
             };
@@ -83,8 +84,8 @@ class ArchivmentsState extends State<Achievements> {
             Map temp = {
               "isDone": false,
               "active": element['active'],
-              "name": element['name'][lang],
-              "description": element['description'][lang],
+              "name": element['name'][_userInfo.app_lang],
+              "description": element['description'][_userInfo.app_lang],
               "credits": element['credits'],
               "updatedAt": updatedAt
             };
@@ -151,6 +152,7 @@ class ArchivmentsState extends State<Achievements> {
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context).size;
+    UserModel _userInfo = AuthProvider.of(context).userModel;
 
     return Builder(builder: (context) {
       return Container(
@@ -171,8 +173,10 @@ class ArchivmentsState extends State<Achievements> {
                     ),
                     PageHeader(
                       context,
-                      "Achievements",
-                      "Each completed achievement \n brings you credit on Flugio, ",
+                      LocalText.achievements_menu[_userInfo.app_lang]
+                          .toString(),
+                      LocalText.achievements_description[_userInfo.app_lang]
+                          .toString(),
                     ),
                     Column(
                       children: [
@@ -193,7 +197,11 @@ class ArchivmentsState extends State<Achievements> {
                                 child: Container(
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 55),
-                                  child: SubTxt(context, 'Achievements',
+                                  child: SubTxt(
+                                      context,
+                                      LocalText
+                                          .achievements_menu[_userInfo.app_lang]
+                                          .toString(),
                                       '$user_achieve of ${docLists.length}'),
                                 ),
                               ),
@@ -211,7 +219,10 @@ class ArchivmentsState extends State<Achievements> {
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 55),
                                   child: SubTxt(
-                                      context, 'Credit', '$user_credit CHF'),
+                                      context,
+                                      LocalText.credit[_userInfo.app_lang]
+                                          .toString(),
+                                      '$user_credit CHF'),
                                 ),
                               )
                             ],

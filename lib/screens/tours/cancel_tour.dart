@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:Fuligo/screens/video/audio.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/utils/localtext.dart';
+import 'package:Fuligo/widgets/logo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -385,6 +386,7 @@ class _CancelTourState extends State<CancelTour> {
                   ),
                 ),
               ),
+              Positioned(top: 10, child: Logo),
               Positioned(
                 bottom: 100,
                 child: Container(

@@ -1,18 +1,20 @@
 import 'dart:typed_data';
 
+import 'package:Fuligo/model/user_model.dart';
+import 'package:Fuligo/provider/auth_provider.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/utils/localtext.dart';
+import 'package:Fuligo/widgets/logo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 
 import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../../utils/common_colors.dart';
-import '../../widgets/circleimage.dart';
 import '../../widgets/custom_button.dart';
 import '../tours/tours.dart';
 import 'package:mapbox_api/mapbox_api.dart';
@@ -22,8 +24,8 @@ import '../video/video.dart';
 
 // ignore: must_be_immutable
 class StartTour extends StatefulWidget {
-  LatLng currentUserPosition;
-  StartTour({Key? key, required this.currentUserPosition}) : super(key: key);
+  // LatLng currentUserPosition;
+  StartTour({Key? key}) : super(key: key);
 
   @override
   _StartTourState createState() => _StartTourState();
@@ -40,6 +42,7 @@ class _StartTourState extends State<StartTour> {
   List imageNetList = [];
   List<Uint8List> imageList = [];
   List<Marker> markers = [];
+  LatLng currentUserPoistion = LatLng(38.9036614038578, -76.99211156195398);
 
   final CollectionReference _pointCollection =
       FirebaseFirestore.instance.collection('pointOfInterest');
@@ -50,9 +53,53 @@ class _StartTourState extends State<StartTour> {
     getPointData();
   }
 
+  Future<void> getUserPosition() async {
+    print("bbb");
+    // if (!emailVerified) {
+    //   _timer = Timer.periodic(new Duration(seconds: 2), (timer) async {
+    //     if (timer.tick == 60 || emailVerified) {
+    //       timer.cancel();
+    //     } else {
+    //       getEmailVerified();
+    //     }
+    //   });
+    // }
+
+    Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    } else {
+      // permission = true;
+    }
+
+    _locationData = await location.getLocation();
+
+    setState(() {
+      currentUserPoistion =
+          LatLng(_locationData.latitude!, _locationData.longitude!);
+    });
+  }
+
   Future<List> getPointData() async {
     markers.add(Marker(
-      point: widget.currentUserPosition, //current user poistion
+      point: currentUserPoistion, //current user poistion
       builder: (ctx) => const IconButton(
         icon: Icon(Icons.circle),
         iconSize: 50,
@@ -89,8 +136,8 @@ class _StartTourState extends State<StartTour> {
           if (imageUrlList.isNotEmpty) {
             markers.add(
               Marker(
-                width: 120.0,
-                height: 144.0,
+                width: 60.0,
+                height: 60.0,
                 point: LatLng(location["latitude"], location["longitude"]),
                 builder: (ctx) => Container(
                   margin:
@@ -125,8 +172,8 @@ class _StartTourState extends State<StartTour> {
           if (imageUrlList.isNotEmpty) {
             markers.add(
               Marker(
-                width: 120,
-                height: 120,
+                width: 100,
+                height: 100,
                 point: LatLng(location["latitude"], location["longitude"]),
                 builder: (ctx) => Container(
                   // margin:
@@ -186,6 +233,9 @@ class _StartTourState extends State<StartTour> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userInfo = AuthProvider.of(context).userModel;
+    print("start tour lang");
+    print(userInfo.app_lang);
     return Scaffold(
       body: !loading
           ? Stack(alignment: Alignment.center, children: <Widget>[
@@ -199,15 +249,13 @@ class _StartTourState extends State<StartTour> {
                     color: bgColor.withOpacity(0.5)),
                 child: FlutterMap(
                   options: MapOptions(
-                    center: widget.currentUserPosition, // current user postion
+                    center: currentUserPoistion, // current user postion
                     minZoom: 10.0,
                     bounds: LatLngBounds(
-                      LatLng(
-                          widget.currentUserPosition.latitude - 1,
-                          widget.currentUserPosition.longitude -
-                              1), // [west,south]
-                      LatLng(widget.currentUserPosition.latitude + 1,
-                          widget.currentUserPosition.longitude + 1),
+                      LatLng(currentUserPoistion.latitude - 1,
+                          currentUserPoistion.longitude - 1), // [west,south]
+                      LatLng(currentUserPoistion.latitude + 1,
+                          currentUserPoistion.longitude + 1),
                     ), // [/ [east,north]
                     boundsOptions:
                         const FitBoundsOptions(padding: EdgeInsets.all(8.0)),
@@ -224,8 +272,10 @@ class _StartTourState extends State<StartTour> {
                   mapController: mapController,
                 ),
               ),
+              Positioned(top: 10, child: Logo),
               MenuButton(context),
-              PrimaryButton(context, const Tours(), "Start tour")
+              PrimaryButton(context, const Tours(),
+                  LocalText.btn_start[userInfo.app_lang].toString())
             ])
           : defaultloading(context),
     );

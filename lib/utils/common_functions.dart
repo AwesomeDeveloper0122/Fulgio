@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
+import 'package:Fuligo/screens/avatar_screen.dart';
+import 'package:Fuligo/screens/menu_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dialogs/flutter_dialogs.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +24,7 @@ Future<List<String>> getTitle(pageName) async {
 
 Future<void> showConfirm(
     BuildContext context, String str, String url, String id) async {
-  showPlatformDialog(
+  showDialog(
     context: context,
     builder: (_) => BasicDialogAlert(
       title:
@@ -31,7 +34,14 @@ Future<void> showConfirm(
         BasicDialogAction(
           title: Text("Cancel"),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context, rootNavigator: true).pop('dialog');
+            // Navigator.pop(context);
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => MenuScreen(),
+            //   ),
+            // );
           },
         ),
         BasicDialogAction(
@@ -46,13 +56,12 @@ Future<void> showConfirm(
 }
 
 changeAvatar(BuildContext context, String url, String doc_id) {
-  print("Change Avatar");
+  Navigator.of(context, rootNavigator: true).pop('dialog');
   UserModel _userInfo = AuthProvider.of(context).userModel;
   _userInfo.avatar = url;
 
   AuthProvider.of(context).setUserModel(_userInfo);
-  print("_userInfo.avatar");
-  print(_userInfo.avatar);
+  // Navigator.of(context).pop();
   try {
     DocumentReference ref =
         FirebaseFirestore.instance.collection('avatar').doc(doc_id);
@@ -60,13 +69,20 @@ changeAvatar(BuildContext context, String url, String doc_id) {
         .collection('users')
         .doc(_userInfo.uid)
         .set({'avatar': ref}, SetOptions(merge: true));
-    Navigator.pop(context);
+    Navigator.of(context).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MenuScreen(),
+      ),
+    );
+
     SmartDialog.showToast("change success");
   } catch (e) {
     SmartDialog.showToast("failed");
   }
 
-  SmartDialog.dismiss();
+  // SmartDialog.dismiss();
 }
 
 tracking() {

@@ -6,8 +6,6 @@ class UserRepository {
   static String _userCollectionname = "users";
 
   static Future<void> addUser(String id) async {
-    DocumentReference ref;
-
     CollectionReference user = FirebaseFirestore.instance.collection('users');
     QuerySnapshot avatarSnapshot =
         await FirebaseFirestore.instance.collection('avatar').get();
@@ -15,10 +13,14 @@ class UserRepository {
       if (item["isDefault"] == true) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('defaultAvatar', item["app_img"]!);
-        ref = FirebaseFirestore.instance.collection('avatar').doc(item.id);
+        SharedPreferences prefs_lang = await SharedPreferences.getInstance();
+        await prefs_lang.setString('lang', "en_GB");
+        DocumentReference avatar =
+            FirebaseFirestore.instance.collection('avatar').doc(item.id);
         user
             .doc(id)
-            .set({'uid': id, "avatar": ref}, SetOptions(merge: true))
+            .set({'uid': id, "avatar": avatar, "app_lang": "en_GB"},
+                SetOptions(merge: true))
             .then((value) => {})
             .catchError((error) => {});
         break;
@@ -36,9 +38,16 @@ class UserRepository {
     DocumentSnapshot currentUser =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
-    CollectionReference user = FirebaseFirestore.instance.collection('users');
     QuerySnapshot avatarSnapshot =
         await FirebaseFirestore.instance.collection('avatar').get();
+    // try {
+    //   SharedPreferences prefs_lang = await SharedPreferences.getInstance();
+    //   await prefs_lang.setString('lang', currentUser["app_lang"]);
+    // } catch (e) {
+    //   SharedPreferences prefs_lang = await SharedPreferences.getInstance();
+    //   await prefs_lang.setString('lang', "en_GB");
+    // }
+
     for (var item in avatarSnapshot.docs) {
       if (item["isDefault"] == true) {
         SharedPreferences prefs = await SharedPreferences.getInstance();

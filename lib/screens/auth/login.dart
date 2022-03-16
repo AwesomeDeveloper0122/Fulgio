@@ -69,14 +69,11 @@ class LoginState extends State<Login> {
 
     refId.get().then((DocumentSnapshot documentSnapshot) async {
       if (documentSnapshot.exists) {
-        // print('Document exists on the database');
-        // Reference ref =
-        //     FirebaseStorage.instance.ref().child(documentSnapshot.get('img'));
-        // url = await ref.getDownloadURL();
         if (result != null) {
           result["avatar"] = documentSnapshot["app_img"];
 
           UserModel _userModel = UserModel.fromJson(result);
+
           AuthProvider.of(context).setUserModel(_userModel);
         }
       }
@@ -84,6 +81,7 @@ class LoginState extends State<Login> {
   }
 
   Future<void> addNewUser(User user) async {
+    print("add User");
     await UserRepository.addUser(user.uid);
     await getUser(user);
   }
@@ -145,6 +143,7 @@ class LoginState extends State<Login> {
           BasicDialogAction(
             title: Text("Confirm"),
             onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop('dialog');
               Navigator.push(
                 context,
                 MaterialPageRoute(

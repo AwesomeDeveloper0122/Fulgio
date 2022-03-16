@@ -132,7 +132,7 @@ class ChatRoomState extends State<ChatRoom> {
                         DocumentSnapshot document = snapshot.data!.docs
                             .where((element) =>
                                 element["userId"] ==
-                                "uMoRorj7sbfwP7VOrQWft1EwWIS2")
+                                "KqYlUZcpn5ffjYhowjDRMMT0TTf1")
                             .first;
                         try {
                           List chatlist = document["chatMessages"];

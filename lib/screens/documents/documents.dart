@@ -40,11 +40,8 @@ class DocumentsState extends State<Documents> {
   Future<List<OrderModel>> getOrderData() async {
     List tempList = [];
 
-    //Get language
-    final prefs = await SharedPreferences.getInstance();
-    String lang = prefs.getString('lang') ?? "";
-
     UserModel _userInfo = AuthProvider.of(context).userModel;
+    print(_userInfo.app_lang);
     QuerySnapshot orderSnapshot =
         await FirebaseFirestore.instance.collection('order').get();
 
@@ -54,7 +51,7 @@ class DocumentsState extends State<Documents> {
             print("user id"),
             print(_userInfo.uid),
             if (doc.get('userId') ==
-                "UVJ7ZRb12UVeL3YJvzAPXnA0Cem1") // UVJ7ZRb12UVeL3YJvzAPXnA0Cem1 is userInfo.uid //vVBdd7pUdjZY537PX6pT8FNCrA52
+                "KqYlUZcpn5ffjYhowjDRMMT0TTf1") // UVJ7ZRb12UVeL3YJvzAPXnA0Cem1 is userInfo.uid //vVBdd7pUdjZY537PX6pT8FNCrA52
               {
                 docList.add(doc.get('documents')),
                 tempList.add(doc.get('city')), // refernce id
@@ -74,14 +71,14 @@ class DocumentsState extends State<Documents> {
                 .ref()
                 .child(documentSnapshot.get('image')[0]);
             String url = await ref.getDownloadURL();
-            Uint8List uint8image =
-                (await NetworkAssetBundle(Uri.parse(url)).load(""))
-                    .buffer
-                    .asUint8List();
+            // Uint8List uint8image =
+            //     (await NetworkAssetBundle(Uri.parse(url)).load(""))
+            //         .buffer
+            //         .asUint8List();
 
-            imageList.add(uint8image);
+            // imageList.add(uint8image);
 
-            String name = documentSnapshot.get('name')[lang];
+            String name = documentSnapshot.get('name')[_userInfo.app_lang];
             // String image = documentSnapshot.get('image')[0];
             DateTime datetime = documentSnapshot.get('updatedAt').toDate();
 
@@ -119,6 +116,7 @@ class DocumentsState extends State<Documents> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel _userInfo = AuthProvider.of(context).userModel;
     List<Widget> documentitems = [];
     for (var i = 0; i < orders.length; i++) {
       var element = orders[i];
@@ -126,7 +124,7 @@ class DocumentsState extends State<Documents> {
       String date = DateFormat('MM-dd-yyyy').format(element.datetime);
 
       documentitems.add(
-        DocumentCard(context, imageList[i], element.name, date, docList),
+        DocumentCard(context, element.image, element.name, date, docList),
       );
     }
     var mq = MediaQuery.of(context).size;
