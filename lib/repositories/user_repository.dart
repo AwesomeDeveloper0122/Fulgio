@@ -13,14 +13,24 @@ class UserRepository {
       if (item["isDefault"] == true) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('defaultAvatar', item["app_img"]!);
-        SharedPreferences prefs_lang = await SharedPreferences.getInstance();
-        await prefs_lang.setString('lang', "en_GB");
+
         DocumentReference avatar =
             FirebaseFirestore.instance.collection('avatar').doc(item.id);
         user
             .doc(id)
-            .set({'uid': id, "avatar": avatar, "app_lang": "en_GB"},
-                SetOptions(merge: true))
+            .set({
+              'uid': id,
+              "avatar": avatar,
+              "app_lang": "en_GB",
+              "active": false,
+              "adults": 0,
+              "appInstalled": true,
+              "children": 0,
+              "createdAt": DateTime.now(),
+              "credits": 0,
+              "orderCount": 0,
+              "updatedAt": DateTime.now()
+            }, SetOptions(merge: true))
             .then((value) => {})
             .catchError((error) => {});
         break;
@@ -30,23 +40,20 @@ class UserRepository {
 
   // Get User with ID
   static Future getUserByID(String uid) async {
-    String url;
-    Map userdata;
-    /////////////////////
-
-    /////////////////////
     DocumentSnapshot currentUser =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    if (currentUser.exists) {
+      CollectionReference user = FirebaseFirestore.instance.collection('users');
+      user
+          .doc(uid)
+          .set({"uid": uid, "appInstalled": true, "updatedAt": DateTime.now()},
+              SetOptions(merge: true))
+          .then((value) => {})
+          .catchError((error) => {});
+    }
 
     QuerySnapshot avatarSnapshot =
         await FirebaseFirestore.instance.collection('avatar').get();
-    // try {
-    //   SharedPreferences prefs_lang = await SharedPreferences.getInstance();
-    //   await prefs_lang.setString('lang', currentUser["app_lang"]);
-    // } catch (e) {
-    //   SharedPreferences prefs_lang = await SharedPreferences.getInstance();
-    //   await prefs_lang.setString('lang', "en_GB");
-    // }
 
     for (var item in avatarSnapshot.docs) {
       if (item["isDefault"] == true) {

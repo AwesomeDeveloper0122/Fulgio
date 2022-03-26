@@ -162,6 +162,32 @@ class VideoState extends State<Video> {
                                     ],
                                   ),
                                 ),
+                                Positioned(
+                                  top: 110,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                          "assets/images/compass-rose.png",
+                                          scale: 3.5)
+                                    ],
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 130,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                          "assets/images/compass-needle.png",
+                                          scale: 7)
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),

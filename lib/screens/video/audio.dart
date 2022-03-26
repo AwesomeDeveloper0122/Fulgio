@@ -5,6 +5,7 @@ import 'package:Fuligo/screens/route_screen.dart';
 import 'package:Fuligo/utils/common_colors.dart';
 import 'package:Fuligo/utils/font_style.dart';
 import 'package:Fuligo/utils/loading.dart';
+import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -200,7 +201,7 @@ class AudioState extends State<Audio> {
                       fit: BoxFit.cover),
                 ),
                 child: SafeArea(
-                  child: Stack(children: [
+                  child: Stack(alignment: Alignment.center, children: [
                     CarouselSlider(
                       items: images,
                       options: CarouselOptions(
@@ -212,20 +213,7 @@ class AudioState extends State<Audio> {
                         height: MediaQuery.of(context).size.height,
                       ),
                     ),
-                    Positioned(
-                      top: 50,
-                      left: 20,
-                      child: GestureDetector(
-                        onTap: () => {
-                          Navigator.pop(context),
-                          // timer.cancel(),
-                        },
-                        child: Image.asset(
-                          'assets/images/png/icon-cross.png',
-                          scale: 0.8,
-                        ),
-                      ),
-                    ),
+                    SecondaryButton(context),
                     Positioned(
                       top: 65,
                       right: 20,
@@ -255,6 +243,28 @@ class AudioState extends State<Audio> {
                         ],
                       ),
                     ),
+                    Positioned(
+                      top: 110,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/compass-rose.png",
+                              scale: 3.5)
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      top: 130,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/compass-needle.png",
+                              scale: 7)
+                        ],
+                      ),
+                    ),
                     Column(
                       children: [
                         SingleChildScrollView(
@@ -272,25 +282,24 @@ class AudioState extends State<Audio> {
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: GestureDetector(
-                                  onTap: () => {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => Info(
-                                              infodata: audioData,
-                                            ),
-                                          ),
-                                        ),
-                                      },
-                                  child: Container(
-                                    padding: EdgeInsets.all(15),
-                                    child: Icon(
-                                      Icons.info_outline,
-                                      color: Colors.white,
-                                      size: 66.0,
-                                      semanticLabel: 'Route',
+                                onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Info(
+                                        infodata: audioData,
+                                      ),
                                     ),
-                                  )),
+                                  ),
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 30, vertical: 20),
+                                  child: Image.asset(
+                                      "assets/images/icon-tooltip.png",
+                                      scale: 6),
+                                ),
+                              ),
                             ),
                             Align(
                               alignment: Alignment.bottomCenter,
@@ -310,13 +319,11 @@ class AudioState extends State<Audio> {
                                         ),
                                       },
                                   child: Container(
-                                    padding: EdgeInsets.all(15),
-                                    child: Icon(
-                                      Icons.power_settings_new_sharp,
-                                      color: Colors.white,
-                                      size: 66.0,
-                                      semanticLabel: 'Route',
-                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 20),
+                                    child: Image.asset(
+                                        "assets/images/icon-compass.png",
+                                        scale: 6),
                                   )),
                             ),
                           ],
@@ -394,12 +401,18 @@ class AudioState extends State<Audio> {
             child: const CircularProgressIndicator(),
           );
         } else if (playing != true) {
-          return IconButton(
-            icon: const Icon(Icons.play_circle_outline),
-            iconSize: 100.0,
-            color: Colors.white,
-            onPressed: _player.play,
+          return GestureDetector(
+            onTap: _player.play,
+            child: Container(
+                child:
+                    Image.asset("assets/images/button-play.png", scale: 3.5)),
           );
+          // return IconButton(
+          //   icon: const Icon(Icons.play_circle_outline),
+          //   iconSize: 100.0,
+          //   color: Colors.white,
+          //   onPressed: _player.play,
+          // );
         } else if (processingState != ProcessingState.completed) {
           return IconButton(
             icon: const Icon(Icons.pause_circle_outline),

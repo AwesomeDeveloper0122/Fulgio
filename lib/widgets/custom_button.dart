@@ -59,7 +59,7 @@ Widget CancelButton(context, String txt) => Positioned(
           child: RaisedButton(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(40.0),
-              side: BorderSide(color: Colors.white70, width: 2),
+              side: BorderSide(color: Colors.white, width: 2),
             ),
             color: Colors.transparent,
             onPressed: () {
@@ -194,8 +194,8 @@ Widget MenuButton(context) => Positioned(
           // ),
         },
         child: Image.asset(
-          'assets/images/png/icon-menu-small.png',
-          scale: 0.8,
+          'assets/images/menu/icon-menu.png',
+          scale: 11,
         ),
       ),
       // child: const Icon(
@@ -210,11 +210,12 @@ Widget CrossButton(context) => Positioned(
       child: GestureDetector(
         onTap: () => {(SmartDialog.dismiss())},
         child: Image.asset(
-          'assets/images/png/icon-cross.png',
-          scale: 0.8,
+          'assets/images/icon-close.png',
+          scale: 11,
         ),
       ),
     );
+
 void _show() {
   SmartDialog.show(
     widget: MenuScreen(),

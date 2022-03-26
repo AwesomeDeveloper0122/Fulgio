@@ -85,113 +85,121 @@ class ChatRoomState extends State<ChatRoom> {
 
     return Container(
       decoration: bgDecoration,
-      child: Scaffold(
-        backgroundColor: chatContentColor,
-        body: Stack(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  height: 100,
-                  width: mq.width,
-                  decoration: const BoxDecoration(
-                    color: chatTitleColor,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 0, top: 30),
-                        child: Text(
-                          userInfo.username["first"].toString(),
-                          style: font_18_white,
+      child: Container(
+        decoration: BoxDecoration(
+          color: chatHeaderColor.withOpacity(0.4),
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [gradientFrom, chatHeaderColor]),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Container(
+                    height: 100,
+                    width: mq.width,
+                    decoration: const BoxDecoration(
+                      color: chatHeaderColor,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(right: 0, top: 30),
+                          child: Text(
+                            userInfo.username["first"].toString(),
+                            style: font_18_white,
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(right: 20, top: 30),
-                        child: CircleImage(
-                            context, userInfo.avatar, 40, 40, "chat"),
-                      ),
-                    ],
+                        Container(
+                          padding: const EdgeInsets.only(right: 20, top: 30),
+                          child: CircleImage(
+                              context, userInfo.avatar, 40, 40, "chat"),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: StreamBuilder<QuerySnapshot>(
-                      stream: chatStream,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError) {
-                          return const Text('Something went wrong');
-                        }
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
+                        stream: chatStream,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            return const Text('Something went wrong');
+                          }
 
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Text("Loading");
-                        }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Text("Loading");
+                          }
 
-                        DocumentSnapshot document = snapshot.data!.docs
-                            .where((element) =>
-                                element["userId"] ==
-                                "KqYlUZcpn5ffjYhowjDRMMT0TTf1")
-                            .first;
-                        try {
-                          List chatlist = document["chatMessages"];
-                          Timer(
-                              const Duration(milliseconds: 300),
-                              () => _controller.jumpTo(
-                                  _controller.position.maxScrollExtent));
+                          DocumentSnapshot document = snapshot.data!.docs
+                              .where((element) => element.id == widget.docId)
+                              .first;
+                          try {
+                            List chatlist = document["chatMessages"];
+                            Timer(
+                                const Duration(milliseconds: 300),
+                                () => _controller.jumpTo(
+                                    _controller.position.maxScrollExtent));
 
-                          return ListView.builder(
-                            controller: _controller,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            itemCount: chatlist.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                crossAxisAlignment:
-                                    chatlist[index]["author"] == "user"
-                                        ? CrossAxisAlignment.start
-                                        : CrossAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    width: mq.width * 0.65,
-                                    padding: const EdgeInsets.all(15),
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    decoration: BoxDecoration(
-                                        color: bgColor,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Text(
-                                        chatlist[index]['message'].toString(),
-                                        style: font_14_white),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } catch (e) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: mq.height * 0.2,
-                              ),
-                              const Text(
-                                "No chat data",
-                                style: TextStyle(
-                                    fontSize: 30, color: Colors.white30),
-                              ),
-                            ],
-                          );
-                        }
-                      }),
-                ),
-                buildMessageTextField(),
-              ],
-            ),
-            SecondaryButton(context),
-          ],
+                            return ListView.builder(
+                              controller: _controller,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              itemCount: chatlist.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  crossAxisAlignment:
+                                      chatlist[index]["author"] == "user"
+                                          ? CrossAxisAlignment.start
+                                          : CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      width: mq.width * 0.65,
+                                      padding: const EdgeInsets.all(15),
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      decoration: BoxDecoration(
+                                          color: chatMessageColor,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Text(
+                                          chatlist[index]['message'].toString(),
+                                          style: font_14_white),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } catch (e) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: mq.height * 0.2,
+                                ),
+                                const Text(
+                                  "",
+                                  style: TextStyle(
+                                      fontSize: 30, color: Colors.white30),
+                                ),
+                              ],
+                            );
+                          }
+                        }),
+                  ),
+                  buildMessageTextField(),
+                ],
+              ),
+              SecondaryButton(context),
+            ],
+          ),
         ),
       ),
     );
@@ -201,7 +209,7 @@ class ChatRoomState extends State<ChatRoom> {
     var mq = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: const BoxDecoration(color: Colors.black45),
+      decoration: const BoxDecoration(color: chatHeaderColor),
       child: Container(
         height: 70.0,
         child: Row(
@@ -210,7 +218,7 @@ class ChatRoomState extends State<ChatRoom> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               width: mq.width * 0.7,
               decoration: BoxDecoration(
-                color: bgColor,
+                color: chatInputColor,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TextField(

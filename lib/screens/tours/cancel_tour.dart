@@ -412,23 +412,28 @@ class _CancelTourState extends State<CancelTour> {
                               gradient: const LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
-                                  colors: [gradientFrom, bgColor]),
-                              color: bgColor.withOpacity(0.8)),
+                                  colors: [gradientFrom, chatHeaderColor]),
+                              color: chatHeaderColor.withOpacity(0.7)),
                           child: ListTile(
-                            leading: Icon(
-                              Icons.play_arrow,
-                              size: 30,
-                              color: Colors.white,
+                            leading: Container(
+                              margin: EdgeInsets.only(top: 10),
+                              child: Icon(
+                                Icons.play_arrow,
+                                size: 30,
+                                color: Colors.white,
+                              ),
                             ),
                             title: Text(
                               'In ${shortDistance.round()} Meter',
+                              style: const TextStyle(color: Colors.white54),
                               // textScaleFactor: 1.5,
                             ),
-                            trailing: const Image(
-                              image: AssetImage(
-                                  'assets/images/png/icon-route.png'),
-                              width: 60,
-                              height: 60,
+                            trailing: Container(
+                              margin: EdgeInsets.only(top: 10),
+                              child: Image.asset(
+                                "assets/images/icon-route.png",
+                                scale: 5,
+                              ),
                             ),
                             subtitle: Text(
                               mediaList[index]["name"],

@@ -2,10 +2,8 @@ import 'dart:convert';
 
 import 'package:Fuligo/model/user_model.dart';
 import 'package:Fuligo/provider/auth_provider.dart';
-import 'package:Fuligo/screens/avatar_screen.dart';
 import 'package:Fuligo/screens/menu_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dialogs/flutter_dialogs.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

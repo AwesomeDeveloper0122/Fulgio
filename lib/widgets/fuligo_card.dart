@@ -9,6 +9,15 @@ Widget FuligoCard(context, String content, Color color) => Stack(
           height: 140,
           margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
           decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 5,
+
+                offset: const Offset(1, 0), // changes position of shadow
+              ),
+            ],
             color: bgColor,
             gradient: const LinearGradient(
                 begin: Alignment.topLeft,

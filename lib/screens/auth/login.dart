@@ -71,9 +71,7 @@ class LoginState extends State<Login> {
       if (documentSnapshot.exists) {
         if (result != null) {
           result["avatar"] = documentSnapshot["app_img"];
-
           UserModel _userModel = UserModel.fromJson(result);
-
           AuthProvider.of(context).setUserModel(_userModel);
         }
       }

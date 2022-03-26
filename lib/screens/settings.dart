@@ -5,6 +5,7 @@ import 'package:Fuligo/repositories/user_repository.dart';
 import 'package:Fuligo/screens/menu_screen.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/utils/localtext.dart';
+import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:Fuligo/widgets/popup.dart';
 
 import 'package:Fuligo/widgets/custom_button.dart';
@@ -54,8 +55,7 @@ class _SettingsState extends State<Settings> {
   Future<void> saveLang(value, context) async {
     CollectionReference user = FirebaseFirestore.instance.collection('users');
     UserModel userInfo = AuthProvider.of(context).userModel;
-    print("loading");
-    print(loading);
+
     // if (loading) {
     //   await defaultloading(context);
     // } else {
@@ -104,7 +104,7 @@ class _SettingsState extends State<Settings> {
 
   final _headerStyle = const TextStyle(
       decoration: TextDecoration.none,
-      color: Colors.white70,
+      color: Colors.white,
       fontSize: 20,
       letterSpacing: 1.5);
   final _contentStyleHeader = const TextStyle(
@@ -166,7 +166,7 @@ class _SettingsState extends State<Settings> {
                   isOpen: false,
                   leftIcon: const Icon(
                     Icons.settings,
-                    color: Colors.white70,
+                    color: Colors.white,
                     size: 30,
                   ),
                   headerBackgroundColor: Colors.transparent,
@@ -252,11 +252,12 @@ class _SettingsState extends State<Settings> {
                 ),
               },
               child: Image.asset(
-                'assets/images/png/icon-cross.png',
-                scale: 0.8,
+                'assets/images/icon-close.png',
+                scale: 11,
               ),
             ),
           ),
+          // SecondaryButton(context)
         ],
       ),
     );

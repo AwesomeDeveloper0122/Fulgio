@@ -121,26 +121,33 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/font/
-    - assets/images/1.jpeg
-    - assets/images/mark1.png
+   
     - assets/images/logo.png
     - assets/images/explore.png
-    - assets/images/map_test.png
+  
     - assets/images/discover.png
-    - assets/images/avatar-1.jpg
-    - assets/images/avatar-2.jpg
-    - assets/images/avatar-3.jpg
-    - assets/images/avatar-4.jpg  
+    
     - assets/images/png/icon-umbrella.png
-    - assets/images/png/icon-map.png
-    - assets/images/png/icon-document.png
-    - assets/images/png/icon-achievement.png
-    - assets/images/png/icon-route.png
-    - assets/images/png/icon-heart.png
-    - assets/images/png/icon-cross.png
-    - assets/images/png/icon-menu-small.png
-    - assets/images/png/icon-support.png
-    - assets/3.mp3
+   
+    - assets/images/menu/icon-map.png  
+    - assets/images/menu/icon-chat.png  
+    - assets/images/menu/icon-settings.png  
+    - assets/images/menu/icon-documents.png  
+    - assets/images/menu/icon-gamification.png  
+    - assets/images/menu/icon-menu.png  
+  
+    - assets/images/button-play.png
+    - assets/images/icon-tooltip.png
+    - assets/images/icon-compass.png
+    - assets/images/compass-needle.png
+    - assets/images/compass-rose.png
+    - assets/images/direction_close.png
+   
+    - assets/images/icon-achievement.png
+    - assets/images/icon-booking.png
+    - assets/images/icon-close.png
+    - assets/images/icon-route.png
+    - assets/images/icon-medal.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

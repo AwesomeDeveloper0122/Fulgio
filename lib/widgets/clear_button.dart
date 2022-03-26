@@ -8,8 +8,8 @@ Widget SecondaryButton(context) => Positioned(
       child: GestureDetector(
         onTap: () => {(Navigator.pop(context))},
         child: Image.asset(
-          'assets/images/png/icon-cross.png',
-          scale: 0.8,
+          'assets/images/icon-close.png',
+          scale: 11,
         ),
       ),
     );
@@ -20,10 +20,9 @@ Widget ClearRoundButton(context, double left) => Positioned(
         onTap: () {
           Navigator.pop(context);
         },
-        child: const Icon(
-          Icons.cancel,
-          size: 100,
-          color: Colors.white,
+        child: Image.asset(
+          "assets/images/direction_close.png",
+          scale: 3.5,
         ),
       ),
     );
