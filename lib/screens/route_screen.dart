@@ -78,9 +78,9 @@ class RouteScreenState extends State<RouteScreen> {
                                 );
                               },
                               textColor: whiteColor,
-                              child: Text(
+                              child: const Text(
                                 "Show directions",
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w400,

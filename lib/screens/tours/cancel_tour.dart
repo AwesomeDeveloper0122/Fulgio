@@ -69,12 +69,7 @@ class _CancelTourState extends State<CancelTour> {
 
   Future<void> drawPoint() async {
     points.add(currentUserPoistion);
-    // String request =
-    //     "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/47.467561,-110.046834;50.467561,11.046834?steps=true&geometries=geojson&access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q";
-    // String request =
-    //     "https://api.mapbox.com/directions/v5/mapbox/cycling/-82.662323,45.523751;-82.64394599688436,45.5334555889784?steps=true&geometries=geojson&access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q";
-    // final response = await http.get(Uri.parse(
-    //     'https://api.mapbox.com/directions/v5/mapbox/cycling/51.50743,0.12782;27.59072,76.61892?steps=true&geometries=geojson&access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q'));
+
     String request =
         "https://api.mapbox.com/directions/v5/mapbox/walking/${currentUserPoistion.longitude},${currentUserPoistion.latitude};${nearestPosition.longitude},${nearestPosition.latitude}?steps=true&geometries=geojson&access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q";
     final response = await http.get(Uri.parse(request));
@@ -114,13 +109,8 @@ class _CancelTourState extends State<CancelTour> {
       Marker(
         point: currentUserPoistion,
         // point: _center,
-        builder: (ctx) => const IconButton(
-          icon: Icon(Icons.circle),
-          iconSize: 50,
-          color: Colors.white,
-          onPressed: null,
-          // color: Colors.red,
-        ),
+        builder: (ctx) =>
+            Image.asset("assets/images/location_marker.png", scale: 6),
       ),
     );
     final prefs = await SharedPreferences.getInstance();

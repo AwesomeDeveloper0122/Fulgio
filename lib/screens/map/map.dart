@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 
 import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
 
 import '../../utils/common_colors.dart';
 import '../../widgets/circleimage.dart';
@@ -47,21 +48,47 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     // getUserPosition();
-
+    // getUserPosition().then((value) => getPointData());
     getPointData();
+  }
+
+  Future<void> getUserPosition() async {
+    Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+
+    setState(() {
+      currentUserPoistion =
+          LatLng(_locationData.latitude!, _locationData.longitude!);
+    });
   }
 
   Future<List> getPointData() async {
     markers.add(
       Marker(
         point: currentUserPoistion, //current user poistion
-        builder: (ctx) => const IconButton(
-          icon: Icon(Icons.circle),
-          iconSize: 50,
-          color: Colors.red,
-          onPressed: null,
-          // color: Colors.red,
-        ),
+        builder: (ctx) =>
+            Image.asset("assets/images/location_marker.png", scale: 6),
       ),
     );
     QuerySnapshot querySnapshot = await _pointCollection.get();

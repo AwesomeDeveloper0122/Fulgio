@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:Fuligo/screens/achievement/success.dart';
 import 'package:Fuligo/utils/loading.dart';
 import 'package:Fuligo/utils/localtext.dart';
+import 'package:Fuligo/widgets/clear_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -395,20 +396,7 @@ class _TourAnotherState extends State<TourAnother> {
                 mapController: mapController,
               ),
               // Cross button
-              Positioned(
-                top: 50,
-                left: 20,
-                child: GestureDetector(
-                  onTap: () => {
-                    _timer.cancel(),
-                    Navigator.pop(context),
-                  },
-                  child: Image.asset(
-                    'assets/images/png/icon-cross.png',
-                    scale: 0.8,
-                  ),
-                ),
-              ),
+              SecondaryButton(context),
               Positioned(
                 bottom: 30,
                 left: 20,

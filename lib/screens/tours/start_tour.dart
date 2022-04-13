@@ -100,13 +100,8 @@ class _StartTourState extends State<StartTour> {
   Future<List> getPointData() async {
     markers.add(Marker(
       point: currentUserPoistion, //current user poistion
-      builder: (ctx) => const IconButton(
-        icon: Icon(Icons.circle),
-        iconSize: 50,
-        color: Colors.red,
-        onPressed: null,
-        // color: Colors.red,
-      ),
+      builder: (ctx) =>
+          Image.asset("assets/images/location_marker.png", scale: 6),
     )
         // builder: (ctx) =>
         //     Image(image: AssetImage("assets/images/png/icon-heart.png"))),

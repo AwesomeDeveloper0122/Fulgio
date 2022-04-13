@@ -1,5 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'dart:math';
+
 import 'package:Fuligo/screens/video/info.dart';
 import 'package:Fuligo/screens/route_screen.dart';
 import 'package:Fuligo/utils/font_style.dart';
@@ -14,6 +16,7 @@ import 'package:Fuligo/utils/common_colors.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 
 // ignore: must_be_immutable
 class Video extends StatefulWidget {
@@ -34,11 +37,14 @@ class VideoState extends State<Video> {
   String currentTimeString = "";
   Map videoData = {};
   bool loading = true;
-
+  ValueNotifier<double> direction = ValueNotifier(0);
   @override
   void initState() {
     super.initState();
     getVideoData(widget.id);
+    FlutterCompass.events!.listen((event) {
+      direction.value = event.heading!;
+    });
 
     // _controller.play();
   }
@@ -115,9 +121,11 @@ class VideoState extends State<Video> {
                               children: <Widget>[
                                 VideoPlayer(_controller),
                                 Container(
-                                    child: _ControlsOverlay(
-                                        controller: _controller,
-                                        infodata: videoData)),
+                                  child: _ControlsOverlay(
+                                      controller: _controller,
+                                      infodata: videoData,
+                                      direction: direction),
+                                ),
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 30),
@@ -182,9 +190,25 @@ class VideoState extends State<Video> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Image.asset(
-                                          "assets/images/compass-needle.png",
-                                          scale: 7)
+                                      ValueListenableBuilder(
+                                        valueListenable: direction,
+                                        builder: (context, x, z) {
+                                          return Transform.rotate(
+                                            angle: (direction.value *
+                                                (pi / 180) *
+                                                -1),
+                                            child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 30,
+                                                    vertical: 20),
+                                                child: Image.asset(
+                                                    "assets/images/compass-needle.png",
+                                                    scale: 6)),
+                                          );
+                                        },
+                                      ),
+                                      // Image.asset("assets/images/compass-needle.png",
+                                      //     scale: 7)
                                     ],
                                   ),
                                 ),
@@ -206,8 +230,13 @@ class VideoState extends State<Video> {
 // ignore: must_be_immutable
 class _ControlsOverlay extends StatelessWidget {
   Map infodata;
-  _ControlsOverlay({Key? key, required this.controller, required this.infodata})
-      : super(key: key);
+  ValueNotifier<double> direction;
+  _ControlsOverlay({
+    Key? key,
+    required this.controller,
+    required this.infodata,
+    required this.direction,
+  }) : super(key: key);
 
   final VideoPlayerController controller;
 
@@ -316,24 +345,31 @@ class _ControlsOverlay extends StatelessWidget {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: GestureDetector(
-                          onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        RouteScreen(infodata: infodata),
-                                  ),
-                                ),
-                              },
-                          child: Container(
-                            padding: EdgeInsets.all(15),
-                            child: Icon(
-                              Icons.power_settings_new_sharp,
-                              color: Colors.white,
-                              size: 66.0,
-                              semanticLabel: 'Route',
+                        onTap: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  RouteScreen(infodata: infodata),
                             ),
-                          )),
+                          ),
+                        },
+                        child: ValueListenableBuilder(
+                          valueListenable: direction,
+                          builder: (context, x, z) {
+                            return Transform.rotate(
+                              angle: (direction.value * (pi / 180) * -1),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 20),
+                                child: Image.asset(
+                                    "assets/images/icon-compass.png",
+                                    scale: 6),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ],
                 ),

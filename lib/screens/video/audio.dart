@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:Fuligo/screens/video/info.dart';
 import 'package:Fuligo/screens/route_screen.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 
 var themeNotifier = ValueNotifier<ThemeVariation>(
   const ThemeVariation(Colors.blue, Brightness.light),
@@ -54,21 +56,24 @@ class AudioState extends State<Audio> {
   bool loading = true;
 
   Color? _thumbGlowColor;
+  ValueNotifier<double> direction = ValueNotifier(0);
   final _thumbCanPaintOutsideBar = true;
 
-  final List<String> imgList = [
-    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
-  ];
+  // final List<String> imgList = [
+  //   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
+  //   'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
+  //   'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+  //   'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
+  //   'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
+  //   'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+  // ];
 
   @override
   void initState() {
     getAudioData(widget.id);
-
+    FlutterCompass.events!.listen((event) {
+      direction.value = event.heading!;
+    });
     super.initState();
 
     _player = AudioPlayer();
@@ -102,20 +107,20 @@ class AudioState extends State<Audio> {
     return url;
   }
 
-  Future<List<CachedNetworkImageProvider>> _loadAllImages(List imgList) async {
-    List<CachedNetworkImageProvider> cachedImages = [];
-    for (int i = 0; i < imgList.length; i++) {
-      var configuration = createLocalImageConfiguration(context);
-      cachedImages.add(
-          new CachedNetworkImageProvider(imgList[i])..resolve(configuration));
-    }
-    setState(() {
-      cachedimages = cachedImages;
-    });
-    print("cachedImages");
-    print(cachedImages);
-    return cachedImages;
-  }
+  // Future<List<CachedNetworkImageProvider>> _loadAllImages(List imgList) async {
+  //   List<CachedNetworkImageProvider> cachedImages = [];
+  //   for (int i = 0; i < imgList.length; i++) {
+  //     var configuration = createLocalImageConfiguration(context);
+  //     cachedImages.add(
+  //         new CachedNetworkImageProvider(imgList[i])..resolve(configuration));
+  //   }
+  //   setState(() {
+  //     cachedimages = cachedImages;
+  //   });
+  //   print("cachedImages");
+  //   print(cachedImages);
+  //   return cachedImages;
+  // }
 
   Future<void> getAudioData(id) async {
     final prefs = await SharedPreferences.getInstance();
@@ -125,11 +130,9 @@ class AudioState extends State<Audio> {
 
     var data = mediadata.data();
     List imageUrl = data!["app_image"];
-    print("imageUrl");
-    print(imageUrl);
+
     String infoimage = "";
     infoimage = imageUrl[0];
-    // _loadAllImages(imageUrl);
 
     for (var i = 0; i < imageUrl.length; i++) {
       var item = imageUrl[i];
@@ -260,8 +263,22 @@ class AudioState extends State<Audio> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset("assets/images/compass-needle.png",
-                              scale: 7)
+                          ValueListenableBuilder(
+                            valueListenable: direction,
+                            builder: (context, x, z) {
+                              return Transform.rotate(
+                                angle: (direction.value * (pi / 180) * -1),
+                                child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 20),
+                                    child: Image.asset(
+                                        "assets/images/compass-needle.png",
+                                        scale: 6)),
+                              );
+                            },
+                          ),
+                          // Image.asset("assets/images/compass-needle.png",
+                          //     scale: 7)
                         ],
                       ),
                     ),
@@ -308,23 +325,33 @@ class AudioState extends State<Audio> {
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: GestureDetector(
-                                  onTap: () => {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => RouteScreen(
-                                              infodata: audioData,
-                                            ),
-                                          ),
-                                        ),
-                                      },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 30, vertical: 20),
-                                    child: Image.asset(
-                                        "assets/images/icon-compass.png",
-                                        scale: 6),
-                                  )),
+                                onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RouteScreen(
+                                        infodata: audioData,
+                                      ),
+                                    ),
+                                  ),
+                                },
+                                child: ValueListenableBuilder(
+                                  valueListenable: direction,
+                                  builder: (context, x, z) {
+                                    return Transform.rotate(
+                                      angle:
+                                          (direction.value * (pi / 180) * -1),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 30, vertical: 20),
+                                        child: Image.asset(
+                                            "assets/images/icon-compass.png",
+                                            scale: 6),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ],
                         ),
