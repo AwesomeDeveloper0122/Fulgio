@@ -40,6 +40,9 @@ class VerifyState extends State<Verify> {
   }
 
   Future<void> getHeader() async {
+    print("123");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String lang = prefs.getString('lang').toString();
     FirebaseFirestore.instance
         .collection('header')
         .doc("od9KyauEGUn5PYycMKS6")

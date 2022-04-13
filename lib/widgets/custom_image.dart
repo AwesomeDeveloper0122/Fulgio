@@ -80,6 +80,7 @@ Widget ChatCard(context, String image_url, String title, String content,
         String docId) =>
     GestureDetector(
       onTap: () {
+        print(docId);
         Navigator.push(
           context,
           MaterialPageRoute(

@@ -83,7 +83,7 @@ class VerifyTrackingState extends State<VerifyTracking> {
 
     await fireUser?.reload();
     print("fireUser!.emailVerified");
-    print(fireUser);
+    print(fireUser!.emailVerified);
     final signedInUser = fireUser;
     if (signedInUser != null && signedInUser.emailVerified) {
       timer.cancel();
@@ -160,94 +160,104 @@ class VerifyTrackingState extends State<VerifyTracking> {
                       Logo,
                       PageHeader(context, headerData["title"][lang].toString(),
                           headerData["subtitle"][lang].toString()),
-                      !permission
-                          ? Container(
-                              height: mapHeight.height,
-                              width: mq.width * 0.6,
-                              margin: const EdgeInsets.only(top: 15),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(25.0),
+                      GestureDetector(
+                        onTap: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StartTour(),
+                            ),
+                          ),
+                        },
+                        child: !permission
+                            ? Container(
+                                height: mapHeight.height,
+                                width: mq.width * 0.6,
+                                margin: const EdgeInsets.only(top: 15),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25.0),
+                                  ),
                                 ),
-                              ),
-                              child: Center(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  child: Container(
-                                    padding: const EdgeInsets.only(top: 15),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Container(
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                LocalText.allow_title[lang]
-                                                    .toString(),
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 10),
-                                                child: Text(
-                                                  LocalText
-                                                      .allow_description[lang]
+                                child: Center(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.only(top: 15),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Container(
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  LocalText.allow_title[lang]
                                                       .toString(),
                                                   style: TextStyle(
-                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
                                                   ),
+                                                  textAlign: TextAlign.center,
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Flexible(
-                                          child: FlutterMap(
-                                            options: MapOptions(
-                                              center: currentUserPoistion,
-                                              zoom: 16.0,
-                                            ),
-                                            layers: [
-                                              TileLayerOptions(
-                                                urlTemplate:
-                                                    'https://api.mapbox.com/styles/v1/sakura0122/cl0asbsbv000314menn31lgqa/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q',
-                                                additionalOptions: {
-                                                  'accessToken':
-                                                      LocalText.accessToken,
-                                                },
-                                              ),
-                                              MarkerLayerOptions(
-                                                markers: [
-                                                  Marker(
-                                                    point: currentUserPoistion,
-                                                    builder: (ctx) =>
-                                                        IconButton(
-                                                      icon: Icon(Icons
-                                                          .person_pin_circle),
-                                                      iconSize: 40,
-                                                      color: Color.fromARGB(
-                                                          255, 243, 33, 33),
-                                                      onPressed: null,
-                                                      // color: Colors.red,
+                                                Container(
+                                                  margin: const EdgeInsets
+                                                      .symmetric(vertical: 10),
+                                                  child: Text(
+                                                    LocalText
+                                                        .allow_description[lang]
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 12,
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        )
-                                      ],
+                                          Flexible(
+                                            child: FlutterMap(
+                                              options: MapOptions(
+                                                center: currentUserPoistion,
+                                                zoom: 16.0,
+                                              ),
+                                              layers: [
+                                                TileLayerOptions(
+                                                  urlTemplate:
+                                                      'https://api.mapbox.com/styles/v1/sakura0122/cl0asbsbv000314menn31lgqa/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FrdXJhMDEyMiIsImEiOiJja3pmNTFjam0yZ3M0Mm9tbTJ3bnFqbHc0In0.SbKkWu_yR23brbvErKLL9Q',
+                                                  additionalOptions: {
+                                                    'accessToken':
+                                                        LocalText.accessToken,
+                                                  },
+                                                ),
+                                                MarkerLayerOptions(
+                                                  markers: [
+                                                    Marker(
+                                                      point:
+                                                          currentUserPoistion,
+                                                      builder: (ctx) =>
+                                                          IconButton(
+                                                        icon: Icon(Icons
+                                                            .person_pin_circle),
+                                                        iconSize: 40,
+                                                        color: Color.fromARGB(
+                                                            255, 243, 33, 33),
+                                                        onPressed: null,
+                                                        // color: Colors.red,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                          : Text("")
+                              )
+                            : Text(""),
+                      )
                     ],
                   ))
                 ],

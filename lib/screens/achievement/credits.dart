@@ -135,36 +135,19 @@ class CreditsState extends State<Credits> {
       creditData.add(
         Container(
           margin: EdgeInsets.only(bottom: 20),
-          // decoration: BoxDecoration(
-          //   color: bgColor,
-          //   gradient: const LinearGradient(
-          //       begin: Alignment.topLeft,
-          //       end: Alignment.bottomRight,
-          //       colors: [gradientFrom, bgColor]),
-          //   borderRadius: BorderRadius.circular(15.0),
-          // ),
           decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 5,
-
-                offset: const Offset(1, 0), // changes position of shadow
-              ),
-            ],
             color: bgColor,
             gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [gradientFrom, bgColor]),
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(15.0),
           ),
           child: ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 3),
             leading: item["flag"] == "order"
-                ? Image.asset("assets/images/icon-booking.png")
-                : Image.asset("assets/images/icon-achievement.png"),
+                ? Image.asset("assets/images/png/icon-airports.png")
+                : Image.asset("assets/images/png/icon-achievement.png"),
             title: Text(item["name"], style: font_14_white_70),
             subtitle: Text(
               item["flag"] == "order"

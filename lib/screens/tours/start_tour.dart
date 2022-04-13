@@ -231,7 +231,6 @@ class _StartTourState extends State<StartTour> {
     UserModel userInfo = AuthProvider.of(context).userModel;
     print("start tour lang");
     print(userInfo.app_lang);
-    print(markers);
     return Scaffold(
       body: !loading
           ? Stack(alignment: Alignment.center, children: <Widget>[

@@ -51,7 +51,6 @@ class ChatState extends State<Chat> {
           (doc) => {
             print("UserInfo id"),
             print(_userInfo.uid),
-            print(doc.reference.id),
             if (doc.get('userId') ==
                 "KqYlUZcpn5ffjYhowjDRMMT0TTf1") // UVJ7ZRb12UVeL3YJvzAPXnA0Cem1 is userInfo.uid //vVBdd7pUdjZY537PX6pT8FNCrA52
               {

@@ -80,14 +80,16 @@ class Test extends StatelessWidget {
                     bottom: 20,
                   ),
                   leading: Image(
-                    image: AssetImage('assets/images/menu/icon-map.png'),
+                    image: AssetImage('assets/images/png/icon-map.png'),
                     width: 40,
                     height: 40,
                   ),
                   title: Text(
                     LocalText.map_menu[_userInfo.app_lang].toString(),
                     style: TextStyle(
-                        color: Colors.white, fontSize: 20, letterSpacing: 1.5),
+                        color: Colors.white70,
+                        fontSize: 20,
+                        letterSpacing: 1.5),
                   ),
                   onTap: () => {
                     Navigator.push(
@@ -110,7 +112,7 @@ class Test extends StatelessWidget {
                   horizontalTitleGap: 30.0,
                   contentPadding: EdgeInsets.only(bottom: 20),
                   leading: Image(
-                    image: AssetImage('assets/images/menu/icon-documents.png'),
+                    image: AssetImage('assets/images/png/icon-document.png'),
                     width: 40,
                     height: 40,
                     color: whiteColor,
@@ -118,7 +120,9 @@ class Test extends StatelessWidget {
                   title: Text(
                     LocalText.documents_menu[_userInfo.app_lang].toString(),
                     style: TextStyle(
-                        color: Colors.white, fontSize: 20, letterSpacing: 1.5),
+                        color: Colors.white70,
+                        fontSize: 20,
+                        letterSpacing: 1.5),
                   ),
                   onTap: () => {
                     Navigator.push(
@@ -135,14 +139,16 @@ class Test extends StatelessWidget {
                     bottom: 20,
                   ),
                   leading: Image(
-                    image: AssetImage('assets/images/menu/icon-chat.png'),
+                    image: AssetImage('assets/images/png/icon-support.png'),
                     width: 40,
                     height: 40,
                   ),
                   title: Text(
                     LocalText.chat_menu[_userInfo.app_lang].toString(),
                     style: TextStyle(
-                        color: Colors.white, fontSize: 20, letterSpacing: 1.5),
+                        color: Colors.white70,
+                        fontSize: 20,
+                        letterSpacing: 1.5),
                   ),
                   onTap: () => {
                     Navigator.push(
@@ -162,15 +168,16 @@ class Test extends StatelessWidget {
                     bottom: 20,
                   ),
                   leading: Image(
-                    image:
-                        AssetImage('assets/images/menu/icon-gamification.png'),
+                    image: AssetImage('assets/images/png/icon-achievement.png'),
                     width: 40,
                     height: 40,
                   ),
                   title: Text(
                     LocalText.achievements_menu[_userInfo.app_lang].toString(),
                     style: TextStyle(
-                        color: Colors.white, fontSize: 20, letterSpacing: 1.5),
+                        color: Colors.white70,
+                        fontSize: 20,
+                        letterSpacing: 1.5),
                   ),
                   onTap: () => {
                     Navigator.push(
@@ -187,18 +194,16 @@ class Test extends StatelessWidget {
                     bottom: 20,
                   ),
                   leading: Image(
-                    image: AssetImage('assets/images/menu/icon-settings.png'),
+                    image: AssetImage('assets/images/png/icon-achievement.png'),
                     width: 40,
                     height: 40,
                   ),
-                  // leading: Image.asset(
-                  //   "assets/images/icon-data.png",
-                  //   scale: 0.5,
-                  // ),
                   title: Text(
                     LocalText.setting[_userInfo.app_lang].toString(),
                     style: TextStyle(
-                        color: Colors.white, fontSize: 20, letterSpacing: 1.5),
+                        color: Colors.white70,
+                        fontSize: 20,
+                        letterSpacing: 1.5),
                   ),
                   onTap: () {
                     Navigator.push(
@@ -222,7 +227,7 @@ class Test extends StatelessWidget {
                 //   title: Text(
                 //     'Language',
                 //     style: TextStyle(
-                //         color: Colors.white, fontSize: 20, letterSpacing: 1.5),
+                //         color: Colors.white70, fontSize: 20, letterSpacing: 1.5),
                 //   ),
                 //   onTap: () {
                 //     showDialog(
@@ -248,8 +253,8 @@ class Test extends StatelessWidget {
                 // Navigator.of(context).pop()
               },
               child: Image.asset(
-                'assets/images/icon-close.png',
-                scale: 11,
+                'assets/images/png/icon-cross.png',
+                scale: 0.8,
               ),
             ),
           ),
@@ -270,7 +275,7 @@ class Test extends StatelessWidget {
                           ? _userInfo.username["first"]
                           : "Anonymous",
                       style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.white70,
                           decoration: TextDecoration.none,
                           fontSize: 16),
                     ),

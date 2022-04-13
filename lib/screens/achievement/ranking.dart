@@ -109,38 +109,20 @@ class RankingState extends State<Ranking> {
             margin: EdgeInsets.only(bottom: 20),
             decoration: _userInfo.uid != item["uid"]
                 ? BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: bgDecorationColor.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset:
-                            const Offset(1, 0), // changes position of shadow
-                      ),
-                    ],
-                    color: bgDecorationColor,
+                    color: bgColor,
                     gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [gradientFrom1, bgColor]),
-                    borderRadius: BorderRadius.circular(20.0),
+                        colors: [bgColor, gradientFrom]),
+                    borderRadius: BorderRadius.circular(25.0),
                   )
                 : BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: bgDecorationColor.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset:
-                            const Offset(1, 0), // changes position of shadow
-                      ),
-                    ],
-                    color: bgDecorationColor,
+                    color: bgColor,
                     gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [gradientFrom, bgColor]),
-                    borderRadius: BorderRadius.circular(20.0),
+                        colors: [Colors.white10, bgColor]),
+                    borderRadius: BorderRadius.circular(25.0),
                   ),
             child: ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -148,6 +130,19 @@ class RankingState extends State<Ranking> {
               leading: Container(
                 child: InkWell(
                   onTap: () {},
+                  // child: ClipOval(
+                  //   child: Container(
+                  //     width: 80,
+                  //     height: 80,
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(20),
+                  //       image: DecorationImage(
+                  //         fit: BoxFit.cover,
+                  //         image: NetworkImage(imageList[i]),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   child: FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
                     image: item["avatar"],
@@ -163,31 +158,7 @@ class RankingState extends State<Ranking> {
                     fontSize: 16),
               ),
               // trailing: CircleImage(context, item["avatar"], 80, 80, "ranking"),
-              trailing: Stack(
-                children: [
-                  Image.asset(
-                    "assets/images/icon-medal.png",
-                    color: _userInfo.uid != item["uid"]
-                        ? Colors.white.withOpacity(0.3)
-                        : Colors.white,
-                    colorBlendMode: BlendMode.modulate,
-                    scale: 0.1,
-                  ),
-                  Positioned(
-                    top: 27,
-                    left: 18,
-                    child: Text(
-                      '${i + 1}',
-                      style: TextStyle(
-                          color: _userInfo.uid != item["uid"]
-                              ? Colors.white38
-                              : Colors.white,
-                          fontSize: 20),
-                    ),
-                  )
-                ],
-              ),
-
+              trailing: Text('${i + 1}'),
               subtitle: Text(
                 item["num"].toString() +
                     '  ${LocalText.achievements_menu[_userInfo.app_lang]}',
@@ -217,7 +188,13 @@ class RankingState extends State<Ranking> {
     }
 
     return Container(
-      decoration: bgDecoration,
+      decoration: const BoxDecoration(
+        color: bgColor,
+        gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [gradientFrom, bgColor]),
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
